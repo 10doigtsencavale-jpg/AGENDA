@@ -1,0 +1,32 @@
+{
+  "id": "./",
+  "name": "Agenda Chansigné — 10 Doigts en Cavale",
+  "short_name": "Agenda Chansigné",
+  "description": "Les concerts chansignés à venir, en un coup d'œil.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#d9f0f2",
+  "theme_color": "#e0432c",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

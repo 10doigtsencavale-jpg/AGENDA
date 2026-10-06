@@ -1,0 +1,1238 @@
+<!doctype html>
+<html lang="fr" data-theme="light"><head>
+<meta charset="utf-8">
+<title>Agenda Chansigné</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Agenda Chansigné">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/png" href="icon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#e0432c">
+<meta name="description" content="Les concerts chansignés à venir — 10 Doigts en Cavale.">
+<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<style>
+  :root{
+    --bg:#d9f0f2;
+    --surface:#ffffff;
+    --surface-2:#c3e6e9;
+    --ink:#3b2013;
+    --muted:#8c7460;
+    --line:#b3dade;
+    --accent:#e0432c;
+    --accent-ink:#ffffff;
+    --accent-2:#f0a028;
+    --accent-2-ink:#3b2013;
+    --teal:#8fc7bc;
+    --teal-deep:#3f8f83;
+    --shadow: 0 1px 2px rgba(59,32,19,.08), 0 8px 24px -12px rgba(59,32,19,.24);
+    --font-display:'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    --font-body:'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0a2226;
+      --surface:#123033;
+      --surface-2:#163a3d;
+      --ink:#fbefe0;
+      --muted:#cbaf94;
+      --line:#1f4a4e;
+      --accent:#ff6a4d;
+      --accent-ink:#2b0d04;
+      --accent-2:#ffb648;
+      --accent-2-ink:#2c1c05;
+      --teal:#8fc7bc;
+      --teal-deep:#3f8f83;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -14px rgba(0,0,0,.65);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a2226;
+    --surface:#123033;
+    --surface-2:#163a3d;
+    --ink:#fbefe0;
+    --muted:#cbaf94;
+    --line:#1f4a4e;
+    --accent:#ff6a4d;
+    --accent-ink:#2b0d04;
+    --accent-2:#ffb648;
+    --accent-2-ink:#2c1c05;
+    --teal:#8fc7bc;
+    --teal-deep:#3f8f83;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -14px rgba(0,0,0,.65);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:48px;
+  }
+  a{color:inherit;}
+  img{display:block;}
+
+  .topbar{
+    display:flex;align-items:center;gap:12px;
+    padding:18px 20px 14px;
+    max-width:640px;margin:0 auto;
+  }
+  .mark{
+    width:46px;height:46px;border-radius:13px;flex:none;
+    overflow:hidden;
+    box-shadow:0 2px 6px rgba(224,67,44,.35);
+  }
+  .mark img{width:100%;height:100%;object-fit:cover;}
+  .brand h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:21px;
+    letter-spacing:.2px;
+    margin:0;
+    line-height:1.1;
+  }
+  .brand p{
+    margin:1px 0 0;
+    font-size:14.5px;
+    color:var(--muted);
+    letter-spacing:.2px;
+  }
+
+  main{max-width:640px;margin:0 auto;padding:0 16px;}
+
+  /* Hero: next concert */
+  .hero{
+    position:relative;
+    border-radius:20px;
+    overflow:hidden;
+    background:var(--accent);
+    color:#fff;
+    margin:6px 0 28px;
+    box-shadow:var(--shadow);
+    min-height:220px;
+  }
+  .hero-bg{
+    position:absolute;inset:0;
+    background-size:cover;background-position:center top;
+    filter:saturate(1.05);
+  }
+  .hero-scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(59,20,10,.08) 0%, rgba(59,20,10,.5) 55%, rgba(43,13,4,.92) 100%);
+  }
+  .hero-noimg{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(130% 150% at 12% -10%, var(--accent-2) 0%, transparent 55%),
+      linear-gradient(155deg,var(--accent),#a82a1a 75%);
+  }
+  .hero-confetti{
+    position:absolute;top:16px;left:16px;display:flex;gap:6px;align-items:center;
+    opacity:.85;pointer-events:none;
+  }
+  .hero-confetti span{display:block;width:6px;height:6px;border-radius:50%;background:#fff;}
+  .hero-confetti span:nth-child(2){background:var(--accent-2);width:8px;height:8px;}
+  .hero-confetti span:nth-child(3){background:var(--teal);width:5px;height:5px;}
+  .hero-doodle{
+    position:absolute;top:14px;right:14px;width:60px;height:auto;
+    opacity:.5;pointer-events:none;
+  }
+  .hero-inner{
+    position:relative;padding:20px 20px 20px;
+    display:flex;flex-direction:column;min-height:220px;
+  }
+  .hero-eyebrow-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px;}
+  .hero-eyebrow{
+    font-size:13.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+    color:#ffe6c2;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 4px rgba(240,160,40,.35);}
+  .hero-title{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(31px,8vw,41px);
+    line-height:1;
+    margin:10px 0 6px;
+    text-wrap:balance;
+  }
+  .hero-meta{
+    font-size:16.5px;
+    color:#fff0e2;
+    display:flex;flex-wrap:wrap;gap:x;
+    row-gap:4px;
+  }
+  .hero-meta span:not(:last-child)::after{content:"·";margin:0 7px;color:#f0b39e;}
+  .hero-actions{margin-top:auto;padding-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
+
+  .btn{
+    appearance:none;border:none;text-decoration:none;
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:var(--font-body);font-weight:700;font-size:16.5px;
+    padding:11px 18px;border-radius:100px;cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--accent-2);color:var(--accent-2-ink);}
+  .btn-ghost{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35);}
+
+  .section-title{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:17px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 10px;
+    padding-top:2px;
+  }
+
+  .month{margin-bottom:26px;}
+  .month-head{
+    position:sticky;top:0;z-index:5;
+    background:var(--bg);
+    padding:10px 0 8px;
+    display:flex;align-items:baseline;gap:10px;
+  }
+  .month-head h2{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:27px;
+    margin:0;
+    letter-spacing:.2px;
+    color:var(--accent);
+  }
+  .month-head .count{
+    font-size:14.5px;color:var(--muted);font-weight:600;
+  }
+
+  .cards{display:flex;flex-direction:column;gap:10px;}
+
+  .card{
+    display:flex;gap:14px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px;
+    box-shadow:var(--shadow);
+  }
+  .card-date{
+    flex:none;width:52px;text-align:center;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+  }
+  .card-date .d{
+    font-family:var(--font-display);
+    font-weight:800;font-size:29px;line-height:1;
+    color:var(--accent);
+    font-variant-numeric:tabular-nums;
+  }
+  .card-date .m{
+    font-size:12.5px;font-weight:700;letter-spacing:.6px;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .card-img{
+    flex:none;width:76px;height:76px;border-radius:12px;
+    background:var(--surface-2);object-fit:cover;
+    border:1px solid var(--line);
+  }
+  .card-img.placeholder{
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:700;font-size:25px;
+    color:var(--muted);
+  }
+  .card-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;justify-content:center;}
+  .card-artist{
+    font-family:var(--font-display);
+    font-weight:700;font-size:20px;line-height:1.15;
+    overflow-wrap:anywhere;
+  }
+  .card-venue{
+    font-size:15.5px;color:var(--muted);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    display:flex;align-items:center;gap:4px;
+  }
+  .card-venue .pin{width:11px;height:11px;flex:none;color:var(--accent-2);}
+  .card-cta{
+    appearance:none;border:none;font-family:var(--font-body);cursor:pointer;
+    margin-top:7px;
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:14.5px;font-weight:700;color:var(--accent-2-ink);
+    background:var(--accent-2);
+    padding:5px 12px 5px 10px;border-radius:100px;
+    text-decoration:none;width:fit-content;
+  }
+  .card-cta svg{width:12px;height:12px;flex:none;}
+  .badge-cancelled{
+    margin-top:7px;
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:13.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+    color:var(--accent);
+    background:color-mix(in srgb, var(--accent) 14%, transparent);
+    padding:5px 12px;border-radius:100px;width:fit-content;
+  }
+  .card.is-cancelled{opacity:.62;}
+  .card.is-cancelled .card-img,.card.is-cancelled .card-img.placeholder{filter:grayscale(.5);}
+
+  /* Repère "Nouveau" — événements ajoutés depuis la dernière visite */
+  .card-artist{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .badge-new{
+    display:inline-flex;align-items:center;
+    font-family:var(--font-body);font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    color:#fff;background:var(--teal-deep);
+    padding:3px 9px;border-radius:100px;
+  }
+  .hero-badge-new{
+    display:inline-flex;align-items:center;flex:none;
+    font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    color:#fff;background:var(--teal-deep);
+    padding:4px 11px;border-radius:100px;
+  }
+
+  .card{cursor:pointer;transition:transform .12s ease;}
+  .card:active{transform:scale(.985);}
+  .hero{cursor:pointer;}
+  .card:focus-visible,.hero:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px;}
+
+  /* Modal: visuel en entier + réservation */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:100;
+    background:rgba(15,20,20,.62);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .modal-overlay[hidden]{display:none;}
+  @media (min-width:640px){ .modal-overlay{align-items:center;padding:24px;} }
+  .modal-panel{
+    position:relative;
+    background:var(--surface);
+    width:100%;max-width:480px;
+    max-height:92vh;overflow-y:auto;
+    border-radius:24px 24px 0 0;
+    box-shadow:0 -10px 40px rgba(0,0,0,.35);
+    animation:modal-in .2s ease;
+  }
+  @media (min-width:640px){ .modal-panel{border-radius:24px;} }
+  @keyframes modal-in{ from{transform:translateY(28px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+  .modal-close{
+    position:absolute;top:12px;right:12px;z-index:2;
+    width:36px;height:36px;border-radius:50%;
+    background:rgba(20,16,10,.55);color:#fff;border:none;
+    font-size:25px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #modal-image-wrap img{width:100%;display:block;border-radius:24px 24px 0 0;}
+  .modal-body{padding:18px 22px 28px;}
+
+  /* Vignette "Vidéo en LSF" — en haut du formulaire, avant tout le reste */
+  .video-badge-btn{
+    appearance:none;border:none;background:none;padding:0;margin-bottom:18px;cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;align-items:center;gap:16px;
+  }
+  .video-badge-img-wrap{position:relative;width:88px;height:88px;flex:none;}
+  .video-badge-img-wrap img{width:100%;height:100%;display:block;}
+  .video-badge-play{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.45);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+  .video-badge-play svg{width:9px;height:9px;margin-left:1px;}
+  .video-badge-btn:active .video-badge-img-wrap{transform:scale(.94);}
+  .video-badge-label{font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--ink);text-align:left;line-height:1.3;}
+  .video-badge-label small{display:block;font-family:var(--font-body);font-size:15.5px;font-weight:600;color:var(--muted);}
+
+  .modal-eyebrow{
+    font-size:13.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--accent);margin-bottom:5px;
+  }
+  .modal-title{
+    font-family:var(--font-display);font-weight:800;font-size:30px;
+    margin:0 0 6px;line-height:1.05;
+  }
+  .modal-meta{font-size:16.5px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+  .reminder-btn{
+    appearance:none;font-family:var(--font-body);text-decoration:none;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;padding:13px 18px;border-radius:100px;margin-bottom:14px;
+    background:var(--surface-2);color:var(--ink);border:1.5px solid var(--line);
+    font-weight:700;font-size:16px;cursor:pointer;box-sizing:border-box;
+  }
+  .reminder-btn svg{width:17px;height:17px;flex:none;}
+  .reminder-btn:active{background:var(--surface);}
+  .modal-cta{
+    appearance:none;border:none;font-family:var(--font-body);
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;padding:14px 18px;border-radius:100px;
+    background:var(--accent-2);color:var(--accent-2-ink);
+    font-weight:700;font-size:17px;text-decoration:none;
+    box-sizing:border-box;text-align:center;cursor:pointer;
+  }
+  .modal-cta svg{width:15px;height:15px;flex:none;}
+  .modal-cta .addr{overflow-wrap:anywhere;}
+  .modal-cta.is-copied{background:var(--accent);color:var(--accent-ink);}
+  .modal-note{
+    display:block;text-align:center;color:var(--muted);
+    font-size:16px;padding:12px 0;
+  }
+  body.modal-open{overflow:hidden;}
+
+  /* Message prêt à envoyer (aide à l'écriture) */
+  .modal-message{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);}
+  .modal-message-title{
+    font-family:var(--font-display);font-weight:800;font-size:19px;
+    margin:0 0 4px;color:var(--ink);
+  }
+  .modal-message-sub{font-size:14.5px;color:var(--muted);margin:0 0 14px;line-height:1.4;}
+  .places-stepper{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:12px;font-size:16px;font-weight:700;color:var(--ink);
+  }
+  .stepper-controls{display:flex;align-items:center;gap:14px;}
+  .stepper-controls button{
+    appearance:none;border:none;width:34px;height:34px;border-radius:50%;
+    background:var(--surface-2);color:var(--ink);font-size:21px;font-weight:700;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;
+  }
+  .stepper-controls button:active{transform:scale(.92);}
+  .stepper-count{min-width:22px;text-align:center;font-variant-numeric:tabular-nums;font-size:18px;}
+  .field-label{display:block;font-size:14.5px;font-weight:700;color:var(--muted);margin-bottom:6px;}
+  .field-input{
+    width:100%;box-sizing:border-box;padding:11px 14px;border-radius:12px;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink);
+    font-family:var(--font-body);font-size:16.5px;margin-bottom:16px;
+  }
+  .field-input:focus{outline:2px solid var(--accent-2);outline-offset:1px;border-color:var(--accent-2);}
+  .places-stepper + .places-stepper{margin-top:10px;}
+  .stepper-group{margin-bottom:16px;}
+  .stepper-group-title{
+    font-size:14px;font-weight:800;color:var(--accent-2-ink,var(--accent-2));
+    text-transform:uppercase;letter-spacing:.04em;margin:0 0 10px;
+  }
+  .message-preview{
+    white-space:pre-wrap;font-family:var(--font-body);font-size:15.5px;line-height:1.55;
+    background:var(--surface-2);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;margin:16px 0 12px;color:var(--ink);max-height:220px;overflow-y:auto;
+  }
+  .modal-copy-message{
+    appearance:none;border:none;font-family:var(--font-body);cursor:pointer;
+    display:block;width:100%;padding:13px 16px;border-radius:100px;
+    background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16.5px;
+  }
+  .modal-copy-message.is-copied{background:var(--accent-2);color:var(--accent-2-ink);}
+
+  /* Étapes "Préparer votre mail" — pictogrammes + libellés courts,
+     pensés pour un public sourd très visuel et peu à l'aise en lecture. */
+  .msg-step{margin-bottom:22px;}
+  .msg-step-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .msg-step-icon{
+    flex:none;width:34px;height:34px;border-radius:50%;
+    background:var(--accent-2);color:var(--accent-2-ink);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .msg-step-icon svg{width:18px;height:18px;}
+  .msg-step-label{font-family:var(--font-display);font-weight:800;font-size:17.5px;color:var(--ink);}
+  .msg-step-hint{font-size:15.5px;color:var(--muted);margin:0 0 10px;line-height:1.5;}
+  .msg-address-chip{
+    display:block;background:var(--surface-2);border:2px dashed var(--accent-2);
+    border-radius:14px;padding:13px 16px;font-weight:800;font-size:17px;
+    color:var(--ink);text-align:center;overflow-wrap:anywhere;margin:0;
+  }
+
+  .empty{
+    text-align:center;
+    padding:52px 24px 40px;
+    color:var(--muted);
+  }
+  .empty .mark{width:56px;height:56px;border-radius:16px;margin:0 auto 18px;}
+  .empty h2{
+    font-family:var(--font-display);
+    font-size:23px;font-weight:700;color:var(--ink);margin:0 0 8px;
+  }
+  .empty p{font-size:16.5px;line-height:1.5;max-width:36ch;margin:0 auto;}
+
+  /* Petit mot festif tout en bas de la liste, pour donner envie de revenir */
+  .coming-soon{
+    position:relative;overflow:hidden;
+    margin:8px 0 30px;border-radius:20px;padding:30px 20px 26px;text-align:center;
+    background:linear-gradient(150deg, var(--accent) 0%, var(--accent-2) 100%);
+    color:#fff;box-shadow:var(--shadow);
+  }
+  .coming-soon-confetti{
+    position:absolute;top:16px;left:18px;display:flex;gap:6px;align-items:center;opacity:.85;
+  }
+  .coming-soon-confetti span{display:block;width:6px;height:6px;border-radius:50%;background:#fff;}
+  .coming-soon-confetti span:nth-child(2){width:8px;height:8px;background:rgba(255,255,255,.7);}
+  .coming-soon-confetti span:nth-child(3){width:5px;height:5px;background:rgba(255,255,255,.7);}
+  .coming-soon-title{
+    font-family:var(--font-display);font-weight:800;font-size:26px;
+    text-transform:uppercase;letter-spacing:.5px;line-height:1.15;margin:8px 0 8px;
+  }
+  .coming-soon-sub{
+    font-size:16px;margin:0 auto;opacity:.95;max-width:32ch;
+  }
+
+  footer{
+    max-width:640px;margin:34px auto 0;padding:16px 20px 4px;
+    text-align:center;font-size:14px;color:var(--muted);
+    border-top:1px solid var(--line);
+  }
+  footer a{color:var(--accent);text-decoration:none;font-weight:700;}
+
+  .install-wrap{margin:0 auto 14px;max-width:420px;}
+  .install-btn{
+    appearance:none;font-family:var(--font-body);cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;padding:13px 18px;border-radius:100px;box-sizing:border-box;
+    background:var(--surface-2);color:var(--ink);border:1.5px solid var(--line);
+    font-weight:700;font-size:16px;
+  }
+  .install-btn svg{width:18px;height:18px;flex:none;}
+  .install-btn:active{background:var(--surface);}
+  .install-help{
+    margin-top:10px;padding:14px 16px;border-radius:16px;text-align:left;
+    background:var(--surface-2);border:1.5px solid var(--line);color:var(--ink);
+    font-size:15px;line-height:1.5;
+  }
+  .install-help p{margin:0 0 8px;}
+  .install-help p:last-child{margin-bottom:0;}
+  .install-help strong{font-weight:700;}
+
+  @media (prefers-reduced-motion: reduce){
+    .btn{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="mark"><img src="icon-512.png" alt=""></div>
+  <div class="brand">
+    <h1>10 Doigts en Cavale</h1>
+    <p>Agenda des concerts chansignés</p>
+  </div>
+</div>
+
+<main>
+  <div id="hero-slot"></div>
+  <div id="list-slot"></div>
+
+  <div class="coming-soon">
+    <div class="coming-soon-confetti"><span></span><span></span><span></span></div>
+    <p class="coming-soon-title">D'autres événements<br>à venir</p>
+    <p class="coming-soon-sub">De nouveaux concerts chansignés arrivent bientôt !</p>
+  </div>
+</main>
+
+<div id="modal" class="modal-overlay" hidden>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button type="button" class="modal-close" id="modal-close-btn" aria-label="Fermer">&times;</button>
+    <div id="modal-image-wrap"></div>
+    <div class="modal-body">
+      <div id="modal-video-wrap"></div>
+      <div class="modal-eyebrow" id="modal-eyebrow"></div>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <div class="modal-meta" id="modal-meta"></div>
+      <div id="modal-reminder-wrap"></div>
+      <div id="modal-cta-wrap"></div>
+      <div id="modal-message-wrap"></div>
+    </div>
+  </div>
+</div>
+
+
+<footer>
+  <div class="install-wrap" id="install-wrap" hidden>
+    <button type="button" class="install-btn" id="install-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 8v7M9 12.5l3 3 3-3"/></svg>
+      Installer l'appli sur mon téléphone
+    </button>
+    <div class="install-help" id="install-help" hidden></div>
+  </div>
+  Chansigné par <a href="https://www.10doigtsencavale.com" target="_blank" rel="noopener">10 Doigts en Cavale</a>
+</footer>
+
+<script>
+/* ============================================================
+   DONNÉES DES ÉVÉNEMENTS
+   ------------------------------------------------------------
+   Chaque événement est ajouté ici par Claude, à partir d'un
+   visuel (affiche/flyer) envoyé par l'association. Ne PAS
+   resynchroniser depuis 10doigtsencavale.com/agenda : cette
+   app est alimentée uniquement à la main, événement par
+   événement, à partir des visuels transmis en conversation.
+
+   Champs de chaque objet :
+   - id        : identifiant unique, ex. "2026-09-11-belin"
+   - artist    : nom de l'artiste ou de la tête d'affiche
+   - venue     : nom du lieu / festival
+   - city      : ville (optionnel, ajouté après une virgule)
+   - date      : "AAAA-MM-JJ" (date du concert)
+   - time      : "HH:MM" (optionnel)
+   - timeLabel : libellé libre affiché à la place de l'heure quand elle
+                 n'est pas connue (ex. "Soirée") — optionnel
+   - link      : URL de réservation, OU "mailto:adresse@mail"
+   - linkLabel : texte du bouton (par défaut "Réserver")
+   - image     : data URI de l'affiche/visuel, compressée
+                 (voir note plus bas), ou null
+   - note      : précision courte optionnelle (ex. "Festival",
+                 "Complet", "Entrée libre")
+   - video     : data URI (ou constante réutilisable) d'une vidéo
+                 de présentation en LSF, ou null/absent si aucune.
+                 Affiche une vignette "Vidéo en LSF" cliquable en
+                 haut du formulaire de l'évènement, qui ouvre la
+                 vidéo en plein écran. Plusieurs évènements peuvent
+                 pointer vers la même vidéo (déclarée une seule
+                 fois en constante) quand elle les concerne tous.
+
+   Pour l'image : redimensionner à ~600px de large et
+   compresser en JPEG qualité ~70 avant de convertir en base64,
+   pour rester léger. Champ "image" à null si pas de visuel
+   dispo : un fond de remplacement s'affiche automatiquement.
+
+   Pour la vidéo : compresser (H.264, ~540px de large suffit,
+   CRF ~26) avant de convertir en base64 — une vidéo verticale de
+   60-90s tient autour de 5-7 Mo une fois compressée. Attention à
+   la taille totale de la page (limite 16 Mo) : réutiliser une
+   même constante vidéo pour plusieurs évènements quand c'est le
+   cas plutôt que de dupliquer le base64.
+
+   Les événements passés disparaissent seuls de l'affichage
+   (comparaison à la date du jour) : inutile de les supprimer.
+
+   - cancelled : true si le concert est annulé (le visuel porte
+     un bandeau "ANNULÉ"). L'événement reste visible dans le mois
+     concerné, mais grisé, sans bouton de réservation, et n'est
+     jamais mis en avant comme "prochain concert".
+   ============================================================ */
+const VIDEO_LILOPHONE_ANNONCE = "https://www.facebook.com/share/r/19KPm6bfHm/";
+const EVENTS = [
+  {id:"2026-09-11-belin", artist:"Bertrand Belin", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-11", time:null, link:"mailto:Ilophone@gmail.com", linkLabel:"Réserver", image:"ev-4343cf8b06.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
+  {id:"2026-09-12-freres-misere", artist:"Les Frères Misère", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-12", time:null, link:"mailto:Ilophone@gmail.com", linkLabel:"Réserver", image:"ev-4a45a317cc.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
+  {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:"mailto:billetterie@lfe.bzh", linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
+  {id:"2026-09-25-mathilde-peruwelz", artist:"Mathilde", venue:"Centre culturel", city:"Péruwelz (BE)", date:"2026-09-25", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-273f03c6bf.jpg", note:null, cancelled:false},
+  {id:"2026-09-26-mathilde-saint-lezin", artist:"Mathilde", venue:"Saint-Lézin (49)", city:null, date:"2026-09-26", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0f27631bbb.jpg", note:null, cancelled:false},
+  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false},
+  {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:false},
+  {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Vesoul (70)", city:null, date:"2026-10-16", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
+  {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique (38)", city:null, date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
+  {id:"2026-10-17-mathilde-paris", artist:"Mathilde", venue:"Facettes Festival", city:"Paris (75)", date:"2026-10-17", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-5b58a18f6d.jpg", note:null, cancelled:false},
+  {id:"2026-10-17-medine-ouest-park", artist:"Médine", venue:"Festival Ouest-Park", city:null, date:"2026-10-17", time:null, link:"mailto:billetterie@letetris.fr", linkLabel:"Réserver", image:"ev-2a71d5f330.jpg", note:null, video:"https://www.facebook.com/reel/1093320369953102", cancelled:false},
+  {id:"2026-10-23-ultra-vomit", artist:"Ultra Vomit", venue:"Fire Master Convention (36)", city:null, date:"2026-10-23", time:null, link:"https://firemaster-convention.fr", linkLabel:"Réserver", image:"ev-38a773c067.jpg", note:null, timeLabel:"Soirée", cancelled:false},
+  {id:"2026-10-30-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-30", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
+  {id:"2026-10-31-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-31", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
+  {id:"2026-11-08-danyl-la-sirene", artist:"Danyl", venue:"La Sirène (17)", city:null, date:"2026-11-08", time:null, link:"mailto:accessibilite@la-sirene.fr", linkLabel:"Réserver", image:"ev-5bfd288933.jpg", note:null, cancelled:false},
+  {id:"2026-11-12-mathilde-villeurbanne", artist:"Mathilde", venue:"Théâtre l'Astrée", city:"Villeurbanne (69)", date:"2026-11-12", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-fe4bdf93a6.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-mathilde-rouen", artist:"Mathilde", venue:"Fête de l'Huma Normandie", city:"Rouen", date:"2026-11-14", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-429edeb59a.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"https://lesrendezvoussoniques.com", linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"https://lesrendezvoussoniques.com", linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
+  {id:"2026-11-28-mathilde-saint-denis-de-pile", artist:"Mathilde", venue:"Saint-Denis-de-Pile (33)", city:null, date:"2026-11-28", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-a91f2cff7d.jpg", note:null, cancelled:false},
+  {id:"2026-12-04-mathilde-lille", artist:"Mathilde", venue:"Splendid", city:"Lille (59)", date:"2026-12-04", time:"22:30", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-90f116eab1.jpg", note:null, cancelled:false},
+  {id:"2026-12-12-ashen", artist:"Ashen", venue:"Charitable Métal Fest (77)", city:null, date:"2026-12-12", time:null, link:"https://lempreinte.net", linkLabel:"Réserver", image:"ev-46969d5686.jpg", note:null, timeLabel:"Soirée", cancelled:false}
+];
+
+const MOIS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+const MOIS_ABBR = ["Jan","Fév","Mars","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+const JOURS = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+
+function parseLocalDate(iso){
+  const [y,m,d] = iso.split("-").map(Number);
+  return new Date(y, m-1, d);
+}
+function startOfToday(){
+  const n = new Date();
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+}
+function isMailto(link){
+  return typeof link === "string" && (link.startsWith("mailto:") || (link.includes("@") && !link.startsWith("http")));
+}
+function normalizeLink(link){
+  if(!link) return null;
+  if(link.startsWith("mailto:") || link.startsWith("http")) return link;
+  if(link.includes("@")) return "mailto:" + link;
+  return "https://" + link;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+const iconTicket = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a1.5 1.5 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a1.5 1.5 0 0 0 0-3V9Z"/></svg>';
+// Pictogrammes des 3 étapes "préparer votre mail" — simples, reconnaissables
+// sans avoir à lire le texte à côté (public sourd, très visuel).
+const iconEdit = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const iconCopy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+const iconMail = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg>';
+const iconPin = '<svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-4.14 0-7.5 3.36-7.5 7.5 0 5.63 6.55 11.6 6.83 11.85a1 1 0 0 0 1.34 0c.28-.25 6.83-6.22 6.83-11.85C19.5 5.36 16.14 2 12 2Zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5Z"/></svg>';
+const iconPlay = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+const iconCalendar = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M12 14v4M10 16h4"/></svg>';
+// Vignette ronde "Vidéo en LSF" fournie par l'association (logo mains + LSF).
+const videoBadgeImg = "video-badge.png";
+const heroDoodle = '<svg class="hero-doodle" viewBox="0 0 100 130" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M40 95c-14-2-24-16-24-16"/><path d="M46 60V22a5 5 0 0 1 10 0v30"/><path d="M56 52V16a5 5 0 0 1 10 0v36"/><path d="M66 54V24a5 5 0 0 1 10 0v34"/><rect x="38" y="60" width="38" height="34" rx="16"/><path d="M55 94c0 10 4 18 4 18"/><path d="M8 30a16 16 0 0 0 16 16"/><path d="M8 30h16v16"/></svg>';
+
+/* Repère "Nouveau" + pastille sur l'icône de l'appli installée, pour les
+   concerts ajoutés depuis la dernière visite. Purement côté navigateur
+   (localStorage + Badging API) : ça ne prévient personne activement quand
+   l'appli est fermée, seulement au moment où la personne la rouvre — une
+   vraie notification poussée demanderait un serveur d'envoi, hors de
+   portée d'une page statique. Voir aussi : navigator.setAppBadge (Badging
+   API), supportée sur appli installée (Android/Chrome, desktop, iOS 16.4+). */
+const SEEN_EVENTS_KEY = "chansigne_seen_event_ids_v1";
+
+function getSeenEventIds(){
+  // null = première visite (aucun historique) : on ne veut pas marquer
+  // tous les concerts déjà en ligne comme "Nouveau" dans ce cas.
+  try {
+    const raw = localStorage.getItem(SEEN_EVENTS_KEY);
+    return raw ? new Set(JSON.parse(raw)) : null;
+  } catch(err){
+    return null;
+  }
+}
+function setSeenEventIds(ids){
+  try { localStorage.setItem(SEEN_EVENTS_KEY, JSON.stringify(Array.from(ids))); }
+  catch(err){ /* stockage indisponible (navigation privée…) : tant pis */ }
+}
+function updateAppBadge(count){
+  try {
+    if(count > 0 && "setAppBadge" in navigator) navigator.setAppBadge(count);
+    else if("clearAppBadge" in navigator) navigator.clearAppBadge();
+  } catch(err){ /* Badging API non dispo (appli non installée, navigateur non compatible…) */ }
+}
+
+function render(){
+  const today = startOfToday();
+  const upcoming = EVENTS
+    .filter(e => parseLocalDate(e.date) >= today)
+    .sort((a,b) => a.date.localeCompare(b.date) || (a.time||"").localeCompare(b.time||""));
+
+  const seenIds = getSeenEventIds();
+  const isFirstVisit = seenIds === null;
+  const newIds = isFirstVisit
+    ? new Set()
+    : new Set(upcoming.filter(e => !e.cancelled && !seenIds.has(e.id)).map(e => e.id));
+  updateAppBadge(newIds.size);
+  if(isFirstVisit) setSeenEventIds(new Set(upcoming.map(e => e.id)));
+
+  const heroSlot = document.getElementById("hero-slot");
+  const listSlot = document.getElementById("list-slot");
+
+  if(upcoming.length === 0){
+    heroSlot.innerHTML = "";
+    listSlot.innerHTML = `
+      <div class="empty">
+        <div class="mark"><img src="icon-512.png" alt="" style="width:100%;height:100%;"></div>
+        <h2>Aucun concert programmé pour l'instant</h2>
+        <p>Les prochains concerts chansignés apparaîtront ici dès qu'ils seront ajoutés. Revenez bientôt !</p>
+      </div>`;
+    return;
+  }
+
+  const next = upcoming.find(e => !e.cancelled);
+
+  if(next){
+    const nextLink = normalizeLink(next.link);
+    const d = parseLocalDate(next.date);
+    const dateStr = `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()].toLowerCase()}${timeText(next) ? " · " + timeText(next) : ""}`;
+
+    heroSlot.innerHTML = `
+      <div class="hero" data-id="${next.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(next.artist)}">
+        ${next.image
+          ? `<div class="hero-bg" style="background-image:url('${next.image}')"></div><div class="hero-scrim"></div>`
+          : `<div class="hero-noimg"></div>`}
+        ${heroDoodle}
+        <div class="hero-confetti"><span></span><span></span><span></span></div>
+        <div class="hero-inner">
+          <div class="hero-eyebrow-row">
+            <span class="hero-eyebrow"><span class="dot"></span>Prochain concert</span>
+            ${newIds.has(next.id) ? '<span class="hero-badge-new">Nouveau</span>' : ''}
+          </div>
+          <div class="hero-title">${escapeHtml(next.artist)}</div>
+          <div class="hero-meta">
+            <span>${escapeHtml(dateStr)}</span>
+            <span>${escapeHtml(next.venue)}${next.city ? ", " + escapeHtml(next.city) : ""}</span>
+          </div>
+          <div class="hero-actions">
+            ${nextLink ? `<button type="button" class="btn btn-primary">${iconTicket} ${escapeHtml(next.linkLabel || "Réserver")}</button>` : ``}
+          </div>
+        </div>
+      </div>`;
+  } else {
+    heroSlot.innerHTML = "";
+  }
+
+  const byMonth = new Map();
+  for(const e of upcoming){
+    const dt = parseLocalDate(e.date);
+    const key = dt.getFullYear() + "-" + dt.getMonth();
+    if(!byMonth.has(key)) byMonth.set(key, {label: MOIS[dt.getMonth()] + " " + dt.getFullYear(), items: []});
+    byMonth.get(key).items.push(e);
+  }
+
+  let html = "";
+  for(const {label, items} of byMonth.values()){
+    html += `<div class="month">
+      <div class="month-head"><h2>${label}</h2><span class="count">${items.length} concert${items.length>1?"s":""}</span></div>
+      <div class="cards">`;
+    for(const e of items){
+      const dt = parseLocalDate(e.date);
+      const link = e.cancelled ? null : normalizeLink(e.link);
+      html += `
+        <div class="card${e.cancelled ? " is-cancelled" : ""}" data-id="${e.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(e.artist)}">
+          <div class="card-date"><div class="d">${dt.getDate()}</div><div class="m">${MOIS_ABBR[dt.getMonth()]}</div></div>
+          ${e.image
+            ? `<img class="card-img" src="${e.image}" alt="">`
+            : `<div class="card-img placeholder">${escapeHtml((e.artist||"?").charAt(0))}</div>`}
+          <div class="card-body">
+            <div class="card-artist">${escapeHtml(e.artist)}${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
+            <div class="card-venue">${iconPin}${escapeHtml(e.venue)}${e.city ? ", " + escapeHtml(e.city) : ""}${timeText(e) ? " · " + escapeHtml(timeText(e)) : ""}</div>
+            ${e.cancelled
+              ? `<span class="badge-cancelled">Annulé</span>`
+              : (link ? `<button type="button" class="card-cta">${iconTicket} ${escapeHtml(e.linkLabel || "Réserver")}</button>` : (e.note ? `<span class="card-cta" style="color:var(--muted);background:none;padding:0;">${escapeHtml(e.note)}</span>` : ``))}
+          </div>
+        </div>`;
+    }
+    html += `</div></div>`;
+  }
+  listSlot.innerHTML = html;
+
+  // Laisse le repère "Nouveau" et la pastille sur l'icône visibles un
+  // moment, puis marque ces concerts comme vus pour la prochaine visite.
+  if(newIds.size > 0){
+    setTimeout(() => {
+      setSeenEventIds(new Set(upcoming.map(e => e.id)));
+      updateAppBadge(0);
+    }, 4000);
+  }
+}
+render();
+
+/* ============================================================
+   MODAL — visuel en entier + réservation directement cliquable
+   ============================================================ */
+const modalEl = document.getElementById("modal");
+const modalImageWrap = document.getElementById("modal-image-wrap");
+const modalVideoWrap = document.getElementById("modal-video-wrap");
+const modalEyebrow = document.getElementById("modal-eyebrow");
+const modalTitle = document.getElementById("modal-title");
+const modalMeta = document.getElementById("modal-meta");
+const modalReminderWrap = document.getElementById("modal-reminder-wrap");
+const modalCtaWrap = document.getElementById("modal-cta-wrap");
+const modalMessageWrap = document.getElementById("modal-message-wrap");
+let lastFocused = null;
+
+/* Copie dans le presse-papier, avec repli pour les navigateurs qui
+   n'ont pas l'API Clipboard (ou la refusent hors contexte sécurisé). */
+async function copyText(text){
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch(err){
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch(err2){
+      return false;
+    }
+  }
+}
+
+/* Message pré-rempli, pensé pour les personnes sourdes qui ont du mal
+   à rédiger : il suffit de le copier et de l'envoyer tel quel. */
+function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name){
+  const pa = Math.max(0, pshAdults);
+  const pc = Math.max(0, pshChildren);
+  const ca = Math.max(0, companionAdults);
+  const cc = Math.max(0, companionChildren);
+  const who = name && name.trim() ? `Je m'appelle ${name.trim()}, je` : "Je";
+
+  const pshLines = [];
+  if(pa > 0) pshLines.push(`- ${pa} adulte${pa > 1 ? "s" : ""}`);
+  if(pc > 0) pshLines.push(`- ${pc} enfant${pc > 1 ? "s" : ""}`);
+
+  const companionLines = [];
+  if(ca > 0) companionLines.push(`- ${ca} adulte${ca > 1 ? "s" : ""} valide${ca > 1 ? "s" : ""} ou en situation de handicap`);
+  if(cc > 0) companionLines.push(`- ${cc} enfant${cc > 1 ? "s" : ""} valide${cc > 1 ? "s" : ""} ou en situation de handicap`);
+
+  const pshBlock = pshLines.length
+    ? `\nPlaces au tarif PSH :\n${pshLines.join("\n")}\n`
+    : "";
+
+  const companionBlock = companionLines.length
+    ? `\nPlaces accompagnants :\n${companionLines.join("\n")}\n`
+    : "";
+
+  const signature = name && name.trim() ? `Bien cordialement.\n${name.trim()}` : "Bien cordialement.";
+
+  return `Bonjour,
+
+${who} suis sourd(e), je souhaite réserver des places pour le concert chansigné de ${artist}.
+${pshBlock}${companionBlock}
+Merci de m'indiquer :
+- comment acheter mes places.
+- où me rendre le jour J, et à quelle heure, pour assister au concert chansigné.
+- s'il y a des gilets vibrants, où les récupérer.
+
+Pour faciliter ma compréhension, merci de privilégier une réponse claire et avec des phrases simples.
+
+En vous remerciant.
+${signature}`;
+}
+
+/* Rappel calendrier — sans serveur, sans fichier téléchargé (les pages
+   publiées ici ne peuvent pas proposer de téléchargement de fichier aux
+   visiteurs : le navigateur bloque tout data:/blob: déclenché par la page).
+   Solution fiable : un lien "Ajouter à Google Agenda" prérempli, qui
+   fonctionne comme un lien de réservation classique. Les horaires sont
+   convertis en UTC en tenant compte de l'heure d'été/hiver française. */
+// Horaire affiché : heure précise (time) ou libellé libre (timeLabel, ex. "Soirée")
+function timeText(e){ return e.time || e.timeLabel || ""; }
+function pad2(n){ return String(n).padStart(2,"0"); }
+function parisUtcOffsetHours(y, m, d){
+  // Règle européenne : heure d'été du dernier dimanche de mars (UTC+2)
+  // au dernier dimanche d'octobre (retour à UTC+1).
+  function lastSundayUTC(year, monthIndex){
+    const last = new Date(Date.UTC(year, monthIndex + 1, 0));
+    last.setUTCDate(last.getUTCDate() - last.getUTCDay());
+    return last.getTime();
+  }
+  const check = Date.UTC(y, m, d);
+  const dstStart = lastSundayUTC(y, 2);  // mars
+  const dstEnd = lastSundayUTC(y, 9);    // octobre
+  return (check >= dstStart && check < dstEnd) ? 2 : 1;
+}
+function buildGoogleCalendarUrl(e){
+  const dt = parseLocalDate(e.date);
+  const y = dt.getFullYear(), m = dt.getMonth(), d = dt.getDate();
+  const text = `${e.artist} — concert chansigné`;
+  const details = "Concert traduit en langue des signes par 10 Doigts en Cavale.";
+  const location = [e.venue, e.city].filter(Boolean).join(", ");
+
+  let datesParam;
+  if(e.time){
+    const [h, min] = e.time.split(":").map(Number);
+    const offset = parisUtcOffsetHours(y, m, d);
+    const startMs = Date.UTC(y, m, d, h, min) - offset * 3600000;
+    const endMs = startMs + 2 * 3600000; // durée par défaut : 2h
+    const fmt = ms => {
+      const u = new Date(ms);
+      return `${u.getUTCFullYear()}${pad2(u.getUTCMonth()+1)}${pad2(u.getUTCDate())}T${pad2(u.getUTCHours())}${pad2(u.getUTCMinutes())}00Z`;
+    };
+    datesParam = `${fmt(startMs)}/${fmt(endMs)}`;
+  } else {
+    const end = new Date(y, m, d + 1);
+    const fmtDate = dd => `${dd.getFullYear()}${pad2(dd.getMonth()+1)}${pad2(dd.getDate())}`;
+    datesParam = `${fmtDate(dt)}/${fmtDate(end)}`;
+  }
+
+  const params = new URLSearchParams({ action: "TEMPLATE", text, dates: datesParam, details, location });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function openModal(id){
+  const e = EVENTS.find(ev => ev.id === id);
+  if(!e) return;
+
+  const dt = parseLocalDate(e.date);
+  const dateStr = `${JOURS[dt.getDay()]} ${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}${timeText(e) ? " · " + timeText(e) : ""}`;
+
+  modalImageWrap.innerHTML = e.image ? `<img src="${e.image}" alt="">` : "";
+
+  // Vignette "Vidéo en LSF" — tout en haut du formulaire, avant le reste,
+  // pour un public sourd très visuel : image = message, avant même le texte.
+  // La vidéo est hébergée à l'extérieur (ex. Facebook) et simplement liée
+  // ici : l'intégrer directement dans la page (base64) empêchait le
+  // partage public de cette page (contrôle de sécurité automatique).
+  if(e.video){
+    modalVideoWrap.innerHTML = `
+      <a class="video-badge-btn" href="${e.video}" target="_blank" rel="noopener" aria-label="Regarder la vidéo en langue des signes">
+        <span class="video-badge-img-wrap">
+          <img src="${videoBadgeImg}" alt="">
+          <span class="video-badge-play">${iconPlay}</span>
+        </span>
+        <span class="video-badge-label">Vidéo en LSF<small>Touchez pour la regarder</small></span>
+      </a>`;
+  } else {
+    modalVideoWrap.innerHTML = "";
+  }
+
+  modalEyebrow.textContent = e.cancelled ? "Concert annulé" : "Détails du concert";
+  modalTitle.textContent = e.artist;
+  modalMeta.textContent = `${dateStr} — ${e.venue}${e.city ? ", " + e.city : ""}`;
+
+  // Rappel calendrier — utile quel que soit le mode de réservation (mail
+  // ou site web), donc affiché pour tout concert qui n'est pas annulé.
+  if(e.cancelled){
+    modalReminderWrap.innerHTML = "";
+  } else {
+    modalReminderWrap.innerHTML = `<a class="reminder-btn" href="${buildGoogleCalendarUrl(e)}" target="_blank" rel="noopener">${iconCalendar} Ajouter à Google Agenda</a>`;
+  }
+
+  const link = e.cancelled ? null : normalizeLink(e.link);
+  const mailAddress = link && isMailto(link) ? link.replace(/^mailto:/,"") : null;
+  if(link){
+    const mail = isMailto(link);
+    if(mail){
+      // Un mailto: dépend d'une appli mail réglée par défaut sur l'appareil —
+      // pas fiable à 100 % partout, mais c'est ce qui rapproche le plus d'un
+      // envoi "en un clic" dans une page web statique. Le bouton qui prépare
+      // et ouvre le mail (destinataire, sujet, corps déjà remplis) est plus
+      // bas, dans la section "Réserver par mail", une fois les champs saisis
+      // — pas besoin de répéter la consigne ici.
+      modalCtaWrap.innerHTML = "";
+    } else {
+      const address = link.replace(/^https?:\/\//,"");
+      modalCtaWrap.innerHTML = `<a class="modal-cta" href="${link}" target="_blank" rel="noopener">${iconTicket} ${escapeHtml(e.linkLabel || "Réserver")} — <span class="addr">${escapeHtml(address)}</span></a>`;
+    }
+  } else if(e.cancelled){
+    modalCtaWrap.innerHTML = `<span class="modal-note">Ce concert est annulé, il n'est plus possible de réserver.</span>`;
+  } else if(e.note){
+    modalCtaWrap.innerHTML = `<span class="modal-note">${escapeHtml(e.note)}</span>`;
+  } else {
+    modalCtaWrap.innerHTML = "";
+  }
+
+  // Message prêt à envoyer, pour aider à écrire à l'organisateur — utile
+  // quand il faut écrire un mail, inutile quand un lien de réservation
+  // (site web) est déjà cliquable juste au-dessus.
+  const isWebsiteLink = !!(link && !mailAddress);
+  if(e.cancelled || isWebsiteLink){
+    modalMessageWrap.innerHTML = "";
+  } else {
+    const stepperGroupsHtml = `
+      <div class="stepper-group">
+        <p class="stepper-group-title">Places tarif PSH</p>
+        <div class="places-stepper">
+          <span>Adulte(s)</span>
+          <div class="stepper-controls">
+            <button type="button" id="psh-adults-minus" aria-label="Moins d'adultes au tarif PSH">−</button>
+            <span class="stepper-count" id="psh-adults-count">0</span>
+            <button type="button" id="psh-adults-plus" aria-label="Plus d'adultes au tarif PSH">+</button>
+          </div>
+        </div>
+        <div class="places-stepper">
+          <span>Enfant(s)</span>
+          <div class="stepper-controls">
+            <button type="button" id="psh-children-minus" aria-label="Moins d'enfants au tarif PSH">−</button>
+            <span class="stepper-count" id="psh-children-count">0</span>
+            <button type="button" id="psh-children-plus" aria-label="Plus d'enfants au tarif PSH">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stepper-group">
+        <p class="stepper-group-title">Places pour accompagnants</p>
+        <div class="places-stepper">
+          <span>Adulte(s)</span>
+          <div class="stepper-controls">
+            <button type="button" id="comp-adults-minus" aria-label="Moins d'accompagnants adultes">−</button>
+            <span class="stepper-count" id="comp-adults-count">0</span>
+            <button type="button" id="comp-adults-plus" aria-label="Plus d'accompagnants adultes">+</button>
+          </div>
+        </div>
+        <div class="places-stepper">
+          <span>Enfant(s)</span>
+          <div class="stepper-controls">
+            <button type="button" id="comp-children-minus" aria-label="Moins d'accompagnants enfants">−</button>
+            <span class="stepper-count" id="comp-children-count">0</span>
+            <button type="button" id="comp-children-plus" aria-label="Plus d'accompagnants enfants">+</button>
+          </div>
+        </div>
+      </div>`;
+
+    if(mailAddress){
+      // Pas de véritable envoi possible depuis une page web statique : le
+      // plus fiable reste de faire copier le message (avec l'adresse) en un
+      // seul geste, puis de laisser la personne l'envoyer depuis sa propre
+      // appli mail. Présenté en 3 étapes visuelles avec pictogrammes, pour
+      // un public sourd très à l'aise avec l'image mais peu avec la lecture.
+      modalMessageWrap.innerHTML = `
+        <div class="modal-message">
+          <p class="modal-message-title">Préparer votre mail pour réserver</p>
+
+          <div class="msg-step">
+            <div class="msg-step-head">
+              <span class="msg-step-icon">${iconEdit}</span>
+              <span class="msg-step-label">1. Compléter votre demande</span>
+            </div>
+            <label class="field-label" for="msg-name">Votre nom et prénom</label>
+            <input type="text" id="msg-name" class="field-input" placeholder="Ex. : Camille Dupont" autocomplete="name">
+            ${stepperGroupsHtml}
+          </div>
+
+          <div class="msg-step">
+            <div class="msg-step-head">
+              <span class="msg-step-icon">${iconCopy}</span>
+              <span class="msg-step-label">2. Copier le message</span>
+            </div>
+            <pre class="message-preview" id="message-preview"></pre>
+            <button type="button" class="modal-cta" id="copy-all-btn">${iconCopy} Copier le message et le mail pour l'envoyer</button>
+          </div>
+
+          <div class="msg-step">
+            <div class="msg-step-head">
+              <span class="msg-step-icon">${iconMail}</span>
+              <span class="msg-step-label">3. Envoyez-le depuis votre boîte mail</span>
+            </div>
+            <p class="msg-step-hint">Ouvrez votre application mail, collez le message, et envoyez-le à :</p>
+            <p class="msg-address-chip">${escapeHtml(mailAddress)}</p>
+          </div>
+        </div>`;
+    } else {
+      modalMessageWrap.innerHTML = `
+        <div class="modal-message">
+          <p class="modal-message-title">Message prêt à envoyer</p>
+          <p class="modal-message-sub">Pour aider à écrire à l'organisateur : copiez ce message et envoyez-le tel quel, par mail ou sur place.</p>
+
+          <label class="field-label" for="msg-name">Votre nom et prénom</label>
+          <input type="text" id="msg-name" class="field-input" placeholder="Ex. : Camille Dupont" autocomplete="name">
+          ${stepperGroupsHtml}
+
+          <pre class="message-preview" id="message-preview"></pre>
+          <button type="button" class="modal-copy-message" id="copy-message-btn">Copier le message</button>
+        </div>`;
+    }
+
+    const counts = { pshAdults: 0, pshChildren: 0, compAdults: 0, compChildren: 0 };
+    const nameInput = document.getElementById("msg-name");
+    const preview = document.getElementById("message-preview");
+    const copyMsgBtn = mailAddress ? null : document.getElementById("copy-message-btn");
+    const baseMsgLabel = copyMsgBtn ? copyMsgBtn.textContent : "";
+    const copyAllBtn = mailAddress ? document.getElementById("copy-all-btn") : null;
+    const baseCopyAllLabel = copyAllBtn ? copyAllBtn.innerHTML : "";
+
+    function refreshMessage(){
+      document.getElementById("psh-adults-count").textContent = String(counts.pshAdults);
+      document.getElementById("psh-children-count").textContent = String(counts.pshChildren);
+      document.getElementById("comp-adults-count").textContent = String(counts.compAdults);
+      document.getElementById("comp-children-count").textContent = String(counts.compChildren);
+      preview.textContent = buildReservationMessage(
+        e.artist, counts.pshAdults, counts.pshChildren, counts.compAdults, counts.compChildren, nameInput.value
+      );
+    }
+    refreshMessage();
+
+    function wireStepper(key, idPrefix, min){
+      document.getElementById(`${idPrefix}-minus`).addEventListener("click", () => {
+        counts[key] = Math.max(min, counts[key] - 1);
+        refreshMessage();
+      });
+      document.getElementById(`${idPrefix}-plus`).addEventListener("click", () => {
+        counts[key] = Math.min(20, counts[key] + 1);
+        refreshMessage();
+      });
+    }
+    wireStepper("pshAdults", "psh-adults", 0);
+    wireStepper("pshChildren", "psh-children", 0);
+    wireStepper("compAdults", "comp-adults", 0);
+    wireStepper("compChildren", "comp-children", 0);
+
+    nameInput.addEventListener("input", refreshMessage);
+    if(copyMsgBtn){
+      copyMsgBtn.addEventListener("click", async () => {
+        const ok = await copyText(preview.textContent);
+        copyMsgBtn.textContent = ok ? "Message copié ✓" : "Impossible de copier le message";
+        copyMsgBtn.classList.toggle("is-copied", ok);
+        setTimeout(() => { copyMsgBtn.textContent = baseMsgLabel; copyMsgBtn.classList.remove("is-copied"); }, 2500);
+      });
+    }
+    if(copyAllBtn){
+      // Un seul geste copie tout ce qu'il faut (adresse + message) pour que
+      // la personne n'ait plus qu'à coller dans sa propre appli mail.
+      copyAllBtn.addEventListener("click", async () => {
+        const combined = `À : ${mailAddress}\nObjet : Réservation — concert chansigné de ${e.artist}\n\n${preview.textContent}`;
+        const ok = await copyText(combined);
+        copyAllBtn.innerHTML = ok ? "Copié ✓ — collez-le dans un nouveau mail" : "Impossible de copier";
+        copyAllBtn.classList.toggle("is-copied", ok);
+        setTimeout(() => { copyAllBtn.innerHTML = baseCopyAllLabel; copyAllBtn.classList.remove("is-copied"); }, 3000);
+      });
+    }
+  }
+
+  lastFocused = document.activeElement;
+  modalEl.hidden = false;
+  document.body.classList.add("modal-open");
+  document.getElementById("modal-close-btn").focus();
+}
+
+function closeModal(){
+  modalEl.hidden = true;
+  document.body.classList.remove("modal-open");
+  if(lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+}
+
+function wireCardTriggers(container){
+  container.addEventListener("click", ev => {
+    const card = ev.target.closest("[data-id]");
+    if(card) openModal(card.dataset.id);
+  });
+  container.addEventListener("keydown", ev => {
+    if(ev.key !== "Enter" && ev.key !== " ") return;
+    const card = ev.target.closest("[data-id]");
+    if(!card) return;
+    ev.preventDefault();
+    openModal(card.dataset.id);
+  });
+}
+wireCardTriggers(document.getElementById("hero-slot"));
+wireCardTriggers(document.getElementById("list-slot"));
+
+document.getElementById("modal-close-btn").addEventListener("click", closeModal);
+modalEl.addEventListener("click", ev => { if(ev.target === modalEl) closeModal(); });
+
+document.addEventListener("keydown", ev => {
+  if(ev.key !== "Escape") return;
+  if(!modalEl.hidden) closeModal();
+});
+
+/* Installation sur l'écran d'accueil (PWA). Un lien web ne peut pas "télécharger"
+   une appli à lui seul : sur Android le navigateur propose l'installation
+   (bouton natif si disponible), sur iPhone il faut passer par Partager →
+   "Sur l'écran d'accueil". Le bouton affiche donc la bonne marche à suivre. */
+(function(){
+  try {
+    const wrap = document.getElementById("install-wrap");
+    const btn = document.getElementById("install-btn");
+    const help = document.getElementById("install-help");
+    if(!wrap || !btn || !help) return;
+    const standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+    if(standalone) return;
+    wrap.hidden = false;
+    let deferred = null;
+    window.addEventListener("beforeinstallprompt", ev => { ev.preventDefault(); deferred = ev; });
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(ua);
+    const stepsIOS = '<p><strong>Sur iPhone / iPad (Safari) :</strong></p><p>1. Touchez le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut).</p><p>2. Choisissez <strong>« Sur l\'écran d\'accueil »</strong>.</p><p>3. Touchez <strong>Ajouter</strong>.</p>';
+    const stepsAndroid = '<p><strong>Sur Android (Chrome) :</strong></p><p>1. Touchez le menu <strong>⋮</strong> en haut à droite.</p><p>2. Choisissez <strong>« Installer l\'application »</strong> (ou « Ajouter à l\'écran d\'accueil »).</p><p>3. Confirmez.</p>';
+    btn.addEventListener("click", async () => {
+      if(deferred){
+        try { deferred.prompt(); await deferred.userChoice; } catch(e) {}
+        deferred = null;
+        return;
+      }
+      help.innerHTML = isIOS ? stepsIOS : (isAndroid ? stepsAndroid : stepsAndroid + stepsIOS);
+      help.hidden = !help.hidden;
+    });
+  } catch(err) { /* l'aide à l'installation n'est pas essentielle */ }
+})();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(() => {}); });
+}
+</script>
+
+</body></html>
