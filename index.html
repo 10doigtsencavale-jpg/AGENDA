@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" type="image/png" href="icon-32.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="manifest" href="manifest.json">
+<script>if(!/SamsungBrowser/i.test(navigator.userAgent)){var l=document.createElement("link");l.rel="manifest";l.href="manifest.json";document.head.appendChild(l);}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -1326,7 +1326,7 @@ document.addEventListener("keydown", ev => {
     const isSamsung = /SamsungBrowser/i.test(ua) && isAndroid;
     const chromeIntent = "intent://" + location.host + location.pathname + location.search +
       "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(location.href) + ";end";
-    const stepsSamsung = '<p><strong>Vous utilisez Samsung Internet.</strong> Ce navigateur affiche une alerte de sécurité (Google Play Protect) et bloque l\'installation.</p><p>Touchez <strong>« Installer avec Chrome »</strong> : la page s\'ouvre dans Google Chrome, où l\'installation se fait sans alerte.</p><p>Si Chrome ne s\'ouvre pas, installez <strong>Google Chrome</strong> depuis le Play Store, puis rouvrez ce lien.</p>';
+    const stepsSamsung = '<p><strong>Vous utilisez Samsung Internet.</strong> Ce navigateur ne sait pas installer cette appli (message « Impossible d\'installer l\'application web »).</p><p><strong>Option 1 (recommandée) :</strong> touchez <strong>« Installer avec Chrome »</strong> : la page s\'ouvre dans Google Chrome, où l\'installation fonctionne.</p><p><strong>Option 2 :</strong> dans Samsung Internet, touchez le menu <strong>☰</strong> (en bas à droite), puis <strong>« Ajouter la page à »</strong> et <strong>« Écran d\'accueil »</strong>. Vous obtenez une icône qui ouvre l\'agenda.</p>';
     if(isSamsung){
       const label = document.getElementById("install-label");
       if(label) label.textContent = "Installer avec Chrome";
