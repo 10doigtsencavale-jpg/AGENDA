@@ -504,6 +504,15 @@
   .install-help p:last-child{margin-bottom:0;}
   .install-help strong{font-weight:700;}
 
+
+  .install-top{margin:14px 0 12px;}
+  .install-top-row{display:flex;align-items:center;gap:8px;}
+  .install-btn-top{flex:1;background:var(--accent-2);color:var(--accent-2-ink);border-color:transparent;font-size:17px;padding:14px 18px;box-shadow:0 4px 14px rgba(0,0,0,.18);}
+  .install-btn-top:active{filter:brightness(.95);background:var(--accent-2);}
+  .install-dismiss{appearance:none;flex:none;width:44px;height:44px;border-radius:50%;cursor:pointer;
+    background:var(--surface-2);color:var(--muted);border:1.5px solid var(--line);font-size:24px;line-height:1;font-family:var(--font-body);}
+  .install-again{display:inline-block;margin-bottom:10px;}
+
   @media (prefers-reduced-motion: reduce){
     .btn{transition:none;}
   }
@@ -521,6 +530,16 @@
 </div>
 
 <main>
+  <div class="install-top" id="install-wrap" hidden>
+    <div class="install-top-row">
+      <button type="button" class="install-btn install-btn-top" id="install-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 8v7M9 12.5l3 3 3-3"/></svg>
+        Installer l'appli sur mon téléphone
+      </button>
+      <button type="button" class="install-dismiss" id="install-dismiss" aria-label="Masquer le bouton d'installation">&times;</button>
+    </div>
+    <div class="install-help" id="install-help" hidden></div>
+  </div>
   <div id="hero-slot"></div>
   <div id="list-slot"></div>
 
@@ -549,13 +568,7 @@
 
 
 <footer>
-  <div class="install-wrap" id="install-wrap" hidden>
-    <button type="button" class="install-btn" id="install-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 8v7M9 12.5l3 3 3-3"/></svg>
-      Installer l'appli sur mon téléphone
-    </button>
-    <div class="install-help" id="install-help" hidden></div>
-  </div>
+  <a href="#" id="install-again" class="install-again" hidden>Installer l'application sur mon téléphone</a><br>
   Chansigné par <a href="https://www.10doigtsencavale.com" target="_blank" rel="noopener">10 Doigts en Cavale</a>
 </footer>
 
@@ -619,8 +632,8 @@ const EVENTS = [
   {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:"mailto:billetterie@lfe.bzh", linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
   {id:"2026-09-25-mathilde-peruwelz", artist:"Mathilde", venue:"Centre culturel", city:"Péruwelz (BE)", date:"2026-09-25", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-273f03c6bf.jpg", note:null, cancelled:false},
   {id:"2026-09-26-mathilde-saint-lezin", artist:"Mathilde", venue:"Saint-Lézin (49)", city:null, date:"2026-09-26", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0f27631bbb.jpg", note:null, cancelled:false},
-  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false},
-  {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:false},
+  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
+  {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
   {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Vesoul (70)", city:null, date:"2026-10-16", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
   {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique (38)", city:null, date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
   {id:"2026-10-17-mathilde-paris", artist:"Mathilde", venue:"Facettes Festival", city:"Paris (75)", date:"2026-10-17", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-5b58a18f6d.jpg", note:null, cancelled:false},
@@ -1210,7 +1223,19 @@ document.addEventListener("keydown", ev => {
     if(!wrap || !btn || !help) return;
     const standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
     if(standalone) return;
-    wrap.hidden = false;
+    const again = document.getElementById("install-again");
+    const dismissBtn = document.getElementById("install-dismiss");
+    const KEY = "agenda-install-dismissed";
+    const getDismissed = () => { try { return localStorage.getItem(KEY) === "1"; } catch(e) { return false; } };
+    const setDismissed = v => { try { if(v) localStorage.setItem(KEY, "1"); else localStorage.removeItem(KEY); } catch(e) {} };
+    const render = dismissed => {
+      wrap.hidden = dismissed;
+      if(again) again.hidden = !dismissed;
+      if(dismissed) help.hidden = true;
+    };
+    render(getDismissed());
+    if(dismissBtn) dismissBtn.addEventListener("click", () => { setDismissed(true); render(true); });
+    if(again) again.addEventListener("click", ev => { ev.preventDefault(); setDismissed(false); render(false); window.scrollTo({top:0,behavior:"smooth"}); });
     let deferred = null;
     window.addEventListener("beforeinstallprompt", ev => { ev.preventDefault(); deferred = ev; });
     const ua = navigator.userAgent || "";
