@@ -538,7 +538,7 @@
     <div class="install-top-row">
       <button type="button" class="install-btn install-btn-top" id="install-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 8v7M9 12.5l3 3 3-3"/></svg>
-        Installer l'appli sur mon téléphone
+        <span id="install-label">Installer l'appli sur mon téléphone</span>
       </button>
       <button type="button" class="install-dismiss" id="install-dismiss" aria-label="Masquer le bouton d'installation">&times;</button>
     </div>
@@ -642,14 +642,14 @@ const EVENTS = [
   {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique (38)", city:null, date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
   {id:"2026-10-17-mathilde-paris", artist:"Mathilde", venue:"Facettes Festival", city:"Paris (75)", date:"2026-10-17", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-5b58a18f6d.jpg", note:null, cancelled:false},
   {id:"2026-10-17-medine-ouest-park", artist:"Médine", venue:"Festival Ouest-Park", city:"Le Havre (76)", date:"2026-10-17", time:null, link:"mailto:billetterie@letetris.fr", linkLabel:"Réserver", image:"ev-ad81461ffd.jpg", note:null, video:"https://www.facebook.com/reel/1093320369953102", cancelled:false},
-  {id:"2026-10-23-ultra-vomit", artist:"Ultra Vomit", venue:"Fire Master Convention (36)", city:null, date:"2026-10-23", time:null, link:"https://firemaster-convention.fr", linkLabel:"Réserver", image:"ev-38a773c067.jpg", note:null, timeLabel:"Soirée", cancelled:false},
+  {id:"2026-10-23-ultra-vomit", artist:"Ultra Vomit", venue:"Fire Master Convention (36)", city:null, date:"2026-10-23", time:null, link:"https://www.firemaster-convention.fr/billetterie/", linkLabel:"Réserver", image:"ev-38a773c067.jpg", note:null, timeLabel:"Soirée", cancelled:false, video:"https://www.facebook.com/reel/1433247458739101"},
   {id:"2026-10-30-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-30", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
   {id:"2026-10-31-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-31", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
   {id:"2026-11-08-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-11-08", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
   {id:"2026-11-12-mathilde-villeurbanne", artist:"Mathilde", venue:"Théâtre l'Astrée", city:"Villeurbanne (69)", date:"2026-11-12", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-fe4bdf93a6.jpg", note:null, cancelled:false},
   {id:"2026-11-14-mathilde-rouen", artist:"Mathilde", venue:"Fête de l'Huma Normandie", city:"Rouen", date:"2026-11-14", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-429edeb59a.jpg", note:null, cancelled:false},
-  {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"https://lesrendezvoussoniques.com", linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
-  {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"https://lesrendezvoussoniques.com", linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"mailto:contact@lenormandy.net", linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"mailto:contact@lenormandy.net", linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
   {id:"2026-11-28-mathilde-saint-denis-de-pile", artist:"Mathilde", venue:"Saint-Denis-de-Pile (33)", city:null, date:"2026-11-28", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-a91f2cff7d.jpg", note:null, cancelled:false},
   {id:"2026-12-04-mathilde-lille", artist:"Mathilde", venue:"Splendid", city:"Lille (59)", date:"2026-12-04", time:"22:30", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-90f116eab1.jpg", note:null, cancelled:false},
   {id:"2026-12-12-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-12-12", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
@@ -1258,7 +1258,22 @@ document.addEventListener("keydown", ev => {
     const isAndroid = /Android/.test(ua);
     const stepsIOS = '<p><strong>Sur iPhone / iPad (Safari) :</strong></p><p>1. Touchez le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut).</p><p>2. Choisissez <strong>« Sur l\'écran d\'accueil »</strong>.</p><p>3. Touchez <strong>Ajouter</strong>.</p>';
     const stepsAndroid = '<p><strong>Sur Android (Chrome) :</strong></p><p>1. Touchez le menu <strong>⋮</strong> en haut à droite.</p><p>2. Choisissez <strong>« Installer l\'application »</strong> (ou « Ajouter à l\'écran d\'accueil »).</p><p>3. Confirmez.</p>';
+    // Samsung Internet : son installateur d'applis web produit un paquet jugé
+    // "non sécurisé" par Google Play Protect (Android 14+), ce qui bloque
+    // l'installation. Chrome n'a pas ce problème : on y renvoie la personne.
+    const isSamsung = /SamsungBrowser/i.test(ua) && isAndroid;
+    const chromeIntent = "intent://" + location.host + location.pathname + location.search +
+      "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(location.href) + ";end";
+    const stepsSamsung = '<p><strong>Vous utilisez Samsung Internet.</strong> Ce navigateur affiche une alerte de sécurité (Google Play Protect) et bloque l\'installation.</p><p>Touchez <strong>« Installer avec Chrome »</strong> : la page s\'ouvre dans Google Chrome, où l\'installation se fait sans alerte.</p><p>Si Chrome ne s\'ouvre pas, installez <strong>Google Chrome</strong> depuis le Play Store, puis rouvrez ce lien.</p>';
+    if(isSamsung){
+      const label = document.getElementById("install-label");
+      if(label) label.textContent = "Installer avec Chrome";
+      btn.dataset.chromeIntent = chromeIntent;
+      help.innerHTML = stepsSamsung;
+      help.hidden = false;
+    }
     btn.addEventListener("click", async () => {
+      if(isSamsung){ window.location.href = chromeIntent; return; }
       if(deferred){
         try { deferred.prompt(); await deferred.userChoice; } catch(e) {}
         deferred = null;
