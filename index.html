@@ -513,6 +513,10 @@
     background:var(--surface-2);color:var(--muted);border:1.5px solid var(--line);font-size:24px;line-height:1;font-family:var(--font-body);}
   .install-again{display:inline-block;margin-bottom:10px;}
 
+  .card.is-soon{filter:grayscale(1);opacity:.6;cursor:default;pointer-events:none;user-select:none;}
+  .card.is-soon .soon-ph{background:var(--line);border-radius:12px;}
+  .card.is-soon .soon-label{font-weight:700;font-size:17px;color:var(--muted);font-style:italic;}
+
   @media (prefers-reduced-motion: reduce){
     .btn{transition:none;}
   }
@@ -637,18 +641,18 @@ const EVENTS = [
   {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Vesoul (70)", city:null, date:"2026-10-16", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
   {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique (38)", city:null, date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
   {id:"2026-10-17-mathilde-paris", artist:"Mathilde", venue:"Facettes Festival", city:"Paris (75)", date:"2026-10-17", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-5b58a18f6d.jpg", note:null, cancelled:false},
-  {id:"2026-10-17-medine-ouest-park", artist:"Médine", venue:"Festival Ouest-Park", city:null, date:"2026-10-17", time:null, link:"mailto:billetterie@letetris.fr", linkLabel:"Réserver", image:"ev-2a71d5f330.jpg", note:null, video:"https://www.facebook.com/reel/1093320369953102", cancelled:false},
+  {id:"2026-10-17-medine-ouest-park", artist:"Médine", venue:"Festival Ouest-Park", city:"Le Havre (76)", date:"2026-10-17", time:null, link:"mailto:billetterie@letetris.fr", linkLabel:"Réserver", image:"ev-ad81461ffd.jpg", note:null, video:"https://www.facebook.com/reel/1093320369953102", cancelled:false},
   {id:"2026-10-23-ultra-vomit", artist:"Ultra Vomit", venue:"Fire Master Convention (36)", city:null, date:"2026-10-23", time:null, link:"https://firemaster-convention.fr", linkLabel:"Réserver", image:"ev-38a773c067.jpg", note:null, timeLabel:"Soirée", cancelled:false},
   {id:"2026-10-30-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-30", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
   {id:"2026-10-31-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-31", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
-  {id:"2026-11-08-danyl-la-sirene", artist:"Danyl", venue:"La Sirène (17)", city:null, date:"2026-11-08", time:null, link:"mailto:accessibilite@la-sirene.fr", linkLabel:"Réserver", image:"ev-5bfd288933.jpg", note:null, cancelled:false},
+  {id:"2026-11-08-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-11-08", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
   {id:"2026-11-12-mathilde-villeurbanne", artist:"Mathilde", venue:"Théâtre l'Astrée", city:"Villeurbanne (69)", date:"2026-11-12", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-fe4bdf93a6.jpg", note:null, cancelled:false},
   {id:"2026-11-14-mathilde-rouen", artist:"Mathilde", venue:"Fête de l'Huma Normandie", city:"Rouen", date:"2026-11-14", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-429edeb59a.jpg", note:null, cancelled:false},
   {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"https://lesrendezvoussoniques.com", linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
   {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"https://lesrendezvoussoniques.com", linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
   {id:"2026-11-28-mathilde-saint-denis-de-pile", artist:"Mathilde", venue:"Saint-Denis-de-Pile (33)", city:null, date:"2026-11-28", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-a91f2cff7d.jpg", note:null, cancelled:false},
   {id:"2026-12-04-mathilde-lille", artist:"Mathilde", venue:"Splendid", city:"Lille (59)", date:"2026-12-04", time:"22:30", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-90f116eab1.jpg", note:null, cancelled:false},
-  {id:"2026-12-12-ashen", artist:"Ashen", venue:"Charitable Métal Fest (77)", city:null, date:"2026-12-12", time:null, link:"https://lempreinte.net", linkLabel:"Réserver", image:"ev-46969d5686.jpg", note:null, timeLabel:"Soirée", cancelled:false}
+  {id:"2026-12-12-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-12-12", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
 ];
 
 const MOIS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
@@ -729,7 +733,7 @@ function render(){
   const isFirstVisit = seenIds === null;
   const newIds = isFirstVisit
     ? new Set()
-    : new Set(upcoming.filter(e => !e.cancelled && !seenIds.has(e.id)).map(e => e.id));
+    : new Set(upcoming.filter(e => !e.cancelled && !e.soon && !seenIds.has(e.id)).map(e => e.id));
   updateAppBadge(newIds.size);
   if(isFirstVisit) setSeenEventIds(new Set(upcoming.map(e => e.id)));
 
@@ -747,7 +751,7 @@ function render(){
     return;
   }
 
-  const next = upcoming.find(e => !e.cancelled);
+  const next = upcoming.find(e => !e.cancelled && !e.soon);
 
   if(next){
     const nextLink = normalizeLink(next.link);
@@ -795,6 +799,17 @@ function render(){
       <div class="cards">`;
     for(const e of items){
       const dt = parseLocalDate(e.date);
+      if(e.soon){
+        // Concert encore confidentiel : seule la date est visible, la carte
+        // n'est pas cliquable (pas de data-id, pas de rôle bouton).
+        html += `
+        <div class="card is-soon" aria-label="Concert le ${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()} : annonce prochainement">
+          <div class="card-date"><div class="d">${dt.getDate()}</div><div class="m">${MOIS_ABBR[dt.getMonth()]}</div></div>
+          <div class="card-img soon-ph" aria-hidden="true"></div>
+          <div class="card-body"><div class="soon-label">Annonce prochainement</div></div>
+        </div>`;
+        continue;
+      }
       const link = e.cancelled ? null : normalizeLink(e.link);
       html += `
         <div class="card${e.cancelled ? " is-cancelled" : ""}" data-id="${e.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(e.artist)}">
