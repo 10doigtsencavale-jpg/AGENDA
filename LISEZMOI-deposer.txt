@@ -1,4 +1,4 @@
-MISE A JOUR V7 - format artiste, salle, ville, heure
+MISE A JOUR V9 - horaires sous la date
 
 Un seul fichier a deposer sur GitHub : index.html
 1. https://github.com/10doigtsencavale-jpg/AGENDA
