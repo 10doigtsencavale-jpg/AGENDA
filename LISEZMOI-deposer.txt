@@ -1,4 +1,4 @@
-MISE A JOUR V4 - soirees a plusieurs artistes fusionnees
+MISE A JOUR V5 - artistes et visuels empiles
 
 Un seul fichier a deposer sur GitHub : index.html
 1. https://github.com/10doigtsencavale-jpg/AGENDA
