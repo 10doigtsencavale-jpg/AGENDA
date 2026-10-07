@@ -401,9 +401,9 @@
 
 
   /* Soirée à plusieurs artistes : une seule carte, une seule réservation */
-  .card-img.card-duo{display:flex;flex-direction:column;gap:2px;overflow:hidden;padding:0;background:var(--surface);}
-  .card-duo .duo-cell{position:relative;flex:1;min-height:0;width:100%;}
-  .card-duo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 22%;}
+  .card-img.card-duo{display:flex;flex-direction:column;gap:6px;height:auto;overflow:visible;padding:0;background:none;border:0;}
+  .card-duo .duo-cell{position:relative;width:76px;height:76px;flex:none;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2);}
+  .card-duo img{display:block;width:100%;height:100%;object-fit:cover;}
   .card-duo .duo-more{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     background:rgba(20,16,10,.62);color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;}
   .badge-duo{
@@ -418,9 +418,11 @@
     font-size:13.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
     color:#fff;background:rgba(43,13,4,.82);padding:5px 11px;border-radius:999px;
   }
-  .modal-posters{display:flex;flex-direction:column;gap:2px;width:100%;}
-  .modal-posters .modal-poster{width:100%;height:min(34vh,320px);border-radius:0;}
-  .modal-posters .modal-poster:first-child{border-radius:24px 24px 0 0;}
+  .modal-posters{display:flex;gap:2px;width:100%;}
+  .modal-posters .modal-poster{flex:1;min-width:0;width:auto;border-radius:0;padding:10px 8px;}
+  .modal-posters .modal-poster:first-child{border-top-left-radius:24px;}
+  .modal-posters .modal-poster:last-child{border-top-right-radius:24px;}
+  .modal-posters .poster-zoom{right:8px;bottom:8px;padding:6px 10px 6px 8px;font-size:13px;}
   .names{display:block;min-width:0;}
   .names .nm{display:block;}
   .video-badge-btn + .video-badge-btn{margin-top:10px;}
@@ -950,7 +952,7 @@ function render(){
         <div class="card${e.cancelled ? " is-cancelled" : ""}" data-id="${e.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(e.artist)}">
           <div class="card-date"><div class="d">${dt.getDate()}</div><div class="m">${MOIS_ABBR[dt.getMonth()]}</div></div>
           ${e.posters.length > 1
-            ? `<div class="card-img card-duo" aria-hidden="true">${e.posters.slice(0,2).map((p,i) => `<span class="duo-cell"><img src="${thumbSrc(p.src)}" alt="" loading="lazy" decoding="async">${(i === 1 && e.posters.length > 2) ? `<span class="duo-more">+${e.posters.length - 2}</span>` : ""}</span>`).join("")}</div>`
+            ? `<div class="card-img card-duo" aria-hidden="true">${e.posters.slice(0,3).map((p,i) => `<span class="duo-cell"><img src="${thumbSrc(p.src)}" alt="" loading="lazy" decoding="async">${(i === 2 && e.posters.length > 3) ? `<span class="duo-more">+${e.posters.length - 2}</span>` : ""}</span>`).join("")}</div>`
             : e.image
             ? `<img class="card-img" src="${thumbSrc(e.image)}" alt="Affiche du concert : ${escapeHtml(e.artist)}" loading="lazy" decoding="async">`
             : `<div class="card-img placeholder">${escapeHtml((e.artist||"?").charAt(0))}</div>`}
