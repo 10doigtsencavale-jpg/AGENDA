@@ -1,4 +1,4 @@
-MISE A JOUR V10 - formulaire mail : handicap et gilets vibrants
+MISE A JOUR V11 - mention sous la salle, noms cote a cote, formulaire
 
 Un seul fichier a deposer sur GitHub : index.html
 1. https://github.com/10doigtsencavale-jpg/AGENDA

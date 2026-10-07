@@ -438,6 +438,9 @@
   .modal-posters .poster-zoom{right:8px;bottom:8px;padding:6px 10px 6px 8px;font-size:13px;}
   .names{display:block;min-width:0;}
   .names .nm{display:block;overflow-wrap:break-word;}
+  .names-inline{display:flex;flex-wrap:wrap;column-gap:.3em;font-size:clamp(24px,7vw,30px);}
+  .names-inline .nm{min-width:0;}
+  .hero-meta-stack .hero-note{font-style:italic;}
   @media (max-width:359px){ .card-artist .names{font-size:17.5px;} }
   .video-badge-btn + .video-badge-btn{margin-top:10px;}
   .modal-eyebrow{
@@ -843,9 +846,9 @@ function updateAppBadge(count){
 function placeLines(e){
   return { venue: e.venue || "", city: e.city || "", time: timeText(e) };
 }
-function namesHtml(g){
+function namesHtml(g, inline){
   if(!g.multi) return escapeHtml(g.artist);
-  return `<span class="names">${g.members.map((m,i) => `<span class="nm">${i ? "+\u00a0" : ""}${escapeHtml(m.artist)}</span>`).join("")}</span>`;
+  return `<span class="names${inline ? " names-inline" : ""}">${g.members.map((m,i) => `<span class="nm">${i ? "+\u00a0" : ""}${escapeHtml(m.artist)}</span>`).join("")}</span>`;
 }
 function buildGroups(list){
   const out = [], idx = new Map();
@@ -941,8 +944,9 @@ function render(){
           <div class="hero-title">${namesHtml(next)}</div>
           <div class="hero-meta hero-meta-stack">
             <span>${escapeHtml(dateStr0)}</span>
-            ${timeText(next) ? `<span class="hero-hour">${escapeHtml(timeText(next))}${noteText(next) ? " · " + escapeHtml(noteText(next)) : ""}</span>` : ""}
+            ${timeText(next) ? `<span class="hero-hour">${escapeHtml(timeText(next))}</span>` : ""}
             ${next.venue ? `<span>${escapeHtml(next.venue)}</span>` : ""}
+            ${noteText(next) ? `<span class="hero-note">${escapeHtml(noteText(next))}</span>` : ""}
             ${next.city ? `<span>${escapeHtml(next.city)}</span>` : ""}
           </div>
           <div class="hero-actions">
@@ -993,8 +997,8 @@ function render(){
             ${e.multi ? `<div class="card-multi-row"><span class="badge-duo">${e.members.length} artistes</span>${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>` : ""}
             <div class="card-artist">${namesHtml(e)}${(!e.multi && newIds.has(e.id)) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
             ${e.venue ? `<div class="card-venue-name">${escapeHtml(e.venue)}</div>` : ""}
-            ${e.city ? `<div class="card-venue">${iconPin}${escapeHtml(e.city)}</div>` : ""}
             ${noteText(e) ? `<div class="card-note">${escapeHtml(noteText(e))}</div>` : ""}
+            ${e.city ? `<div class="card-venue">${iconPin}${escapeHtml(e.city)}</div>` : ""}
             ${e.cancelled
               ? `<span class="badge-cancelled">Annulé</span>`
               : (link ? `<button type="button" class="card-cta">${iconTicket} ${escapeHtml(e.linkLabel || "Réserver")}</button>` : (e.note ? `<span class="card-cta" style="color:var(--muted);background:none;padding:0;">${escapeHtml(e.note)}</span>` : ``))}
@@ -1204,8 +1208,8 @@ function openModal(id){
   }
 
   modalEyebrow.textContent = e.cancelled ? "Concert annulé" : (e.multi ? `Détails de la soirée · ${e.members.length} artistes` : "Détails du concert");
-  modalTitle.innerHTML = namesHtml(e);
-  modalMeta.textContent = `${dateStr}${noteText(e) ? " · " + noteText(e) : ""} — ${[e.venue, e.city].filter(Boolean).join(", ")}`;
+  modalTitle.innerHTML = namesHtml(e, true);
+  modalMeta.textContent = `${dateStr} — ${[e.venue ? e.venue + (noteText(e) ? " (" + e.timeNote + ")" : "") : "", e.city].filter(Boolean).join(", ")}`;
 
   // Rappel calendrier — utile quel que soit le mode de réservation (mail
   // ou site web), donc affiché pour tout concert qui n'est pas annulé.
@@ -1268,7 +1272,7 @@ function openModal(id){
       </div>
 
       <div class="stepper-group">
-        <p class="stepper-group-title">Nombre de personnes accompagnantes (sans handicap)</p>
+        <p class="stepper-group-title">Personnes accompagnantes (sans handicap)</p>
         <div class="places-stepper">
           <span>Adulte(s)</span>
           <div class="stepper-controls">
