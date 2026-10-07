@@ -399,6 +399,31 @@
   .video-badge-label{font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--ink);text-align:left;line-height:1.3;}
   .video-badge-label small{display:block;font-family:var(--font-body);font-size:15.5px;font-weight:600;color:var(--muted);}
 
+
+  /* Soirée à plusieurs artistes : une seule carte, une seule réservation */
+  .card-img.card-duo{display:flex;gap:2px;overflow:hidden;padding:0;background:var(--surface);}
+  .card-duo .duo-cell{position:relative;flex:1;min-width:0;height:100%;}
+  .card-duo img{display:block;width:100%;height:100%;object-fit:cover;}
+  .card-duo .duo-more{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(20,16,10,.62);color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;}
+  .badge-duo{
+    display:inline-flex;align-items:center;
+    font-family:var(--font-body);font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--ink);background:var(--surface-2);border:1px solid var(--line);
+    padding:2px 8px;border-radius:100px;white-space:nowrap;
+  }
+  .hero-bg.hero-bg-multi{display:flex;gap:2px;background:none;}
+  .hero-bg-multi span{flex:1;min-width:0;background-size:cover;background-position:center top;}
+  .hero-multi{
+    font-size:13.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+    color:#fff;background:rgba(43,13,4,.82);padding:5px 11px;border-radius:999px;
+  }
+  .modal-posters{display:flex;gap:2px;width:100%;}
+  .modal-posters .modal-poster{flex:1;min-width:0;width:auto;border-radius:0;padding:10px 8px;}
+  .modal-posters .modal-poster:first-child{border-top-left-radius:24px;}
+  .modal-posters .modal-poster:last-child{border-top-right-radius:24px;}
+  .modal-posters .poster-zoom{right:8px;bottom:8px;padding:6px 10px 6px 8px;font-size:13px;}
+  .video-badge-btn + .video-badge-btn{margin-top:10px;}
   .modal-eyebrow{
     font-size:13.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
     color:var(--accent-text);margin-bottom:5px;
@@ -783,9 +808,52 @@ function updateAppBadge(count){
   } catch(err){ /* Badging API non dispo (appli non installée, navigateur non compatible…) */ }
 }
 
+/* Regroupe les concerts d'une même soirée (même date, même lieu, même
+   adresse de réservation) : une seule carte, un seul moyen de réserver. */
+function buildGroups(list){
+  const out = [], idx = new Map();
+  for(const e of list){
+    const link = (!e.soon && !e.cancelled) ? normalizeLink(e.link) : null;
+    if(!link){ out.push(Object.assign({}, e, {members:[e]})); continue; }
+    const key = [e.date, e.venue, e.city || "", link].join("|");
+    if(idx.has(key)){ idx.get(key).members.push(e); continue; }
+    const g = Object.assign({}, e, {members:[e]});
+    idx.set(key, g); out.push(g);
+  }
+  for(const g of out){
+    const m = g.members;
+    g.multi = m.length > 1;
+    const seenImg = new Set();
+    g.posters = [];
+    for(const x of m){
+      if(x.image && !seenImg.has(x.image)){ seenImg.add(x.image); g.posters.push({src:x.image, artist:x.artist}); }
+    }
+    const seenVid = new Set();
+    g.videos = [];
+    for(const x of m){
+      if(x.video && !seenVid.has(x.video)){ seenVid.add(x.video); g.videos.push({url:x.video, artist:x.artist}); }
+    }
+    if(g.multi){
+      g.artist = m.map(x => x.artist).join(" + ");
+      g.artistsAnd = m.slice(0,-1).map(x => x.artist).join(", ") + " et " + m[m.length-1].artist;
+      g.image = g.posters.length ? g.posters[0].src : null;
+      const times = Array.from(new Set(m.map(x => timeText(x)).filter(Boolean)));
+      if(times.length === 1 && m.every(x => timeText(x) === times[0])){
+        g.time = m[0].time || null; g.timeLabel = m[0].timeLabel || null;
+      } else {
+        g.time = null; g.timeLabel = times.join(" · ") || null;
+      }
+    } else {
+      g.artistsAnd = g.artist;
+    }
+  }
+  return out;
+}
+const GROUPS = buildGroups(EVENTS);
+
 function render(){
   const today = startOfToday();
-  const upcoming = EVENTS
+  const upcoming = GROUPS
     .filter(e => parseLocalDate(e.date) >= today)
     .sort((a,b) => a.date.localeCompare(b.date) || (a.time||"").localeCompare(b.time||""));
 
@@ -793,9 +861,9 @@ function render(){
   const isFirstVisit = seenIds === null;
   const newIds = isFirstVisit
     ? new Set()
-    : new Set(upcoming.filter(e => !e.cancelled && !e.soon && !seenIds.has(e.id)).map(e => e.id));
+    : new Set(upcoming.filter(e => !e.cancelled && !e.soon && e.members.some(m => !seenIds.has(m.id))).map(e => e.id));
   updateAppBadge(newIds.size);
-  if(isFirstVisit) setSeenEventIds(new Set(upcoming.map(e => e.id)));
+  if(isFirstVisit) setSeenEventIds(new Set(upcoming.flatMap(e => e.members.map(m => m.id))));
 
   const heroSlot = document.getElementById("hero-slot");
   const listSlot = document.getElementById("list-slot");
@@ -820,14 +888,17 @@ function render(){
 
     heroSlot.innerHTML = `
       <div class="hero" data-id="${next.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(next.artist)}">
-        ${next.image
-          ? `<div class="hero-bg" style="background-image:url('${next.image}')"></div><div class="hero-scrim"></div>`
-          : `<div class="hero-noimg"></div>`}
+        ${next.posters.length > 1
+          ? `<div class="hero-bg hero-bg-multi">${next.posters.map(p => `<span style="background-image:url('${p.src}')"></span>`).join("")}</div><div class="hero-scrim"></div>`
+          : next.image
+            ? `<div class="hero-bg" style="background-image:url('${next.image}')"></div><div class="hero-scrim"></div>`
+            : `<div class="hero-noimg"></div>`}
         ${heroDoodle}
         <div class="hero-confetti"><span></span><span></span><span></span></div>
         <div class="hero-inner">
           <div class="hero-eyebrow-row">
             <span class="hero-eyebrow"><span class="dot"></span>Prochain concert</span>
+            ${next.multi ? `<span class="hero-multi">${next.members.length} artistes</span>` : ''}
             ${newIds.has(next.id) ? '<span class="hero-badge-new">Nouveau</span>' : ''}
           </div>
           <div class="hero-title">${escapeHtml(next.artist)}</div>
@@ -855,7 +926,7 @@ function render(){
   let html = "";
   for(const {label, items} of byMonth.values()){
     html += `<div class="month">
-      <div class="month-head"><h2>${label}</h2><span class="count">${items.length} concert${items.length>1?"s":""}</span></div>
+      <div class="month-head"><h2>${label}</h2><span class="count">${items.reduce((n,x) => n + x.members.length, 0)} concert${items.reduce((n,x) => n + x.members.length, 0)>1?"s":""}</span></div>
       <div class="cards">`;
     for(const e of items){
       const dt = parseLocalDate(e.date);
@@ -874,11 +945,13 @@ function render(){
       html += `
         <div class="card${e.cancelled ? " is-cancelled" : ""}" data-id="${e.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(e.artist)}">
           <div class="card-date"><div class="d">${dt.getDate()}</div><div class="m">${MOIS_ABBR[dt.getMonth()]}</div></div>
-          ${e.image
+          ${e.posters.length > 1
+            ? `<div class="card-img card-duo" aria-hidden="true">${e.posters.slice(0,2).map((p,i) => `<span class="duo-cell"><img src="${thumbSrc(p.src)}" alt="" loading="lazy" decoding="async">${(i === 1 && e.posters.length > 2) ? `<span class="duo-more">+${e.posters.length - 2}</span>` : ""}</span>`).join("")}</div>`
+            : e.image
             ? `<img class="card-img" src="${thumbSrc(e.image)}" alt="Affiche du concert : ${escapeHtml(e.artist)}" loading="lazy" decoding="async">`
             : `<div class="card-img placeholder">${escapeHtml((e.artist||"?").charAt(0))}</div>`}
           <div class="card-body">
-            <div class="card-artist">${escapeHtml(e.artist)}${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
+            <div class="card-artist">${escapeHtml(e.artist)}${e.multi ? `<span class="badge-duo">${e.members.length} artistes</span>` : ''}${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
             <div class="card-venue">${iconPin}${escapeHtml(e.venue)}${e.city ? ", " + escapeHtml(e.city) : ""}${timeText(e) ? " · " + escapeHtml(timeText(e)) : ""}</div>
             ${e.cancelled
               ? `<span class="badge-cancelled">Annulé</span>`
@@ -894,7 +967,7 @@ function render(){
   // moment, puis marque ces concerts comme vus pour la prochaine visite.
   if(newIds.size > 0){
     setTimeout(() => {
-      setSeenEventIds(new Set(upcoming.map(e => e.id)));
+      setSeenEventIds(new Set(upcoming.flatMap(e => e.members.map(m => m.id))));
       updateAppBadge(0);
     }, 4000);
   }
@@ -914,6 +987,7 @@ const modalReminderWrap = document.getElementById("modal-reminder-wrap");
 const modalCtaWrap = document.getElementById("modal-cta-wrap");
 const modalMessageWrap = document.getElementById("modal-message-wrap");
 let lastFocused = null;
+let lastPosterBtn = null;
 
 /* Copie dans le presse-papier, avec repli pour les navigateurs qui
    n'ont pas l'API Clipboard (ou la refusent hors contexte sécurisé). */
@@ -940,7 +1014,7 @@ async function copyText(text){
 
 /* Message pré-rempli, pensé pour les personnes sourdes qui ont du mal
    à rédiger : il suffit de le copier et de l'envoyer tel quel. */
-function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name){
+function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name, multiDate){
   const pa = Math.max(0, pshAdults);
   const pc = Math.max(0, pshChildren);
   const ca = Math.max(0, companionAdults);
@@ -967,11 +1041,11 @@ function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults
 
   return `Bonjour,
 
-${who} suis sourd(e), je souhaite réserver des places pour le concert chansigné de ${artist}.
+${who} suis sourd(e), je souhaite réserver des places pour ${multiDate ? `la soirée chansignée du ${multiDate}, avec ${artist}` : `le concert chansigné de ${artist}`}.
 ${pshBlock}${companionBlock}
 Merci de m'indiquer :
 - comment acheter mes places.
-- où me rendre le jour J, et à quelle heure, pour assister au concert chansigné.
+- où me rendre le jour J, et à quelle heure, pour assister ${multiDate ? "à la soirée chansignée" : "au concert chansigné"}.
 - s'il y a des gilets vibrants, où les récupérer.
 
 Pour faciliter ma compréhension, merci de privilégier une réponse claire et avec des phrases simples.
@@ -1005,7 +1079,7 @@ function parisUtcOffsetHours(y, m, d){
 function buildGoogleCalendarUrl(e){
   const dt = parseLocalDate(e.date);
   const y = dt.getFullYear(), m = dt.getMonth(), d = dt.getDate();
-  const text = `${e.artist} — concert chansigné`;
+  const text = `${e.artist} — ${e.multi ? "concerts chansignés" : "concert chansigné"}`;
   const details = "Concert traduit en langue des signes par 10 Doigts en Cavale.";
   const location = [e.venue, e.city].filter(Boolean).join(", ");
 
@@ -1034,21 +1108,24 @@ function buildGoogleCalendarUrl(e){
 function thumbSrc(src){ return typeof src === "string" ? src.replace(/(^|\/)ev-/, "$1th-") : src; }
 
 function openModal(id){
-  const e = EVENTS.find(ev => ev.id === id);
+  const e = GROUPS.find(ev => ev.id === id);
   if(!e) return;
 
   const dt = parseLocalDate(e.date);
   const dateStr = `${JOURS[dt.getDay()]} ${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}${timeText(e) ? " · " + timeText(e) : ""}`;
 
-  modalImageWrap.innerHTML = e.image
-    ? `<button type="button" class="modal-poster" id="poster-btn" aria-label="Agrandir l'affiche : ${escapeHtml(e.artist)}">
-         <span class="modal-poster-bg" style="background-image:url('${e.image}')"></span>
-         <img src="${e.image}" alt="Affiche du concert : ${escapeHtml(e.artist)}" decoding="async">
+  const posterHtml = (p, i) => `<button type="button" class="modal-poster" data-poster="${i}" ${(!e.multi && i === 0) ? 'id="poster-btn" ' : ''}aria-label="Agrandir l'affiche : ${escapeHtml(p.artist)}">
+         <span class="modal-poster-bg" style="background-image:url('${p.src}')"></span>
+         <img src="${p.src}" alt="Affiche du concert : ${escapeHtml(p.artist)}" decoding="async">
          <span class="poster-zoom">${iconZoom} Agrandir</span>
-       </button>`
-    : "";
-  const posterBtn = document.getElementById("poster-btn");
-  if(posterBtn) posterBtn.addEventListener("click", () => openLightbox(e.image, "Affiche du concert : " + e.artist));
+       </button>`;
+  modalImageWrap.innerHTML = e.posters.length > 1
+    ? `<div class="modal-posters">${e.posters.map(posterHtml).join("")}</div>`
+    : e.posters.length ? posterHtml(e.posters[0], 0) : "";
+  modalImageWrap.querySelectorAll(".modal-poster").forEach(btn => {
+    const p = e.posters[Number(btn.dataset.poster)];
+    btn.addEventListener("click", () => { lastPosterBtn = btn; openLightbox(p.src, "Affiche du concert : " + p.artist); });
+  });
   modalEl.scrollTop = 0;
   document.querySelector(".modal-panel").scrollTop = 0;
 
@@ -1057,20 +1134,20 @@ function openModal(id){
   // La vidéo est hébergée à l'extérieur (ex. Facebook) et simplement liée
   // ici : l'intégrer directement dans la page (base64) empêchait le
   // partage public de cette page (contrôle de sécurité automatique).
-  if(e.video){
-    modalVideoWrap.innerHTML = `
-      <a class="video-badge-btn" href="${e.video}" target="_blank" rel="noopener" aria-label="Regarder la vidéo en langue des signes">
+  if(e.videos.length){
+    modalVideoWrap.innerHTML = e.videos.map(v => `
+      <a class="video-badge-btn" href="${v.url}" target="_blank" rel="noopener" aria-label="Regarder la vidéo en langue des signes${e.videos.length > 1 ? " : " + escapeHtml(v.artist) : ""}">
         <span class="video-badge-img-wrap">
           <img src="${videoBadgeImg}" alt="">
           <span class="video-badge-play">${iconPlay}</span>
         </span>
-        <span class="video-badge-label">Vidéo en LSF<small>Touchez pour la regarder</small></span>
-      </a>`;
+        <span class="video-badge-label">Vidéo en LSF<small>${e.videos.length > 1 ? escapeHtml(v.artist) : "Touchez pour la regarder"}</small></span>
+      </a>`).join("");
   } else {
     modalVideoWrap.innerHTML = "";
   }
 
-  modalEyebrow.textContent = e.cancelled ? "Concert annulé" : "Détails du concert";
+  modalEyebrow.textContent = e.cancelled ? "Concert annulé" : (e.multi ? `Détails de la soirée · ${e.members.length} artistes` : "Détails du concert");
   modalTitle.textContent = e.artist;
   modalMeta.textContent = `${dateStr} — ${e.venue}${e.city ? ", " + e.city : ""}`;
 
@@ -1221,7 +1298,8 @@ function openModal(id){
       document.getElementById("comp-adults-count").textContent = String(counts.compAdults);
       document.getElementById("comp-children-count").textContent = String(counts.compChildren);
       preview.textContent = buildReservationMessage(
-        e.artist, counts.pshAdults, counts.pshChildren, counts.compAdults, counts.compChildren, nameInput.value
+        e.artistsAnd, counts.pshAdults, counts.pshChildren, counts.compAdults, counts.compChildren, nameInput.value,
+        e.multi ? `${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}` : null
       );
     }
     refreshMessage();
@@ -1254,7 +1332,7 @@ function openModal(id){
       // Un seul geste copie tout ce qu'il faut (adresse + message) pour que
       // la personne n'ait plus qu'à coller dans sa propre appli mail.
       copyAllBtn.addEventListener("click", async () => {
-        const combined = `À : ${mailAddress}\nObjet : Réservation — concert chansigné de ${e.artist}\n\n${preview.textContent}`;
+        const combined = `À : ${mailAddress}\nObjet : Réservation — ${e.multi ? "soirée chansignée" : "concert chansigné"} de ${e.artistsAnd}\n\n${preview.textContent}`;
         const ok = await copyText(combined);
         copyAllBtn.innerHTML = ok ? "Copié ✓ — collez-le dans un nouveau mail" : "Impossible de copier";
         copyAllBtn.classList.toggle("is-copied", ok);
@@ -1281,7 +1359,7 @@ function closeLightbox(){
   lightboxEl.hidden = true;
   lightboxImg.removeAttribute("src");
   lightboxImg.alt = "";
-  const pb = document.getElementById("poster-btn");
+  const pb = lastPosterBtn && lastPosterBtn.isConnected ? lastPosterBtn : document.querySelector("#modal-image-wrap .modal-poster");
   if(pb) pb.focus();
 }
 lightboxEl.addEventListener("click", closeLightbox);

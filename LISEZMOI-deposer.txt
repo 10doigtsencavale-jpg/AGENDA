@@ -1,3 +1,7 @@
-A DEPOSER sur GitHub (Add file > Upload files) : 1 seul fichier
-  - index.html
-(fiche concert : affiche reduite + infos visibles des l ouverture, toucher pour agrandir)
+MISE A JOUR V4 - soirees a plusieurs artistes fusionnees
+
+Un seul fichier a deposer sur GitHub : index.html
+1. https://github.com/10doigtsencavale-jpg/AGENDA
+2. Add file > Upload files > glisser index.html (il remplace l'ancien)
+3. Commit changes
+Attendre 1 a 2 minutes, puis recharger https://10doigtsencavale-jpg.github.io/AGENDA/
