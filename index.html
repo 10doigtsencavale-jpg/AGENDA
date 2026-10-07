@@ -507,6 +507,18 @@
     font-size:14px;font-weight:800;color:var(--accent-2-ink,var(--accent-2));
     text-transform:uppercase;letter-spacing:.04em;margin:0 0 10px;
   }
+  .vest-group{border:0;padding:0;min-width:0;margin-left:0;margin-right:0;}
+  .vest-group legend{padding:0;}
+  .vest-options{display:flex;gap:10px;margin-bottom:12px;}
+  .vest-option{flex:1;position:relative;display:block;cursor:pointer;}
+  .vest-option input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer;}
+  .vest-option span{
+    display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:12px;
+    border:2px solid var(--line);background:var(--surface);color:var(--ink);
+    font-size:17px;font-weight:800;
+  }
+  .vest-option input:checked + span{background:var(--accent-2);border-color:var(--accent-2);color:var(--accent-2-ink);}
+  .vest-option input:focus-visible + span{outline:3px solid var(--accent-2);outline-offset:2px;}
   .message-preview{
     white-space:pre-wrap;font-family:var(--font-body);font-size:15.5px;line-height:1.55;
     background:var(--surface-2);border:1px solid var(--line);border-radius:14px;
@@ -1044,7 +1056,7 @@ async function copyText(text){
 
 /* Message pré-rempli, pensé pour les personnes sourdes qui ont du mal
    à rédiger : il suffit de le copier et de l'envoyer tel quel. */
-function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name, multiDate){
+function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name, multiDate, vest){
   const pa = Math.max(0, pshAdults);
   const pc = Math.max(0, pshChildren);
   const ca = Math.max(0, companionAdults);
@@ -1056,27 +1068,37 @@ function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults
   if(pc > 0) pshLines.push(`- ${pc} enfant${pc > 1 ? "s" : ""}`);
 
   const companionLines = [];
-  if(ca > 0) companionLines.push(`- ${ca} adulte${ca > 1 ? "s" : ""} valide${ca > 1 ? "s" : ""} ou en situation de handicap`);
-  if(cc > 0) companionLines.push(`- ${cc} enfant${cc > 1 ? "s" : ""} valide${cc > 1 ? "s" : ""} ou en situation de handicap`);
+  if(ca > 0) companionLines.push(`- ${ca} adulte${ca > 1 ? "s" : ""}`);
+  if(cc > 0) companionLines.push(`- ${cc} enfant${cc > 1 ? "s" : ""}`);
 
   const pshBlock = pshLines.length
-    ? `\nPlaces au tarif PSH :\n${pshLines.join("\n")}\n`
+    ? `\nPersonnes en situation de handicap :\n${pshLines.join("\n")}\n`
     : "";
 
   const companionBlock = companionLines.length
-    ? `\nPlaces accompagnants :\n${companionLines.join("\n")}\n`
+    ? `\nPersonnes accompagnantes (sans handicap) :\n${companionLines.join("\n")}\n`
     : "";
+
+  // Gilets vibrants : "oui" ajoute un bloc dédié (+ nombre si renseigné),
+  // "non" retire la question, sans réponse on garde la question d'origine.
+  const vestWant = vest && vest.want;
+  const vestCount = vest && vest.count ? String(vest.count).trim() : "";
+  const vestBlock = vestWant === "yes"
+    ? `\nGilets vibrants :\n- S'il y a des gilets vibrants, je suis intéressé(e).${vestCount ? `\n- Nombre de gilets vibrants que je souhaite réserver : ${vestCount}` : ""}\n`
+    : "";
+  const vestQuestion = vestWant === "yes"
+    ? "\n- comment réserver les gilets vibrants et où les récupérer."
+    : (vestWant === "no" ? "" : "\n- s'il y a des gilets vibrants, où les récupérer.");
 
   const signature = name && name.trim() ? `Bien cordialement.\n${name.trim()}` : "Bien cordialement.";
 
   return `Bonjour,
 
 ${who} suis sourd(e), je souhaite réserver des places pour ${multiDate ? `la soirée chansignée du ${multiDate}, avec ${artist}` : `le concert chansigné de ${artist}`}.
-${pshBlock}${companionBlock}
+${pshBlock}${companionBlock}${vestBlock}
 Merci de m'indiquer :
 - comment acheter mes places.
-- où me rendre le jour J, et à quelle heure, pour assister ${multiDate ? "à la soirée chansignée" : "au concert chansigné"}.
-- s'il y a des gilets vibrants, où les récupérer.
+- où me rendre le jour J, et à quelle heure, pour assister ${multiDate ? "à la soirée chansignée" : "au concert chansigné"}.${vestQuestion}
 
 Pour faciliter ma compréhension, merci de privilégier une réponse claire et avec des phrases simples.
 
@@ -1226,27 +1248,27 @@ function openModal(id){
   } else {
     const stepperGroupsHtml = `
       <div class="stepper-group">
-        <p class="stepper-group-title">Places tarif PSH</p>
+        <p class="stepper-group-title">Personnes en situation de handicap</p>
         <div class="places-stepper">
           <span>Adulte(s)</span>
           <div class="stepper-controls">
-            <button type="button" id="psh-adults-minus" aria-label="Moins d'adultes au tarif PSH">−</button>
+            <button type="button" id="psh-adults-minus" aria-label="Moins d'adultes en situation de handicap">−</button>
             <span class="stepper-count" id="psh-adults-count">0</span>
-            <button type="button" id="psh-adults-plus" aria-label="Plus d'adultes au tarif PSH">+</button>
+            <button type="button" id="psh-adults-plus" aria-label="Plus d'adultes en situation de handicap">+</button>
           </div>
         </div>
         <div class="places-stepper">
           <span>Enfant(s)</span>
           <div class="stepper-controls">
-            <button type="button" id="psh-children-minus" aria-label="Moins d'enfants au tarif PSH">−</button>
+            <button type="button" id="psh-children-minus" aria-label="Moins d'enfants en situation de handicap">−</button>
             <span class="stepper-count" id="psh-children-count">0</span>
-            <button type="button" id="psh-children-plus" aria-label="Plus d'enfants au tarif PSH">+</button>
+            <button type="button" id="psh-children-plus" aria-label="Plus d'enfants en situation de handicap">+</button>
           </div>
         </div>
       </div>
 
       <div class="stepper-group">
-        <p class="stepper-group-title">Places pour accompagnants</p>
+        <p class="stepper-group-title">Nombre de personnes accompagnantes (sans handicap)</p>
         <div class="places-stepper">
           <span>Adulte(s)</span>
           <div class="stepper-controls">
@@ -1263,7 +1285,19 @@ function openModal(id){
             <button type="button" id="comp-children-plus" aria-label="Plus d'accompagnants enfants">+</button>
           </div>
         </div>
-      </div>`;
+      </div>
+
+      <fieldset class="stepper-group vest-group">
+        <legend class="stepper-group-title">S'il y a des gilets vibrants, je suis intéressé(e) :</legend>
+        <div class="vest-options">
+          <label class="vest-option"><input type="radio" name="vest-want" id="vest-yes" value="yes"><span>Oui</span></label>
+          <label class="vest-option"><input type="radio" name="vest-want" id="vest-no" value="no"><span>Non</span></label>
+        </div>
+        <div class="vest-count-wrap" id="vest-count-wrap" hidden>
+          <label class="field-label" for="vest-count">Nombre de gilets vibrants que je souhaite réserver :</label>
+          <input type="text" id="vest-count" class="field-input" inputmode="numeric" maxlength="20" placeholder="Ex. : 2" autocomplete="off">
+        </div>
+      </fieldset>`;
 
     if(mailAddress){
       // Pas de véritable envoi possible depuis une page web statique : le
@@ -1319,6 +1353,7 @@ function openModal(id){
     }
 
     const counts = { pshAdults: 0, pshChildren: 0, compAdults: 0, compChildren: 0 };
+    const vest = { want: null, count: "" };
     const nameInput = document.getElementById("msg-name");
     const preview = document.getElementById("message-preview");
     const copyMsgBtn = mailAddress ? null : document.getElementById("copy-message-btn");
@@ -1333,7 +1368,8 @@ function openModal(id){
       document.getElementById("comp-children-count").textContent = String(counts.compChildren);
       preview.textContent = buildReservationMessage(
         e.artistsAnd, counts.pshAdults, counts.pshChildren, counts.compAdults, counts.compChildren, nameInput.value,
-        e.multi ? `${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}` : null
+        e.multi ? `${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}` : null,
+        vest
       );
     }
     refreshMessage();
@@ -1354,6 +1390,14 @@ function openModal(id){
     wireStepper("compChildren", "comp-children", 0);
 
     nameInput.addEventListener("input", refreshMessage);
+    const vestWrap = document.getElementById("vest-count-wrap");
+    const vestCountInput = document.getElementById("vest-count");
+    document.querySelectorAll('input[name="vest-want"]').forEach(r => r.addEventListener("change", () => {
+      vest.want = r.value;
+      vestWrap.hidden = r.value !== "yes";
+      refreshMessage();
+    }));
+    vestCountInput.addEventListener("input", () => { vest.count = vestCountInput.value; refreshMessage(); });
     if(copyMsgBtn){
       copyMsgBtn.addEventListener("click", async () => {
         const ok = await copyText(preview.textContent);
