@@ -1,4 +1,4 @@
-MISE A JOUR V9 - horaires sous la date
+MISE A JOUR V8 - disposition multi-artistes + affiches entieres
 
 Un seul fichier a deposer sur GitHub : index.html
 1. https://github.com/10doigtsencavale-jpg/AGENDA
