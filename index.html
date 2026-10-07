@@ -278,6 +278,12 @@
     overflow-wrap:anywhere;
     display:flex;align-items:flex-start;gap:4px;
   }
+  .card-venue-name{font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.25;overflow-wrap:anywhere;}
+  .card-time{font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.3;display:flex;align-items:center;gap:4px;}
+  .card-time .clock{width:12px;height:12px;flex:none;color:var(--accent-2);}
+  .hero-meta-stack{flex-direction:column;align-items:flex-start;row-gap:2px;}
+  .hero-meta-stack span:not(:last-child)::after{content:none;}
+  .hero-meta-stack span:first-child{font-weight:700;}
   .card-venue .pin{margin-top:3px;}
   .card-venue .pin{width:11px;height:11px;flex:none;color:var(--accent-2);}
   .card-cta{
@@ -721,22 +727,22 @@ const EVENTS = [
   {id:"2026-09-12-freres-misere", artist:"Les Frères Misère", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-12", time:null, link:M("bWFpbHRvOklsb3Bob25lQGdtYWlsLmNvbQ=="), linkLabel:"Réserver", image:"ev-4a45a317cc.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
   {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:M("bWFpbHRvOmJpbGxldHRlcmllQGxmZS5iemg="), linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
   {id:"2026-09-25-mathilde-peruwelz", artist:"Mathilde", venue:"Centre culturel", city:"Péruwelz (BE)", date:"2026-09-25", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-273f03c6bf.jpg", note:null, cancelled:false},
-  {id:"2026-09-26-mathilde-saint-lezin", artist:"Mathilde", venue:"Saint-Lézin (49)", city:null, date:"2026-09-26", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0f27631bbb.jpg", note:null, cancelled:false},
-  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
-  {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
-  {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Vesoul (70)", city:null, date:"2026-10-16", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
-  {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique (38)", city:null, date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
+  {id:"2026-09-26-mathilde-saint-lezin", artist:"Mathilde", venue:"", city:"Saint-Lézin (49)", date:"2026-09-26", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0f27631bbb.jpg", note:null, cancelled:false},
+  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:null, link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
+  {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:null, link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
+  {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Théâtre Edwige Feuillère", city:"Vesoul (70)", date:"2026-10-16", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
+  {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique", city:"Grenoble (38)", date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
   {id:"2026-10-17-mathilde-paris", artist:"Mathilde", venue:"Facettes Festival", city:"Paris (75)", date:"2026-10-17", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-5b58a18f6d.jpg", note:null, cancelled:false},
   {id:"2026-10-17-medine-ouest-park", artist:"Médine", venue:"Festival Ouest-Park", city:"Le Havre (76)", date:"2026-10-17", time:null, link:M("bWFpbHRvOmJpbGxldHRlcmllQGxldGV0cmlzLmZy"), linkLabel:"Réserver", image:"ev-ad81461ffd.jpg", note:null, video:"https://www.facebook.com/reel/1093320369953102", cancelled:false},
-  {id:"2026-10-23-ultra-vomit", artist:"Ultra Vomit", venue:"Fire Master Convention (36)", city:null, date:"2026-10-23", time:null, link:"https://www.firemaster-convention.fr/billetterie/", linkLabel:"Réserver", image:"ev-38a773c067.jpg", note:null, timeLabel:"Soirée", cancelled:false, video:"https://www.facebook.com/reel/1433247458739101"},
+  {id:"2026-10-23-ultra-vomit", artist:"Ultra Vomit", venue:"Fire Master Convention", city:"Issoudun (36)", date:"2026-10-23", time:null, link:"https://www.firemaster-convention.fr/billetterie/", linkLabel:"Réserver", image:"ev-38a773c067.jpg", note:null, timeLabel:"Soirée", cancelled:false, video:"https://www.facebook.com/reel/1433247458739101"},
   {id:"2026-10-30-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-30", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
   {id:"2026-10-31-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-31", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
   {id:"2026-11-08-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-11-08", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
   {id:"2026-11-12-mathilde-villeurbanne", artist:"Mathilde", venue:"Théâtre l'Astrée", city:"Villeurbanne (69)", date:"2026-11-12", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-fe4bdf93a6.jpg", note:null, cancelled:false},
-  {id:"2026-11-14-mathilde-rouen", artist:"Mathilde", venue:"Fête de l'Huma Normandie", city:"Rouen", date:"2026-11-14", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-429edeb59a.jpg", note:null, cancelled:false},
-  {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:M("bWFpbHRvOmNvbnRhY3RAbGVub3JtYW5keS5uZXQ="), linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
-  {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:M("bWFpbHRvOmNvbnRhY3RAbGVub3JtYW5keS5uZXQ="), linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
-  {id:"2026-11-28-mathilde-saint-denis-de-pile", artist:"Mathilde", venue:"Saint-Denis-de-Pile (33)", city:null, date:"2026-11-28", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-a91f2cff7d.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-mathilde-rouen", artist:"Mathilde", venue:"Fête de l'Huma Normandie", city:"Rouen (76)", date:"2026-11-14", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-429edeb59a.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques", city:"Saint-Lô (50)", date:"2026-11-14", time:null, link:M("bWFpbHRvOmNvbnRhY3RAbGVub3JtYW5keS5uZXQ="), linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques", city:"Saint-Lô (50)", date:"2026-11-14", time:null, link:M("bWFpbHRvOmNvbnRhY3RAbGVub3JtYW5keS5uZXQ="), linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
+  {id:"2026-11-28-mathilde-saint-denis-de-pile", artist:"Mathilde", venue:"Centre LGBT+ Rural", city:"Saint-Denis-de-Pile (33)", date:"2026-11-28", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-a91f2cff7d.jpg", note:null, cancelled:false},
   {id:"2026-12-04-mathilde-lille", artist:"Mathilde", venue:"Splendid", city:"Lille (59)", date:"2026-12-04", time:"22:30", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-90f116eab1.jpg", note:null, cancelled:false},
   {id:"2026-12-12-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-12-12", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
 ];
@@ -772,6 +778,7 @@ const iconTicket = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const iconEdit = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
 const iconCopy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
 const iconMail = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg>';
+const iconClock = '<svg class="clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
 const iconPin = '<svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-4.14 0-7.5 3.36-7.5 7.5 0 5.63 6.55 11.6 6.83 11.85a1 1 0 0 0 1.34 0c.28-.25 6.83-6.22 6.83-11.85C19.5 5.36 16.14 2 12 2Zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5Z"/></svg>';
 const iconPlay = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
 const iconZoom = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>';
@@ -812,9 +819,12 @@ function updateAppBadge(count){
 
 /* Regroupe les concerts d'une même soirée (même date, même lieu, même
    adresse de réservation) : une seule carte, un seul moyen de réserver. */
+function placeLines(e){
+  return { venue: e.venue || "", city: e.city || "", time: timeText(e) };
+}
 function namesHtml(g){
   if(!g.multi) return escapeHtml(g.artist);
-  return `<span class="names">${g.members.map((m,i) => `<span class="nm">${i ? "+ " : ""}${escapeHtml(m.artist)}</span>`).join("")}</span>`;
+  return `<span class="names">${g.members.map((m,i) => `<span class="nm">${i ? "+\u00a0" : ""}${escapeHtml(m.artist)}</span>`).join("")}</span>`;
 }
 function buildGroups(list){
   const out = [], idx = new Map();
@@ -890,7 +900,7 @@ function render(){
   if(next){
     const nextLink = normalizeLink(next.link);
     const d = parseLocalDate(next.date);
-    const dateStr = `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()].toLowerCase()}${timeText(next) ? " · " + timeText(next) : ""}`;
+    const dateStr0 = `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()].toLowerCase()}`;
 
     heroSlot.innerHTML = `
       <div class="hero" data-id="${next.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(next.artist)}">
@@ -908,9 +918,11 @@ function render(){
             ${newIds.has(next.id) ? '<span class="hero-badge-new">Nouveau</span>' : ''}
           </div>
           <div class="hero-title">${namesHtml(next)}</div>
-          <div class="hero-meta">
-            <span>${escapeHtml(dateStr)}</span>
-            <span>${escapeHtml(next.venue)}${next.city ? ", " + escapeHtml(next.city) : ""}</span>
+          <div class="hero-meta hero-meta-stack">
+            <span>${escapeHtml(dateStr0)}</span>
+            ${next.venue ? `<span>${escapeHtml(next.venue)}</span>` : ""}
+            ${next.city ? `<span>${escapeHtml(next.city)}</span>` : ""}
+            ${timeText(next) ? `<span>${escapeHtml(timeText(next))}</span>` : ""}
           </div>
           <div class="hero-actions">
             ${nextLink ? `<button type="button" class="btn btn-primary">${iconTicket} ${escapeHtml(next.linkLabel || "Réserver")}</button>` : ``}
@@ -958,7 +970,9 @@ function render(){
             : `<div class="card-img placeholder">${escapeHtml((e.artist||"?").charAt(0))}</div>`}
           <div class="card-body">
             <div class="card-artist">${namesHtml(e)}${e.multi ? `<span class="badge-duo">${e.members.length} artistes</span>` : ''}${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
-            <div class="card-venue">${iconPin}${escapeHtml(e.venue)}${e.city ? ", " + escapeHtml(e.city) : ""}${timeText(e) ? " · " + escapeHtml(timeText(e)) : ""}</div>
+            ${e.venue ? `<div class="card-venue-name">${escapeHtml(e.venue)}</div>` : ""}
+            ${e.city ? `<div class="card-venue">${iconPin}${escapeHtml(e.city)}</div>` : ""}
+            ${timeText(e) ? `<div class="card-time">${iconClock}${escapeHtml(timeText(e))}</div>` : ""}
             ${e.cancelled
               ? `<span class="badge-cancelled">Annulé</span>`
               : (link ? `<button type="button" class="card-cta">${iconTicket} ${escapeHtml(e.linkLabel || "Réserver")}</button>` : (e.note ? `<span class="card-cta" style="color:var(--muted);background:none;padding:0;">${escapeHtml(e.note)}</span>` : ``))}
@@ -1155,7 +1169,7 @@ function openModal(id){
 
   modalEyebrow.textContent = e.cancelled ? "Concert annulé" : (e.multi ? `Détails de la soirée · ${e.members.length} artistes` : "Détails du concert");
   modalTitle.innerHTML = namesHtml(e);
-  modalMeta.textContent = `${dateStr} — ${e.venue}${e.city ? ", " + e.city : ""}`;
+  modalMeta.textContent = `${dateStr} — ${[e.venue, e.city].filter(Boolean).join(", ")}`;
 
   // Rappel calendrier — utile quel que soit le mode de réservation (mail
   // ou site web), donc affiché pour tout concert qui n'est pas annulé.

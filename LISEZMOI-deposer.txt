@@ -1,4 +1,4 @@
-MISE A JOUR V6 - vignettes pleine taille, affiches cote a cote
+MISE A JOUR V7 - format artiste, salle, ville, heure
 
 Un seul fichier a deposer sur GitHub : index.html
 1. https://github.com/10doigtsencavale-jpg/AGENDA
