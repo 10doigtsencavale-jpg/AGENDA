@@ -1,8 +1,8 @@
 // Service worker — Agenda Chansigné
 // Pages : réseau d'abord (pour toujours voir les concerts à jour), cache en secours hors connexion.
 // Images / icônes : cache d'abord.
-const CACHE = "agenda-chansigne-v1";
-const SHELL = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png"];
+const CACHE = "agenda-chansigne-v2"; // v2 : purge les anciens caches (anciennes versions des pages)
+const SHELL = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png", "mentions-legales.html", "confidentialite.html", "cgu.html"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
 });
@@ -15,8 +15,8 @@ self.addEventListener("fetch", e => {
   const url = new URL(req.url);
   if(url.origin !== location.origin) return;
   if(req.mode === "navigate"){
-    e.respondWith(fetch(req).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put("index.html", copy)); return r; })
-      .catch(() => caches.match("index.html")));
+    e.respondWith(fetch(req).then(r => { if(r.ok){ const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return r; })
+      .catch(() => caches.match(req).then(hit => hit || caches.match("index.html"))));
     return;
   }
   e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => {

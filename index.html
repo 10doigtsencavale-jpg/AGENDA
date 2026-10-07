@@ -1,38 +1,55 @@
 <!doctype html>
 <html lang="fr" data-theme="light"><head>
 <meta charset="utf-8">
-<title>Agenda Chansigné</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>if(location.protocol==="http:"&&!/^(localhost|127\.|\[::1\])/.test(location.hostname))location.replace("https:"+location.href.substring(location.protocol.length));</script>
+<title>Agenda Chansigné — concerts chansignés | 10 Doigts en Cavale</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Agenda Chansigné">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="icon" type="image/png" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <script>if(!/SamsungBrowser/i.test(navigator.userAgent)){var l=document.createElement("link");l.rel="manifest";l.href="manifest.json";document.head.appendChild(l);}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<meta name="theme-color" content="#e0432c">
-<meta name="description" content="Les concerts chansignés à venir — 10 Doigts en Cavale.">
-<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<meta name="description" content="Agenda des concerts chansignés (traduits en langue des signes française) en France et en Suisse : prochaines dates, affiches et réservations. Par 10 Doigts en Cavale.">
+<meta name="theme-color" content="#d33d27">
+<link rel="canonical" href="https://10doigtsencavale-jpg.github.io/AGENDA/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Agenda Chansigné">
+<meta property="og:title" content="Agenda Chansigné — les concerts chansignés à venir">
+<meta property="og:description" content="Agenda des concerts chansignés (traduits en langue des signes française) en France et en Suisse : prochaines dates, affiches et réservations. Par 10 Doigts en Cavale.">
+<meta property="og:url" content="https://10doigtsencavale-jpg.github.io/AGENDA/">
+<meta property="og:image" content="https://10doigtsencavale-jpg.github.io/AGENDA/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Agenda Chansigné : les concerts traduits en langue des signes française, par 10 Doigts en Cavale">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Agenda Chansigné — les concerts chansignés à venir">
+<meta name="twitter:description" content="Agenda des concerts chansignés (traduits en langue des signes française) en France et en Suisse : prochaines dates, affiches et réservations. Par 10 Doigts en Cavale.">
+<meta name="twitter:image" content="https://10doigtsencavale-jpg.github.io/AGENDA/og-image.jpg">
+<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}footer .legal-links{margin-top:14px;font-size:13px;line-height:2.4}footer .legal-links a{padding:8px 2px;font-weight:600}</style>
 <style>
   :root{
     --bg:#d9f0f2;
     --surface:#ffffff;
     --surface-2:#c3e6e9;
     --ink:#3b2013;
-    --muted:#8c7460;
+    --muted:#6e5a47;
     --line:#b3dade;
-    --accent:#e0432c;
+    --accent:#d33d27;
+    --accent-text:#b3321f;
     --accent-ink:#ffffff;
     --accent-2:#f0a028;
     --accent-2-ink:#3b2013;
     --teal:#8fc7bc;
-    --teal-deep:#3f8f83;
+    --teal-deep:#2f7468;
     --shadow: 0 1px 2px rgba(59,32,19,.08), 0 8px 24px -12px rgba(59,32,19,.24);
-    --font-display:'Big Shoulders Display', 'Arial Narrow', sans-serif;
-    --font-body:'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display:'Avenir Next Condensed','Roboto Condensed','Arial Narrow','Helvetica Neue Condensed',system-ui,sans-serif;
+    --font-body:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -43,6 +60,7 @@
       --muted:#cbaf94;
       --line:#1f4a4e;
       --accent:#ff6a4d;
+      --accent-text:#ff6a4d;
       --accent-ink:#2b0d04;
       --accent-2:#ffb648;
       --accent-2-ink:#2c1c05;
@@ -59,6 +77,7 @@
     --muted:#cbaf94;
     --line:#1f4a4e;
     --accent:#ff6a4d;
+      --accent-text:#ff6a4d;
     --accent-ink:#2b0d04;
     --accent-2:#ffb648;
     --accent-2-ink:#2c1c05;
@@ -125,7 +144,7 @@
   }
   .hero-scrim{
     position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(59,20,10,.08) 0%, rgba(59,20,10,.5) 55%, rgba(43,13,4,.92) 100%);
+    background:linear-gradient(180deg, rgba(59,20,10,.12) 0%, rgba(43,13,4,.55) 38%, rgba(43,13,4,.86) 62%, rgba(43,13,4,.95) 100%);
   }
   .hero-noimg{
     position:absolute;inset:0;
@@ -153,6 +172,7 @@
     font-size:13.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
     color:#ffe6c2;
     display:inline-flex;align-items:center;gap:6px;
+    background:rgba(43,13,4,.82);padding:5px 11px;border-radius:999px;
   }
   .hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 4px rgba(240,160,40,.35);}
   .hero-title{
@@ -207,7 +227,7 @@
     font-size:27px;
     margin:0;
     letter-spacing:.2px;
-    color:var(--accent);
+    color:var(--accent-text);
   }
   .month-head .count{
     font-size:14.5px;color:var(--muted);font-weight:600;
@@ -230,7 +250,7 @@
   .card-date .d{
     font-family:var(--font-display);
     font-weight:800;font-size:29px;line-height:1;
-    color:var(--accent);
+    color:var(--accent-text);
     font-variant-numeric:tabular-nums;
   }
   .card-date .m{
@@ -254,10 +274,11 @@
     overflow-wrap:anywhere;
   }
   .card-venue{
-    font-size:15.5px;color:var(--muted);
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    display:flex;align-items:center;gap:4px;
+    font-size:15.5px;color:var(--muted);line-height:1.3;
+    overflow-wrap:anywhere;
+    display:flex;align-items:flex-start;gap:4px;
   }
+  .card-venue .pin{margin-top:3px;}
   .card-venue .pin{width:11px;height:11px;flex:none;color:var(--accent-2);}
   .card-cta{
     appearance:none;border:none;font-family:var(--font-body);cursor:pointer;
@@ -273,7 +294,7 @@
     margin-top:7px;
     display:inline-flex;align-items:center;gap:5px;
     font-size:13.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
-    color:var(--accent);
+    color:var(--accent-text);
     background:color-mix(in srgb, var(--accent) 14%, transparent);
     padding:5px 12px;border-radius:100px;width:fit-content;
   }
@@ -369,7 +390,7 @@
   .video-badge-img-wrap img{width:100%;height:100%;display:block;}
   .video-badge-play{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.45);color:var(--accent);
+    width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.45);color:var(--accent-text);
     display:flex;align-items:center;justify-content:center;
     box-shadow:0 2px 8px rgba(0,0,0,.3);
   }
@@ -380,7 +401,7 @@
 
   .modal-eyebrow{
     font-size:13.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-    color:var(--accent);margin-bottom:5px;
+    color:var(--accent-text);margin-bottom:5px;
   }
   .modal-title{
     font-family:var(--font-display);font-weight:800;font-size:30px;
@@ -491,7 +512,7 @@
   .coming-soon{
     position:relative;overflow:hidden;
     margin:8px 0 30px;border-radius:20px;padding:30px 20px 26px;text-align:center;
-    background:linear-gradient(150deg, var(--accent) 0%, var(--accent-2) 100%);
+    background:linear-gradient(150deg, #b3321f 0%, #b45309 100%);
     color:#fff;box-shadow:var(--shadow);
   }
   .coming-soon-confetti{
@@ -513,7 +534,7 @@
     text-align:center;font-size:14px;color:var(--muted);
     border-top:1px solid var(--line);
   }
-  footer a{color:var(--accent);text-decoration:none;font-weight:700;}
+  footer a{color:var(--accent-text);text-decoration:none;font-weight:700;}
 
   .install-wrap{margin:0 auto 14px;max-width:420px;}
   .install-btn{
@@ -545,7 +566,7 @@
 
   .card.is-soon{filter:grayscale(1);opacity:.6;cursor:default;pointer-events:none;user-select:none;}
   .card.is-soon .soon-ph{background:var(--line);border-radius:12px;}
-  .card.is-soon .soon-label{font-weight:700;font-size:17px;color:var(--muted);font-style:italic;}
+  .card.is-soon .soon-label{font-weight:700;font-size:17px;color:var(--muted);font-style:italic;overflow-wrap:anywhere;hyphens:auto;}
 
   @media (prefers-reduced-motion: reduce){
     .btn{transition:none;}
@@ -553,6 +574,7 @@
 </style>
 </head>
 <body>
+<noscript><p style="margin:0;padding:14px 16px;background:#fff;color:#3b2013;font:16px/1.5 system-ui,sans-serif">L'Agenda Chansigné a besoin de JavaScript pour afficher les concerts. Vous pouvez aussi retrouver les dates sur <a href="https://www.10doigtsencavale.com" style="color:#b3321f">10doigtsencavale.com</a>.</p></noscript>
 
 
 <div class="topbar">
@@ -608,7 +630,8 @@
 
 <footer>
   <a href="#" id="install-again" class="install-again" hidden>Installer l'application sur mon téléphone</a><br>
-  Chansigné par <a href="https://www.10doigtsencavale.com" target="_blank" rel="noopener">10 Doigts en Cavale</a>
+  Chansigné par <a href="https://www.10doigtsencavale.com" target="_blank" rel="noopener noreferrer">10 Doigts en Cavale</a>
+  <nav class="legal-links" aria-label="Informations légales"><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a> · <a href="cgu.html">Conditions d'utilisation</a></nav>
 </footer>
 
 <script>
@@ -665,26 +688,27 @@
      jamais mis en avant comme "prochain concert".
    ============================================================ */
 const VIDEO_LILOPHONE_ANNONCE = "https://www.facebook.com/share/r/19KPm6bfHm/";
+const M = s => atob(s); /* adresses décodées à l'exécution (anti-collecte) */
 const EVENTS = [
-  {id:"2026-09-11-belin", artist:"Bertrand Belin", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-11", time:null, link:"mailto:Ilophone@gmail.com", linkLabel:"Réserver", image:"ev-4343cf8b06.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
-  {id:"2026-09-12-freres-misere", artist:"Les Frères Misère", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-12", time:null, link:"mailto:Ilophone@gmail.com", linkLabel:"Réserver", image:"ev-4a45a317cc.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
-  {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:"mailto:billetterie@lfe.bzh", linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
+  {id:"2026-09-11-belin", artist:"Bertrand Belin", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-11", time:null, link:M("bWFpbHRvOklsb3Bob25lQGdtYWlsLmNvbQ=="), linkLabel:"Réserver", image:"ev-4343cf8b06.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
+  {id:"2026-09-12-freres-misere", artist:"Les Frères Misère", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-12", time:null, link:M("bWFpbHRvOklsb3Bob25lQGdtYWlsLmNvbQ=="), linkLabel:"Réserver", image:"ev-4a45a317cc.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
+  {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:M("bWFpbHRvOmJpbGxldHRlcmllQGxmZS5iemg="), linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
   {id:"2026-09-25-mathilde-peruwelz", artist:"Mathilde", venue:"Centre culturel", city:"Péruwelz (BE)", date:"2026-09-25", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-273f03c6bf.jpg", note:null, cancelled:false},
   {id:"2026-09-26-mathilde-saint-lezin", artist:"Mathilde", venue:"Saint-Lézin (49)", city:null, date:"2026-09-26", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0f27631bbb.jpg", note:null, cancelled:false},
-  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
-  {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:"mailto:romane@nancyjazzpulsations.com", linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
+  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
+  {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations (54)", city:null, date:"2026-10-13", time:null, link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
   {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Vesoul (70)", city:null, date:"2026-10-16", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
   {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique (38)", city:null, date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
   {id:"2026-10-17-mathilde-paris", artist:"Mathilde", venue:"Facettes Festival", city:"Paris (75)", date:"2026-10-17", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-5b58a18f6d.jpg", note:null, cancelled:false},
-  {id:"2026-10-17-medine-ouest-park", artist:"Médine", venue:"Festival Ouest-Park", city:"Le Havre (76)", date:"2026-10-17", time:null, link:"mailto:billetterie@letetris.fr", linkLabel:"Réserver", image:"ev-ad81461ffd.jpg", note:null, video:"https://www.facebook.com/reel/1093320369953102", cancelled:false},
+  {id:"2026-10-17-medine-ouest-park", artist:"Médine", venue:"Festival Ouest-Park", city:"Le Havre (76)", date:"2026-10-17", time:null, link:M("bWFpbHRvOmJpbGxldHRlcmllQGxldGV0cmlzLmZy"), linkLabel:"Réserver", image:"ev-ad81461ffd.jpg", note:null, video:"https://www.facebook.com/reel/1093320369953102", cancelled:false},
   {id:"2026-10-23-ultra-vomit", artist:"Ultra Vomit", venue:"Fire Master Convention (36)", city:null, date:"2026-10-23", time:null, link:"https://www.firemaster-convention.fr/billetterie/", linkLabel:"Réserver", image:"ev-38a773c067.jpg", note:null, timeLabel:"Soirée", cancelled:false, video:"https://www.facebook.com/reel/1433247458739101"},
   {id:"2026-10-30-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-30", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
   {id:"2026-10-31-mathilde-rochettes", artist:"Mathilde", venue:"Compagnie des Rochettes", city:"Suisse", date:"2026-10-31", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0a2e034cdf.jpg", note:null, cancelled:false},
   {id:"2026-11-08-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-11-08", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
   {id:"2026-11-12-mathilde-villeurbanne", artist:"Mathilde", venue:"Théâtre l'Astrée", city:"Villeurbanne (69)", date:"2026-11-12", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-fe4bdf93a6.jpg", note:null, cancelled:false},
   {id:"2026-11-14-mathilde-rouen", artist:"Mathilde", venue:"Fête de l'Huma Normandie", city:"Rouen", date:"2026-11-14", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-429edeb59a.jpg", note:null, cancelled:false},
-  {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"mailto:contact@lenormandy.net", linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
-  {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:"mailto:contact@lenormandy.net", linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-pi-ja-ma", artist:"Pi Ja Ma", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:M("bWFpbHRvOmNvbnRhY3RAbGVub3JtYW5keS5uZXQ="), linkLabel:"Réserver", image:"ev-cde2d9d3c8.jpg", note:null, cancelled:false},
+  {id:"2026-11-14-marianne-perrudin", artist:"Marianne Perrudin", venue:"Les Rendez-vous Soniques (50)", city:null, date:"2026-11-14", time:null, link:M("bWFpbHRvOmNvbnRhY3RAbGVub3JtYW5keS5uZXQ="), linkLabel:"Réserver", image:"ev-76277438cd.jpg", note:null, cancelled:false},
   {id:"2026-11-28-mathilde-saint-denis-de-pile", artist:"Mathilde", venue:"Saint-Denis-de-Pile (33)", city:null, date:"2026-11-28", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-a91f2cff7d.jpg", note:null, cancelled:false},
   {id:"2026-12-04-mathilde-lille", artist:"Mathilde", venue:"Splendid", city:"Lille (59)", date:"2026-12-04", time:"22:30", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-90f116eab1.jpg", note:null, cancelled:false},
   {id:"2026-12-12-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-12-12", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
@@ -851,7 +875,7 @@ function render(){
         <div class="card${e.cancelled ? " is-cancelled" : ""}" data-id="${e.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(e.artist)}">
           <div class="card-date"><div class="d">${dt.getDate()}</div><div class="m">${MOIS_ABBR[dt.getMonth()]}</div></div>
           ${e.image
-            ? `<img class="card-img" src="${e.image}" alt="">`
+            ? `<img class="card-img" src="${thumbSrc(e.image)}" alt="Affiche du concert : ${escapeHtml(e.artist)}" loading="lazy" decoding="async">`
             : `<div class="card-img placeholder">${escapeHtml((e.artist||"?").charAt(0))}</div>`}
           <div class="card-body">
             <div class="card-artist">${escapeHtml(e.artist)}${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
@@ -1006,6 +1030,9 @@ function buildGoogleCalendarUrl(e){
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+// Vignette légère pour la liste (le build produit th-xxx.jpg à côté de ev-xxx.jpg).
+function thumbSrc(src){ return typeof src === "string" ? src.replace(/(^|\/)ev-/, "$1th-") : src; }
+
 function openModal(id){
   const e = EVENTS.find(ev => ev.id === id);
   if(!e) return;
@@ -1016,12 +1043,12 @@ function openModal(id){
   modalImageWrap.innerHTML = e.image
     ? `<button type="button" class="modal-poster" id="poster-btn" aria-label="Agrandir l'affiche : ${escapeHtml(e.artist)}">
          <span class="modal-poster-bg" style="background-image:url('${e.image}')"></span>
-         <img src="${e.image}" alt="">
+         <img src="${e.image}" alt="Affiche du concert : ${escapeHtml(e.artist)}" decoding="async">
          <span class="poster-zoom">${iconZoom} Agrandir</span>
        </button>`
     : "";
   const posterBtn = document.getElementById("poster-btn");
-  if(posterBtn) posterBtn.addEventListener("click", () => openLightbox(e.image));
+  if(posterBtn) posterBtn.addEventListener("click", () => openLightbox(e.image, "Affiche du concert : " + e.artist));
   modalEl.scrollTop = 0;
   document.querySelector(".modal-panel").scrollTop = 0;
 
@@ -1244,7 +1271,8 @@ function openModal(id){
 
 const lightboxEl = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
-function openLightbox(src){
+function openLightbox(src, alt){
+  lightboxImg.alt = alt || "";
   lightboxImg.src = src;
   lightboxEl.hidden = false;
   document.getElementById("lightbox-close").focus();
@@ -1252,6 +1280,7 @@ function openLightbox(src){
 function closeLightbox(){
   lightboxEl.hidden = true;
   lightboxImg.removeAttribute("src");
+  lightboxImg.alt = "";
   const pb = document.getElementById("poster-btn");
   if(pb) pb.focus();
 }
