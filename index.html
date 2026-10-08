@@ -816,7 +816,7 @@
    ============================================================ */
 const VIDEO_LILOPHONE_ANNONCE = "https://www.facebook.com/share/r/19KPm6bfHm/";
 const M = s => atob(s); /* adresses décodées à l'exécution (anti-collecte) */
-const EVENTS = [
+const BASE_EVENTS = [
   {id:"2026-09-11-belin", artist:"Bertrand Belin", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-11", time:null, link:M("bWFpbHRvOklsb3Bob25lQGdtYWlsLmNvbQ=="), linkLabel:"Réserver", image:"ev-4343cf8b06.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
   {id:"2026-09-12-freres-misere", artist:"Les Frères Misère", venue:"Ilophone", city:"Ouessant (29)", date:"2026-09-12", time:null, link:M("bWFpbHRvOklsb3Bob25lQGdtYWlsLmNvbQ=="), linkLabel:"Réserver", image:"ev-4a45a317cc.jpg", note:null, video:VIDEO_LILOPHONE_ANNONCE, cancelled:false},
   {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:M("bWFpbHRvOmJpbGxldHRlcmllQGxmZS5iemg="), linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
@@ -840,6 +840,7 @@ const EVENTS = [
   {id:"2026-12-04-mathilde-lille", artist:"Mathilde", venue:"Splendid", city:"Lille (59)", date:"2026-12-04", time:"22:30", link:"https://www.fnacspectacles.com/event/mathilde-le-splendid-lille-21500190/", linkLabel:"Réserver", image:"ev-90f116eab1.jpg", note:null, cancelled:false},
   {id:"2026-12-12-a-venir", soon:true, artist:"", venue:"", city:null, date:"2026-12-12", time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false},
 ];
+let EVENTS = BASE_EVENTS;
 
 const MOIS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 const MOIS_ABBR = ["Jan","Fév","Mars","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
@@ -982,7 +983,7 @@ function renderWhere(e){
 // Placement lu en direct dans le tableau (onglet « Placement (public) » publié en CSV).
 // Vide = fonction désactivée ; seules les valeurs de PLACEMENT ci-dessus servent.
 const PLACEMENT_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQSLGkhGvXbLbt9JNJN4WoOfmdmxLMcdrFS5sxSACwWtTBOFvVAb9xvmnKiJKQVfg1kR3R2uiyjXAhU/pub?gid=1708998674&single=true&output=csv";
-let placementFetchedAt = 0;
+let placementFetchedAt = 0, placementText = "";
 function normName(x){ return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
 function parseCsv(t){
   const rows=[]; let row=[], cur="", q=false;
@@ -1029,6 +1030,7 @@ function refreshPlacement(force){
   if(!force && Date.now()-placementFetchedAt < 60000) return;
   placementFetchedAt = Date.now();
   fetch(PLACEMENT_CSV_URL,{cache:"no-store"}).then(r => r.ok ? r.text() : Promise.reject()).then(t => {
+    placementText = t;
     applyPlacementCsv(t);
     updateCardBadges();
     if(currentGroup && !modalEl.hidden) renderWhere(currentGroup);
@@ -1073,8 +1075,119 @@ function buildGroups(list){
   }
   return out;
 }
-const GROUPS = buildGroups(EVENTS);
+let GROUPS = buildGroups(EVENTS);
+
+/* ============================================================
+   DONNÉES EN DIRECT — onglet public « Agenda (public) » du tableau
+   Les concerts sont relus dans le tableau (dates, lieux, liens, vidéos,
+   annulations…) : plus besoin de republier l'appli à chaque modification.
+   Les données intégrées à l'appli servent de secours (hors connexion,
+   tableau injoignable ou illisible) et gardent les affiches existantes.
+   ============================================================ */
+const EVENTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQSLGkhGvXbLbt9JNJN4WoOfmdmxLMcdrFS5sxSACwWtTBOFvVAb9xvmnKiJKQVfg1kR3R2uiyjXAhU/pub?gid=1608066561&single=true&output=csv";
+const EVENTS_CACHE_KEY = "chansigne_events_csv_v1";
+const POSTERS_OK_KEY = "chansigne_posters_ok_v1";
+let eventsFetchedAt = 0, lastEventsText = "";
+const COUNTRY_CODE = {"suisse":"CH","belgique":"BE","luxembourg":"LU","italie":"IT","espagne":"ES","allemagne":"DE","canada":"CA","monaco":"MC","royaume uni":"UK"};
+function cityLabel(ville, dpt, pays){
+  ville = String(ville||"").trim(); if(!ville) return null;
+  const p = normName(pays), d = String(dpt||"").trim();
+  if(d && (!p || p === "france")) return `${ville} (${d})`;
+  if(p && p !== "france") return `${ville} (${COUNTRY_CODE[p] || String(pays).trim()})`;
+  return ville;
+}
+function csvEvents(text){
+  const rows = parseCsv(text);
+  if(rows.length < 2) return null;
+  const head = rows[0].map(x => normName(x).replace(/ /g,"_"));
+  const col = n => head.indexOf(n);
+  if(["ref","date","artiste"].some(n => col(n) < 0)) return null;
+  const out = [];
+  for(const r of rows.slice(1)){
+    const g = n => { const i = col(n); return i < 0 ? "" : String(r[i] || "").trim(); };
+    const ref = g("ref"), date = isoDate(g("date"));
+    if(!ref || !date) continue;
+    if(ref === "conf"){
+      out.push({id:date+"-a-venir", soon:true, artist:"", venue:"", city:null, date, time:null, link:null, linkLabel:null, image:null, note:null, cancelled:false});
+      continue;
+    }
+    const artist = g("artiste");
+    if(!artist) continue;
+    const hm = g("heure").match(/^(\d{1,2})[:h](\d{2})$/);
+    const url = /^https:\/\//i.test(g("lien")) ? g("lien") : "";
+    const mail = g("email").replace(/\(arobase\)/gi,"@");
+    const e = {
+      id: date + "-" + normName(artist).replace(/ /g,"-"),
+      artist, venue: g("lieu"), city: cityLabel(g("ville"), g("dpt"), g("pays")), date,
+      time: hm ? hm[1].padStart(2,"0") + ":" + hm[2] : null,
+      link: url || (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? "mailto:" + mail : null),
+      linkLabel: "Réserver", note: null,
+      cancelled: /^(oui|yes|true|1|x|✔)/i.test(g("annule")),
+      _ref: ref
+    };
+    if(g("avant_heure")) e.timePrefix = g("avant_heure");
+    if(g("precisions")) e.timeNote = g("precisions");
+    if(/^https:\/\//i.test(g("video"))) e.video = g("video");
+    out.push(e);
+  }
+  return out;
+}
+function postersOk(){ try{ return JSON.parse(localStorage.getItem(POSTERS_OK_KEY) || "[]"); }catch(_){ return []; } }
+function applyEventsCsv(text){
+  const live = csvEvents(text);
+  if(!live || !live.some(e => !e.soon)) return false;   // garde-fou : on garde les données intégrées
+  const today = startOfToday(), ok = new Set(postersOk());
+  const byKey = new Map(BASE_EVENTS.filter(b => !b.soon).map(b => [b.date + "|" + normName(b.artist), b]));
+  const out = [], used = new Set();
+  for(const f of live){
+    if(f.soon){ out.push(f); continue; }
+    const b = byKey.get(f.date + "|" + normName(f.artist));
+    if(b){
+      used.add(b.id);
+      const m = Object.assign({}, b, f); delete m._ref;
+      for(const k of ["video","timePrefix","timeNote"]) if(f[k] === undefined) delete m[k];
+      out.push(m);
+    } else {
+      f.image = (/^[0-9a-f]{10}$/.test(f._ref) && ok.has(f._ref)) ? "ev-" + f._ref + ".jpg" : null;
+      out.push(f);
+    }
+  }
+  // les concerts passés restent dans l'appli (jamais supprimés), même absents du tableau
+  for(const b of BASE_EVENTS) if(!b.soon && !used.has(b.id) && parseLocalDate(b.date) < today) out.push(b);
+  EVENTS = out; GROUPS = buildGroups(EVENTS);
+  return true;
+}
+// Affiche d'un nouveau concert : on ne l'utilise que si le fichier existe vraiment.
+function probePosters(){
+  const todo = EVENTS.filter(e => e._ref && !e.image && /^[0-9a-f]{10}$/.test(e._ref));
+  if(!todo.length) return;
+  Promise.all(todo.map(e => fetch("th-" + e._ref + ".jpg", {method:"HEAD", cache:"no-cache"}).then(r => { if(r.ok){ e.image = "ev-" + e._ref + ".jpg"; return e._ref; } }).catch(() => {})))
+    .then(refs => {
+      refs = refs.filter(Boolean);
+      if(!refs.length) return;
+      try{ localStorage.setItem(POSTERS_OK_KEY, JSON.stringify(Array.from(new Set(postersOk().concat(refs))))); }catch(_){}
+      GROUPS = buildGroups(EVENTS); render(); updateCardBadges();
+    });
+}
+function refreshEvents(force){
+  if(!EVENTS_CSV_URL) return;
+  if(!force && Date.now() - eventsFetchedAt < 60000) return;
+  eventsFetchedAt = Date.now();
+  fetch(EVENTS_CSV_URL, {cache:"no-store"}).then(r => r.ok ? r.text() : Promise.reject()).then(t => {
+    if(t === lastEventsText) return;
+    if(!applyEventsCsv(t)) return;
+    lastEventsText = t;
+    try{ localStorage.setItem(EVENTS_CACHE_KEY, t); }catch(_){}
+    if(placementText) applyPlacementCsv(placementText);
+    render(); updateCardBadges(); probePosters();
+  }).catch(()=>{});
+}
+if(EVENTS_CSV_URL){
+  let cached = ""; try{ cached = localStorage.getItem(EVENTS_CACHE_KEY) || ""; }catch(_){}
+  if(cached && applyEventsCsv(cached)) lastEventsText = cached;
+}
 refreshPlacement(true);
+document.addEventListener("visibilitychange", () => { if(!document.hidden){ refreshEvents(false); refreshPlacement(false); } });
 
 function render(){
   const today = startOfToday();
@@ -1205,6 +1318,7 @@ function render(){
   }
 }
 render();
+refreshEvents(true); probePosters();
 
 /* ============================================================
    MODAL — visuel en entier + réservation directement cliquable
