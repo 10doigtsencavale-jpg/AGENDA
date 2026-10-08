@@ -1,4 +1,7 @@
-MISE A JOUR - mentions legales (directrice de la publication)
+MISE A JOUR V13 - bandeau d aide, tarif reduit, annee
 
-Fichier a deposer sur GitHub : mentions-legales.html (remplace l'ancien)
-Add file > Upload files > glisser mentions-legales.html > Commit changes
+Un seul fichier a deposer sur GitHub : index.html
+1. https://github.com/10doigtsencavale-jpg/AGENDA
+2. Add file > Upload files > glisser index.html (il remplace l'ancien)
+3. Commit changes
+Attendre 1 a 2 minutes, puis recharger https://10doigtsencavale-jpg.github.io/AGENDA/
