@@ -1,0 +1,9 @@
+V22 - UN SEUL FICHIER A DEPOSER : index.html
+
+Nouveaute : la chansigneuse de droite porte un haut habille (epaules denudees, decollete en V, noeud torsade, basque evasee) et ses cheveux sont plus fonces. Tout le reste est inchange.
+
+Comment deposer (1 minute) :
+1. GitHub > depot AGENDA, page principale > Add file > Upload files.
+2. Cliquez sur le lien "choose your files" (ne glissez rien).
+3. Choisissez CE fichier index.html > Ouvrir.
+4. Bouton vert "Commit changes".
