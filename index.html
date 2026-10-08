@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="fr" data-theme="light"><head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://agenda10dec.goatcounter.com; font-src 'self'; connect-src 'self' https://agenda10dec.goatcounter.com https://docs.google.com https://*.googleusercontent.com; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://agenda10dec.goatcounter.com; font-src 'self'; connect-src 'self' https://agenda10dec.goatcounter.com https://docs.google.com https://*.googleusercontent.com; manifest-src 'self'; worker-src 'self'; frame-src https://www.facebook.com https://www.instagram.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(location.protocol==="http:"&&!/^(localhost|127\.|\[::1\])/.test(location.hostname))location.replace("https:"+location.href.substring(location.protocol.length));</script>
 <title>Agenda Chansigné — concerts chansignés | 10 Doigts en Cavale</title>
+<script>window.__bip=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__bip=e;});window.addEventListener('appinstalled',function(){window.__bip=null;window.__installed=true;});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -414,6 +415,22 @@
     background:rgba(255,255,255,.18);color:#fff;border:none;font-size:30px;line-height:1;cursor:pointer;
     display:flex;align-items:center;justify-content:center;
   }
+
+  /* Lecteur vidéo intégré (Facebook / Instagram) — chargé seulement après un clic */
+  .video-overlay{position:fixed;inset:0;z-index:210;background:#182d68;display:flex;align-items:center;justify-content:center;padding:64px 16px 16px;box-sizing:border-box;overflow:auto;}
+  .video-overlay[hidden]{display:none;}
+  .video-box{width:100%;max-width:420px;margin:auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;color:#fff;}
+  .video-name{margin:0;font-family:var(--font-display);font-weight:800;font-size:24px;text-transform:uppercase;line-height:1.15;}
+  .video-frame{display:block;border:0;border-radius:14px;background:#000;height:min(70vh,680px);height:min(70dvh,680px);aspect-ratio:9/16;max-width:100%;}
+  .video-consent{background:#fff;color:var(--ink);border-radius:18px;padding:22px 18px;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .video-consent p{margin:0;font-size:16px;line-height:1.4;font-weight:600;}
+  .video-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;box-sizing:border-box;min-height:56px;padding:12px 18px;border-radius:999px;border:0;cursor:pointer;
+    font-family:var(--font-display);font-weight:800;font-size:19px;line-height:1.2;text-decoration:none;}
+  .video-btn.is-main{background:var(--accent);color:var(--accent-ink,#fff);}
+  .video-btn.is-back{background:#fff;color:var(--ink);}
+  .video-btn svg{width:20px;height:20px;flex:none;}
+  .video-ext{color:#fff;font-weight:700;font-size:15.5px;text-decoration:underline;text-underline-offset:3px;}
+  .video-consent .video-ext{color:var(--ink);}
   .modal-body{padding:18px 22px 28px;}
 
   /* Vignette "Vidéo en LSF" — en haut du formulaire, avant tout le reste */
@@ -518,8 +535,8 @@
     background:rgba(255,255,255,.2);border-radius:50%;}
   .help-banner-icon svg{width:20px;height:20px;}
   .help-banner p{margin:0;}
-  .help-banner-title{font-family:var(--font-display);font-weight:800;font-size:23px;line-height:1.15;text-transform:uppercase;}
-  .help-banner-text{font-size:18px;font-weight:800;margin-top:6px !important;}
+  .help-banner-title{font-family:var(--font-display);font-weight:800;font-size:19px;line-height:1.25;}
+  .help-banner-text{font-size:18px;font-weight:800;margin-top:12px !important;}
   .help-banner-warn{font-size:15.5px;line-height:1.4;margin-top:8px !important;font-weight:600;}
   .modal-message-sub{font-size:14.5px;color:var(--muted);margin:0 0 14px;line-height:1.4;}
   .places-stepper{
@@ -550,8 +567,9 @@
   .stepper-group-title{
     display:flex;align-items:center;gap:8px;
     background:var(--accent-2);color:var(--accent-2-ink);
-    padding:9px 12px;border-radius:10px;line-height:1.25;
+    padding:9px 12px;border-radius:10px;line-height:1.25;overflow-wrap:anywhere;
   }
+  @media (max-width:350px){.stepper-group-title{font-size:12px;letter-spacing:0;padding:9px 10px;gap:6px;}}
   .stepper-group-title .ear-off{width:22px;height:22px;flex:none;}
   .vest-group{border:0;padding:0;min-width:0;margin-left:0;margin-right:0;}
   .vest-group legend{padding:9px 12px;display:block;width:100%;box-sizing:border-box;}
@@ -652,6 +670,8 @@
   }
   .install-help p{margin:0 0 8px;}
   .install-help p:last-child{margin-bottom:0;}
+  .install-copy{font:inherit;font-weight:800;padding:8px 14px;border-radius:999px;border:2px solid var(--accent-2);background:var(--surface);color:var(--ink);cursor:pointer;}
+
   .install-help strong{font-weight:700;}
 
 
@@ -727,6 +747,11 @@
   <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Fermer l'image">&times;</button>
   <img id="lightbox-img" alt="">
   <div id="lightbox-stack" class="lightbox-stack" hidden></div>
+</div>
+
+<div id="video-overlay" class="video-overlay" hidden role="dialog" aria-modal="true" aria-label="Vidéo en langue des signes">
+  <button type="button" class="lightbox-close" id="video-close" aria-label="Fermer la vidéo">&times;</button>
+  <div class="video-box" id="video-box"></div>
 </div>
 
 <footer>
@@ -1359,7 +1384,7 @@ function openModal(id){
   // partage public de cette page (contrôle de sécurité automatique).
   if(e.videos.length){
     modalVideoWrap.innerHTML = e.videos.map(v => `
-      <a class="video-badge-btn" href="${v.url}" target="_blank" rel="noopener" aria-label="Regarder la vidéo en langue des signes${e.videos.length > 1 ? " : " + escapeHtml(v.artist) : ""}">
+      <a class="video-badge-btn" href="${v.url}" target="_blank" rel="noopener" data-video-url="${escapeHtml(v.url)}" data-video-artist="${escapeHtml(v.artist)}" aria-label="Regarder la vidéo en langue des signes${e.videos.length > 1 ? " : " + escapeHtml(v.artist) : ""}">
         <span class="video-badge-img-wrap">
           <img src="${videoBadgeImg}" alt="">
           <span class="video-badge-play">${iconPlay}</span>
@@ -1480,9 +1505,10 @@ function openModal(id){
           <div class="help-banner" role="note">
             <span class="help-banner-icon">${iconMail}</span>
             <div>
-              <p class="help-banner-title">Besoin d'aide pour contacter le festival ?</p>
-              <p class="help-banner-text">Complétez le formulaire ci-dessous.</p>
-              <p class="help-banner-warn">Ce n'est pas une réservation en ligne : ce formulaire écrit le message à votre place. Vous l'envoyez ensuite vous-même à l'organisateur.</p>
+              <p class="help-banner-title">Vous souhaitez écrire au festival / la salle pour effectuer une demande de réservation ?</p>
+              <p class="help-banner-text">Remplissez le formulaire</p>
+              <p class="help-banner-warn">Le message se rédige à votre place</p>
+              <p class="help-banner-warn">Copiez et envoyez le message vous-même à l'organisateur.</p>
             </div>
           </div>
 
@@ -1520,9 +1546,10 @@ function openModal(id){
           <div class="help-banner" role="note">
             <span class="help-banner-icon">${iconMail}</span>
             <div>
-              <p class="help-banner-title">Besoin d'aide pour contacter le festival ?</p>
-              <p class="help-banner-text">Complétez le formulaire ci-dessous.</p>
-              <p class="help-banner-warn">Ce n'est pas une réservation en ligne : ce formulaire écrit le message à votre place. Vous l'envoyez ensuite vous-même à l'organisateur.</p>
+              <p class="help-banner-title">Vous souhaitez écrire au festival / la salle pour effectuer une demande de réservation ?</p>
+              <p class="help-banner-text">Remplissez le formulaire</p>
+              <p class="help-banner-warn">Le message se rédige à votre place</p>
+              <p class="help-banner-warn">Copiez et envoyez le message vous-même à l'organisateur.</p>
             </div>
           </div>
 
@@ -1642,6 +1669,69 @@ function closeLightbox(){
 }
 lightboxEl.addEventListener("click", closeLightbox);
 
+// ---- Lecteur vidéo intégré -------------------------------------------------
+// Les vidéos LSF sont publiées sur Facebook (ou Instagram). On les affiche dans
+// l'appli pour que la personne reste dans l'agenda : la croix ou « Revenir à
+// l'agenda » referme le lecteur. Rien n'est chargé chez Facebook/Instagram
+// avant le clic sur « Lancer la vidéo » (information : page confidentialité). Si le
+// lien n'est pas reconnu, on garde le comportement d'avant (nouvel onglet).
+const videoOverlay = document.getElementById("video-overlay");
+const videoBox = document.getElementById("video-box");
+let videoConsent = false, lastVideoBtn = null;
+function videoEmbedInfo(url){
+  try{
+    const u = new URL(url);
+    const host = u.hostname.replace(/^(www|m|web)\./, "");
+    if(host === "facebook.com" || host === "fb.watch")
+      return { net:"Facebook", src:"https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(url) + "&show_text=false&autoplay=true" };
+    const m = host === "instagram.com" && u.pathname.match(/^\/(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/);
+    if(m) return { net:"Instagram", src:"https://www.instagram.com/" + (m[1] === "reels" ? "reel" : m[1]) + "/" + m[2] + "/embed" };
+  }catch(_){}
+  return null;
+}
+function renderVideo(info, url, artist){
+  const name = artist ? `<p class="video-name">${escapeHtml(artist)}</p>` : "";
+  const ext = `<a class="video-ext" href="${escapeHtml(url)}" target="_blank" rel="noopener">Ouvrir sur ${info.net}</a>`;
+  if(!videoConsent){
+    videoBox.innerHTML = `${name}
+      <button type="button" class="video-btn is-main" id="video-go">${iconPlay} Lancer la vidéo</button>`;
+    document.getElementById("video-go").addEventListener("click", () => { videoConsent = true; renderVideo(info, url, artist); });
+    document.getElementById("video-go").focus();
+    return;
+  }
+  videoBox.innerHTML = `${name}
+    <iframe class="video-frame" title="Vidéo en langue des signes" src="${info.src}"
+      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-presentation"></iframe>
+    <button type="button" class="video-btn is-back" id="video-back">← Revenir à l'agenda</button>
+    ${ext}`;
+  document.getElementById("video-back").addEventListener("click", closeVideo);
+  document.getElementById("video-back").focus();
+}
+function openVideo(btn){
+  const url = btn.dataset.videoUrl, info = videoEmbedInfo(url);
+  if(!info) return false;
+  lastVideoBtn = btn;
+  const multi = document.querySelectorAll("#modal-video-wrap .video-badge-btn").length > 1;
+  renderVideo(info, url, multi ? btn.dataset.videoArtist : "");
+  videoOverlay.hidden = false;
+  document.getElementById("video-close").focus();
+  return true;
+}
+function closeVideo(){
+  videoOverlay.hidden = true;
+  videoBox.innerHTML = "";            // retire l'iframe : la vidéo s'arrête
+  if(lastVideoBtn && lastVideoBtn.isConnected) lastVideoBtn.focus();
+}
+document.getElementById("video-close").addEventListener("click", closeVideo);
+videoOverlay.addEventListener("click", ev => { if(ev.target === videoOverlay) closeVideo(); });
+modalVideoWrap.addEventListener("click", ev => {
+  const a = ev.target.closest("a.video-badge-btn[data-video-url]");
+  if(!a || ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.button) return;
+  if(openVideo(a)) ev.preventDefault();
+});
+
 function closeModal(){
   modalEl.hidden = true;
   document.body.classList.remove("modal-open");
@@ -1669,6 +1759,7 @@ modalEl.addEventListener("click", ev => { if(ev.target === modalEl) closeModal()
 
 document.addEventListener("keydown", ev => {
   if(ev.key !== "Escape") return;
+  if(!videoOverlay.hidden){ closeVideo(); return; }
   if(!lightboxEl.hidden){ closeLightbox(); return; }
   if(!modalEl.hidden) closeModal();
 });
@@ -1698,13 +1789,17 @@ document.addEventListener("keydown", ev => {
     render(getDismissed());
     if(dismissBtn) dismissBtn.addEventListener("click", () => { setDismissed(true); render(true); });
     if(again) again.addEventListener("click", ev => { ev.preventDefault(); setDismissed(false); render(false); window.scrollTo({top:0,behavior:"smooth"}); });
-    let deferred = null;
+    // L'évènement du navigateur est capturé très tôt (dans <head>) pour ne pas
+    // le rater : sans lui, Chrome ne propose pas l'installation en un geste.
+    let deferred = window.__bip || null;
     window.addEventListener("beforeinstallprompt", ev => { ev.preventDefault(); deferred = ev; });
+    window.addEventListener("appinstalled", () => { deferred = null; setDismissed(true); render(true); if(again) again.hidden = true; });
+    if(window.__installed){ wrap.hidden = true; if(again) again.hidden = true; return; }
     const ua = navigator.userAgent || "";
     const isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
     const isAndroid = /Android/.test(ua);
     const stepsIOS = '<p><strong>Sur iPhone / iPad (Safari) :</strong></p><p>1. Touchez le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut).</p><p>2. Choisissez <strong>« Sur l\'écran d\'accueil »</strong>.</p><p>3. Touchez <strong>Ajouter</strong>.</p>';
-    const stepsAndroid = '<p><strong>Sur Android (Chrome) :</strong></p><p>1. Touchez le menu <strong>⋮</strong> en haut à droite.</p><p>2. Choisissez <strong>« Installer l\'application »</strong> (ou « Ajouter à l\'écran d\'accueil »).</p><p>3. Confirmez.</p>';
+    const stepsAndroid = '<p><strong>Sur Android (Chrome) :</strong></p><p>1. Touchez le menu <strong>⋮</strong> en haut à droite.</p><p>2. Choisissez <strong>« Installer l\'application »</strong> (ou « Ajouter à l\'écran d\'accueil »).</p><p>3. Confirmez.</p><p>L\'appli est peut-être <strong>déjà installée</strong> : cherchez l\'icône « Agenda Chansigné » sur votre écran d\'accueil.</p>';
     // Samsung Internet : son installateur d'applis web produit un paquet jugé
     // "non sécurisé" par Google Play Protect (Android 14+), ce qui bloque
     // l'installation. Chrome n'a pas ce problème : on y renvoie la personne.
@@ -1719,8 +1814,31 @@ document.addEventListener("keydown", ev => {
       help.innerHTML = stepsSamsung;
       help.hidden = false;
     }
+    // Navigateur intégré à une appli (Facebook, Instagram, Messenger, TikTok…) :
+    // l'installation y est impossible, il faut d'abord rouvrir la page dans le
+    // vrai navigateur. C'est le cas le plus fréquent pour qui arrive depuis un
+    // post ou une story.
+    const inApp = !isSamsung && (/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|TikTok|musical_ly|BytedanceWebview|Snapchat|LinkedInApp|MicroMessenger|Line\//i.test(ua) || (isAndroid && /; wv\)/.test(ua)));
+    const stepsInApp = '<p><strong>Cette page est ouverte dans une autre appli</strong> (Facebook, Instagram…) : l\'installation n\'y est pas possible.</p>' +
+      (isIOS
+        ? '<p>1. Touchez <strong>⋯</strong> (en bas ou en haut à droite).</p><p>2. Choisissez <strong>« Ouvrir dans Safari »</strong>.</p><p>3. Touchez ensuite <strong>« Installer l\'appli sur mon téléphone »</strong>.</p>'
+        : '<p>1. Touchez <strong>« Ouvrir dans Chrome »</strong> ci-dessus. Si rien ne se passe : touchez <strong>⋮</strong> (ou ⋯) en haut à droite, puis <strong>« Ouvrir dans le navigateur »</strong>.</p><p>2. Touchez ensuite <strong>« Installer l\'appli sur mon téléphone »</strong>.</p>') +
+      '<p><button type="button" class="install-copy" id="install-copy">Copier le lien de l\'agenda</button> <span id="install-copy-state" role="status"></span></p>';
+    if(inApp){
+      const label = document.getElementById("install-label");
+      if(label) label.textContent = isIOS ? "Ouvrir dans Safari" : "Ouvrir dans Chrome";
+      help.innerHTML = stepsInApp;
+      help.hidden = false;
+      help.addEventListener("click", async ev => {
+        const c = ev.target.closest("#install-copy"); if(!c) return;
+        const s = document.getElementById("install-copy-state");
+        try { await navigator.clipboard.writeText(location.origin + location.pathname); s.textContent = "Lien copié."; }
+        catch(e){ s.textContent = location.origin + location.pathname; }
+      });
+    }
     btn.addEventListener("click", async () => {
       if(isSamsung){ window.location.href = chromeIntent; return; }
+      if(inApp){ if(isAndroid) window.location.href = chromeIntent; else help.hidden = false; return; }
       if(deferred){
         try { deferred.prompt(); await deferred.userChoice; } catch(e) {}
         deferred = null;
