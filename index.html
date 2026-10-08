@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="fr" data-theme="light"><head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://agenda10dec.goatcounter.com; font-src 'self'; connect-src 'self' https://agenda10dec.goatcounter.com; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://agenda10dec.goatcounter.com; font-src 'self'; connect-src 'self' https://agenda10dec.goatcounter.com https://docs.google.com https://*.googleusercontent.com; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(location.protocol==="http:"&&!/^(localhost|127\.|\[::1\])/.test(location.hostname))location.replace("https:"+location.href.substring(location.protocol.length));</script>
 <title>Agenda Chansigné — concerts chansignés | 10 Doigts en Cavale</title>
@@ -931,7 +931,7 @@ function renderWhere(e){
 
 // Placement lu en direct dans le tableau (onglet « Placement (public) » publié en CSV).
 // Vide = fonction désactivée ; seules les valeurs de PLACEMENT ci-dessus servent.
-const PLACEMENT_CSV_URL = "";
+const PLACEMENT_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQSLGkhGvXbLbt9JNJN4WoOfmdmxLMcdrFS5sxSACwWtTBOFvVAb9xvmnKiJKQVfg1kR3R2uiyjXAhU/pub?gid=1708998674&single=true&output=csv";
 let placementFetchedAt = 0;
 function normName(x){ return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
 function parseCsv(t){

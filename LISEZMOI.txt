@@ -1,9 +1,11 @@
-V22 - UN SEUL FICHIER A DEPOSER : index.html
+V23 - DEUX FICHIERS A DEPOSER : index.html + confidentialite.html
 
-Nouveaute : la chansigneuse de droite porte un haut habille (epaules denudees, decollete en V, noeud torsade, basque evasee) et ses cheveux sont plus fonces. Tout le reste est inchange.
+Nouveaute : l'appli lit maintenant le tableau Google (onglet "Placement (public)") en direct.
+Le jour J, tu remplis la colonne "PLACEMENT" dans le tableau (ou tu me l'ecris) : l'info apparait dans l'appli en moins d'une minute, sans rien redeposer.
+confidentialite.html : une phrase ajoutee pour mentionner cette lecture du tableau (obligation d'information).
 
 Comment deposer (1 minute) :
 1. GitHub > depot AGENDA, page principale > Add file > Upload files.
 2. Cliquez sur le lien "choose your files" (ne glissez rien).
-3. Choisissez CE fichier index.html > Ouvrir.
+3. Selectionnez les 2 fichiers (Ctrl+clic) > Ouvrir.
 4. Bouton vert "Commit changes".
