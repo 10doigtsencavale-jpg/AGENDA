@@ -1,9 +1,7 @@
-V34 - L'appli lit maintenant le tableau en direct
+V35 - Date/heure espacees, bandeau d'aide, majuscules dans le message
 
-A METTRE SUR GITHUB (2 fichiers) :
+A METTRE SUR GITHUB (1 seul fichier) :
 1. Ouvre le depot AGENDA sur GitHub.
 2. Clique sur "Add file" puis "Upload files".
-3. Glisse ces 2 fichiers : index.html et confidentialite.html (ils remplacent les anciens).
+3. Glisse le fichier index.html (il remplace l'ancien).
 4. En bas, clique sur "Commit changes" (important).
-
-Apres ca, tes modifications dans l'onglet "Agenda (public)" du tableau apparaissent dans l'appli sans repasser par GitHub (delai : environ 5 minutes cote Google + quelques secondes cote appli).
