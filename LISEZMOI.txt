@@ -1,11 +1,12 @@
-V23 - DEUX FICHIERS A DEPOSER : index.html + confidentialite.html
+V25 - UN SEUL FICHIER A DEPOSER : index.html (remplace la V24)
 
-Nouveaute : l'appli lit maintenant le tableau Google (onglet "Placement (public)") en direct.
-Le jour J, tu remplis la colonne "PLACEMENT" dans le tableau (ou tu me l'ecris) : l'info apparait dans l'appli en moins d'une minute, sans rien redeposer.
-confidentialite.html : une phrase ajoutee pour mentionner cette lecture du tableau (obligation d'information).
+Nouveautes (en plus de la V24 : ecart entre les 2 illustrations, pastille video agrandie, mini-pastille sur l'accueil) :
+- Quand le visuel de placement s'affiche : fond bleu marine au lieu du noir.
+- Le nom de l'artiste est centre au-dessus de son illustration.
+- La mini-pastille "placement" de la page d'accueil est en haut a droite de la carte, dans la zone blanche.
 
 Comment deposer (1 minute) :
 1. GitHub > depot AGENDA, page principale > Add file > Upload files.
 2. Cliquez sur le lien "choose your files" (ne glissez rien).
-3. Selectionnez les 2 fichiers (Ctrl+clic) > Ouvrir.
+3. Choisissez CE fichier index.html > Ouvrir.
 4. Bouton vert "Commit changes".

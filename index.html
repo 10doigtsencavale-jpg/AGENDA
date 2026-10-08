@@ -330,7 +330,15 @@
     padding:4px 11px;border-radius:100px;
   }
 
-  .card{cursor:pointer;transition:transform .12s ease;}
+  .card{cursor:pointer;transition:transform .12s ease;position:relative;}
+  /* mini pastille « placement connu » dans le coin de la carte */
+  .place-mini{position:absolute;top:7px;right:8px;width:34px;height:34px;z-index:2;border-radius:50%;
+    border:2.5px solid var(--surface);background:#e64330;box-shadow:0 2px 7px rgba(0,0,0,.3);
+    animation:placePulse 1.7s ease-out 3;pointer-events:none;}
+  .place-mini img{display:block;width:100%;height:100%;border-radius:50%;}
+  @keyframes placePulse{0%{box-shadow:0 2px 7px rgba(0,0,0,.3),0 0 0 0 rgba(230,67,48,.6);}100%{box-shadow:0 2px 7px rgba(0,0,0,.3),0 0 0 14px rgba(230,67,48,0);}}
+  .card.has-place .card-body{padding-top:24px;}
+  @media (prefers-reduced-motion:reduce){.place-mini{animation:none;}}
   .card:active{transform:scale(.985);}
   .hero{cursor:pointer;}
   .card:focus-visible,.hero:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px;}
@@ -386,6 +394,7 @@
     display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;cursor:zoom-out;
   }
   .lightbox[hidden]{display:none;}
+  .lightbox.is-scene-bg{background:rgba(24,45,104,.99);}
   .lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;}
 
   /* Placement des chansigneurs : pastille ronde sous la pastille vidéo */
@@ -393,10 +402,10 @@
   .place-badge-btn .video-badge-img-wrap img{object-fit:contain;}
   .where-info{margin:-2px 0 16px;padding:14px 16px;border-radius:14px;background:var(--surface-2);border:2px solid var(--accent-2);
     font-family:var(--font-display);font-weight:800;font-size:21px;line-height:1.25;color:var(--ink);}
-  .lightbox-stack{width:100%;max-width:720px;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:18px;cursor:default;padding:4px 0;}
+  .lightbox-stack{width:100%;max-width:720px;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:84px;cursor:default;padding:4px 0;}
   .lightbox-stack[hidden]{display:none;}
   .lightbox-stack figure{margin:0;}
-  .lightbox-stack figcaption{font-family:var(--font-display);font-weight:800;font-size:24px;color:#fff;margin:0 0 8px;text-transform:uppercase;}
+  .lightbox-stack figcaption{font-family:var(--font-display);font-weight:800;font-size:24px;color:#fff;margin:0 0 10px;text-transform:uppercase;text-align:center;}
   .lightbox-stack img{display:block;width:100%;height:auto;max-width:none;max-height:none;border-radius:10px;}
   .lb-pending{margin:0;padding:18px 16px;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;font-family:var(--font-display);font-weight:800;font-size:21px;}
   .lightbox img.is-scene{width:100%;max-width:1000px;height:auto;max-height:100%;}
@@ -415,6 +424,8 @@
   }
   .video-badge-img-wrap{position:relative;width:88px;height:88px;flex:none;}
   .video-badge-img-wrap img{width:100%;height:100%;display:block;}
+  /* pastille vidéo un peu plus grande que celle du placement (le disque rouge, plein, paraît plus gros) */
+  .video-badge-btn:not(.place-badge-btn) .video-badge-img-wrap img{transform:scale(1.17);}
   .video-badge-play{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
     width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.45);color:var(--accent-text);
@@ -898,6 +909,20 @@ const SCENE_INFO = {
 };
 function sceneSrc(pos){ return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(SCENES[pos]); }
 function placementItems(g){ return (g.members || [g]).map(m => ({artist:m.artist, pos:(PLACEMENT[m.id] && SCENES[PLACEMENT[m.id]]) ? PLACEMENT[m.id] : null})); }
+const PLACE_MINI = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><clipPath id="c"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#c)"><rect width="64" height="64" fill="#e64330"/><polygon points="6,27 32,11 58,27" fill="#fff"/><rect x="12" y="26" width="40" height="4" fill="#fff"/><rect x="12" y="30" width="4" height="22" fill="#fff"/><rect x="48" y="30" width="4" height="22" fill="#fff"/><rect x="20" y="30" width="3.5" height="6" rx="1" fill="#fff"/><rect x="40.5" y="30" width="3.5" height="6" rx="1" fill="#fff"/><rect x="0" y="51" width="64" height="13" fill="#fff"/><circle cx="32" cy="35" r="4.6" fill="#111"/><rect x="26.5" y="40.5" width="11" height="12" rx="3.5" fill="#111"/><path d="M26.5 43 L21 40 M37.5 43 L43 40" stroke="#111" stroke-width="2.6" stroke-linecap="round"/></g></svg>');
+function placeMiniHtml(){ return `<span class="place-mini" aria-hidden="true"><img src="${PLACE_MINI}" alt=""></span>`; }
+function updateCardBadges(){
+  document.querySelectorAll(".card[data-id]").forEach(c => {
+    const g = GROUPS.find(x => x.id === c.dataset.id);
+    const has = !!(g && !g.cancelled && placementOf(g));
+    const cur = c.querySelector(".place-mini");
+    c.classList.toggle("has-place", has);
+    const lab = c.getAttribute("aria-label") || "", suf = " — placement des chansigneurs disponible";
+    c.setAttribute("aria-label", has ? (lab.endsWith(suf) ? lab : lab + suf) : lab.replace(suf,""));
+    if(has && !cur) c.insertAdjacentHTML("afterbegin", placeMiniHtml());
+    if(!has && cur) cur.remove();
+  });
+}
 function placementOf(g){ return (g.members || [g]).map(m => PLACEMENT[m.id]).find(p => p && SCENES[p]) || null; }
 let currentGroup = null;
 function renderWhere(e){
@@ -980,6 +1005,7 @@ function refreshPlacement(force){
   placementFetchedAt = Date.now();
   fetch(PLACEMENT_CSV_URL,{cache:"no-store"}).then(r => r.ok ? r.text() : Promise.reject()).then(t => {
     applyPlacementCsv(t);
+    updateCardBadges();
     if(currentGroup && !modalEl.hidden) renderWhere(currentGroup);
   }).catch(()=>{});
 }
@@ -1120,7 +1146,8 @@ function render(){
       }
       const link = e.cancelled ? null : normalizeLink(e.link);
       html += `
-        <div class="card${e.cancelled ? " is-cancelled" : ""}" data-id="${e.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(e.artist)}">
+        <div class="card${e.cancelled ? " is-cancelled" : ""}${(!e.cancelled && placementOf(e)) ? " has-place" : ""}" data-id="${e.id}" tabindex="0" role="button" aria-label="Voir l'affiche et réserver : ${escapeHtml(e.artist)}${(!e.cancelled && placementOf(e)) ? " — placement des chansigneurs disponible" : ""}">
+          ${(!e.cancelled && placementOf(e)) ? placeMiniHtml() : ""}
           <div class="card-date"><div class="d">${dt.getDate()}</div><div class="m">${MOIS_ABBR[dt.getMonth()]}</div><div class="y">${dt.getFullYear()}</div>${timeText(e) ? `<div class="t">${escapeHtml(timeText(e))}</div>` : ""}</div>
           ${e.posters.length > 1
             ? `<div class="card-img card-duo" aria-hidden="true">${e.posters.slice(0,3).map((p,i) => `<span class="duo-cell"><img src="${thumbSrc(p.src)}" alt="" loading="lazy" decoding="async">${(i === 2 && e.posters.length > 3) ? `<span class="duo-more">+${e.posters.length - 2}</span>` : ""}</span>`).join("")}</div>`
@@ -1590,6 +1617,7 @@ function openLightboxStack(items){
     it.pos ? `<img src="${sceneSrc(it.pos)}" alt="${escapeHtml(it.artist)} : ${SCENE_INFO[it.pos].alt.replace("Illustration : ","")}">`
            : `<p class="lb-pending">À consulter le jour du concert</p>`}</figure>`).join("");
   lightboxStack.hidden = false; lightboxStack.scrollTop = 0;
+  lightboxEl.classList.add("is-scene-bg");
   lightboxEl.hidden = false;
   document.getElementById("lightbox-close").focus();
 }
@@ -1598,11 +1626,13 @@ function openLightbox(src, alt, scene){
   lightboxImg.classList.toggle("is-scene", !!scene);
   lightboxImg.alt = alt || "";
   lightboxImg.src = src;
+  lightboxEl.classList.toggle("is-scene-bg", !!scene);
   lightboxEl.hidden = false;
   document.getElementById("lightbox-close").focus();
 }
 function closeLightbox(){
   lightboxEl.hidden = true;
+  lightboxEl.classList.remove("is-scene-bg");
   lightboxImg.removeAttribute("src");
   lightboxImg.classList.remove("is-scene");
   lightboxStack.hidden = true; lightboxStack.innerHTML = ""; lightboxImg.hidden = false;
