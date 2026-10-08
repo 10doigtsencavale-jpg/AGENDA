@@ -1,7 +1,6 @@
-MISE A JOUR V13 - bandeau d aide, tarif reduit, annee
+MISE A JOUR V14 - activation des statistiques GoatCounter (agenda10dec)
 
-Un seul fichier a deposer sur GitHub : index.html
+DEUX fichiers a deposer sur GitHub : index.html ET confidentialite.html
 1. https://github.com/10doigtsencavale-jpg/AGENDA
-2. Add file > Upload files > glisser index.html (il remplace l'ancien)
+2. Add file > Upload files > glisser les deux fichiers (ils remplacent les anciens)
 3. Commit changes
-Attendre 1 a 2 minutes, puis recharger https://10doigtsencavale-jpg.github.io/AGENDA/

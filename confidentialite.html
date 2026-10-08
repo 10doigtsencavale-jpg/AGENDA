@@ -44,7 +44,7 @@ dl{margin:8px 0}dt{font-weight:700;margin-top:10px}dd{margin:2px 0 0}
 <ul>
 <li>L'application n'a ni compte, ni formulaire : l'association ne vous demande aucune donnée personnelle.</li>
 <li>L'application elle-même ne dépose <strong>aucun cookie</strong> et n'utilise aucun traceur publicitaire. C'est pourquoi elle n'affiche pas de bandeau de consentement aux cookies.</li>
-<li>Elle ne charge aucune police, aucun script ni aucune image depuis des serveurs tiers (Google, réseaux sociaux, etc.).</li>
+<li>Elle ne charge aucune police, aucune image ni aucun script depuis des serveurs tiers, à l'exception de l'outil de mesure d'audience décrit plus bas, qui fonctionne sans cookie.</li>
 </ul>
 <h2>Responsable du traitement</h2>
 <p>10 Doigts en Cavale, association loi 1901, 15 Rue du Stade, 17600 Corme-Royal — SIRET 919 763 748 00010.<br>
@@ -56,7 +56,12 @@ Contact : <a href="mailto:10doigtsencavale@gmail.com">10doigtsencavale@gmail.com
 <li><strong>Pastille sur l'icône.</strong> Lorsque l'application est installée, elle peut afficher une pastille sur son icône quand de nouveaux concerts sont publiés. Ce calcul se fait entièrement sur votre appareil.</li>
 </ul>
 <h2>Mesure d'audience</h2>
-<p>L'application n'utilise actuellement aucun outil de mesure d'audience.</p>
+<p>Pour savoir combien de personnes consultent l'agenda, nous utilisons <strong>GoatCounter</strong>, un outil de mesure d'audience <strong>sans cookie</strong>. Il compte les pages vues et enregistre des informations techniques générales (page consultée, site d'origine, type d'appareil, navigateur, taille d'écran, pays approximatif). Il ne permet pas de vous suivre d'un site à l'autre et ne sert ni à la publicité ni au profilage.</p>
+<p>Ces statistiques sont conservées au maximum 13 mois. Base légale : intérêt légitime de l'association à connaître la fréquentation de son agenda ; vous pouvez vous y opposer à tout moment :</p>
+<p><button type="button" class="btn" id="optout">Ne plus compter mes visites</button> <span id="optout-state" role="status"></span></p>
+<script>(function(){var b=document.getElementById("optout"),s=document.getElementById("optout-state");
+function st(){try{s.textContent=localStorage.getItem("skipgc")==="t"?"Vos visites ne sont plus comptées sur cet appareil.":"";}catch(e){}}
+b.addEventListener("click",function(){try{localStorage.setItem("skipgc","t");}catch(e){}st();});st();})();</script>
 <h2>Réservation par email</h2>
 <p>Pour certains concerts, la réservation se fait en écrivant à l'adresse de l'organisateur. L'application vous aide à rédiger le message (à copier ou à ouvrir dans votre messagerie), mais ne l'envoie pas et n'en conserve rien : l'association ne reçoit pas votre message. Il est traité par l'organisateur selon sa propre politique de confidentialité.</p>
 <h2>Liens vers des sites tiers</h2>
