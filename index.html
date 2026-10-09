@@ -584,6 +584,10 @@
   @media (max-width:350px){.stepper-group-title{font-size:12px;letter-spacing:0;padding:9px 10px;gap:6px;}}
   .stepper-group-title .ear-off{width:22px;height:22px;flex:none;}
   .proof-note{display:flex;align-items:flex-start;gap:10px;margin:14px 0 0;font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.4;}
+  .proof-group{border:0;padding:0;min-width:0;margin:0;}
+  .proof-group .vest-options{margin:12px 0 0;}
+  .vest-title-in{display:flex;align-items:center;gap:8px;}
+  .vest-ic{width:30px;height:30px;flex:none;display:block;}
   .proof-note svg{width:26px;height:26px;flex:none;color:var(--accent-2-ink,var(--accent-2));}
   .vest-group{border:0;padding:0;min-width:0;margin-left:0;margin-right:0;}
   .vest-group legend{padding:9px 12px;display:block;width:100%;box-sizing:border-box;}
@@ -1753,7 +1757,7 @@ async function copyText(text){
 
 /* Message pré-rempli, pensé pour les personnes sourdes qui ont du mal
    à rédiger : il suffit de le copier et de l'envoyer tel quel. */
-function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name, multiDate, vest){
+function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name, multiDate, vest, proof){
   const pa = Math.max(0, pshAdults);
   const pc = Math.max(0, pshChildren);
   const ca = Math.max(0, companionAdults);
@@ -1768,8 +1772,9 @@ function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults
   if(ca > 0) companionLines.push(`- ${ca} adulte${ca > 1 ? "s" : ""}`);
   if(cc > 0) companionLines.push(`- ${cc} enfant${cc > 1 ? "s" : ""}`);
 
-  // Justificatif de surdité : phrase ajoutée automatiquement (adaptée au nombre de personnes).
-  const proofLine = proofSentence(pa + pc);
+  // Justificatif de surdité : phrase ajoutée automatiquement (adaptée au nombre de personnes),
+  // sauf si la personne répond « Non ».
+  const proofLine = (proof && proof.want === "no") ? "" : proofSentence(pa + pc);
   const pshBlock = pshLines.length
     ? `\nPersonnes sourdes/malentendantes :\n${pshLines.join("\n")}${proofLine ? `\n${proofLine}` : ""}\n`
     : (proofLine ? `\n${proofLine}\n` : "");
@@ -1985,7 +1990,13 @@ function openModal(id){
             <button type="button" id="psh-children-plus" aria-label="Plus d'enfants en situation de handicap">+</button>
           </div>
         </div>
-        <p class="proof-note">${iconDoc}<span id="proof-text">${proofSentence(0)}</span></p>
+        <fieldset class="proof-group">
+          <legend class="proof-note">${iconDoc}<span id="proof-text">${proofSentence(0)}</span></legend>
+          <div class="vest-options">
+            <label class="vest-option"><input type="radio" name="proof-want" id="proof-yes" value="yes"><span>Oui</span></label>
+            <label class="vest-option"><input type="radio" name="proof-want" id="proof-no" value="no"><span>Non</span></label>
+          </div>
+        </fieldset>
       </div>
 
       <div class="stepper-group">
@@ -2009,7 +2020,7 @@ function openModal(id){
       </div>
 
       <fieldset class="stepper-group vest-group">
-        <legend class="stepper-group-title">S'il y a des gilets vibrants, je suis intéressé(e) :</legend>
+        <legend class="stepper-group-title"><span class="vest-title-in"><img class="vest-ic" src="vest-icon.png" alt=""><span>S'il y a des gilets vibrants, je suis intéressé(e) :</span></span></legend>
         <div class="vest-options">
           <label class="vest-option"><input type="radio" name="vest-want" id="vest-yes" value="yes"><span>Oui</span></label>
           <label class="vest-option"><input type="radio" name="vest-want" id="vest-no" value="no"><span>Non</span></label>
@@ -2101,6 +2112,7 @@ function openModal(id){
 
     const counts = { pshAdults: 0, pshChildren: 0, compAdults: 0, compChildren: 0 };
     const vest = { want: null, count: "" };
+    const proof = { want: null };
     const nameInput = document.getElementById("msg-name");
     const preview = document.getElementById("message-preview");
     const copyMsgBtn = mailAddress ? null : document.getElementById("copy-message-btn");
@@ -2117,7 +2129,7 @@ function openModal(id){
       preview.textContent = buildReservationMessage(
         e.artistsAnd, counts.pshAdults, counts.pshChildren, counts.compAdults, counts.compChildren, nameInput.value,
         e.multi ? `${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}` : null,
-        vest
+        vest, proof
       );
       // Bouton « Envoyer le mail » : ouvre l'appli mail avec destinataire,
       // objet et message déjà remplis (mis à jour à chaque modification).
@@ -2156,6 +2168,10 @@ function openModal(id){
       refreshMessage();
     }));
     vestCountInput.addEventListener("input", () => { vest.count = vestCountInput.value; refreshMessage(); });
+    document.querySelectorAll('input[name="proof-want"]').forEach(r => r.addEventListener("change", () => {
+      proof.want = r.value;
+      refreshMessage();
+    }));
     if(copyMsgBtn){
       copyMsgBtn.addEventListener("click", async () => {
         const ok = await copyText(preview.textContent);

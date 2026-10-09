@@ -1,3 +1,4 @@
-V51 - Remplace index.html sur GitHub.
-- Phrase "justificatif" avec picto document, toujours affichée sous les personnes sourdes. Elle change selon le nombre (0, 1, 2 ou +) et s'ajoute au message.
-- Vidéo d'annonce en LSF : le picto est maintenant sur tous les concerts. Sans lien vidéo, un clic affiche "Pas d'annonce en LSF pour le moment" (même bulle que le placement).
+V52 - Envoie les 2 fichiers sur GitHub : index.html ET vest-icon.png (nouveau).
+- Picto gilet vibrant devant la phrase jaune des gilets.
+- Boutons Oui / Non remis sous la phrase justificatif.
+  Pas de réponse ou Oui : la phrase est dans le message. Non : la phrase est retirée.
