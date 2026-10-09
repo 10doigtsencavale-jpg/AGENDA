@@ -545,9 +545,11 @@
   .help-banner .nowrap{white-space:nowrap;}
   .lsf-dot{display:block;flex:none;border-radius:50%;object-fit:cover;background:#e3a749;}
   .lsf-dot-lg{width:56px;height:56px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);}
-  .lsf-dot-sm{width:34px;height:34px;border:2px solid var(--line);margin-left:auto;}
+  .lsf-dot-sm{width:42px;height:42px;box-sizing:border-box;border:2px solid var(--line);margin-left:auto;}
   .help-banner-warn{font-size:16px;line-height:1.4;margin-top:8px !important;font-weight:700;}
   .help-banner-first{margin-top:14px !important;}
+  .help-banner-warn{position:relative;padding-left:16px;}
+  .help-banner-warn::before{content:"–";position:absolute;left:2px;top:0;}
   .modal-message-sub{font-size:14.5px;color:var(--muted);margin:0 0 14px;line-height:1.4;}
   .places-stepper{
     display:flex;align-items:center;justify-content:space-between;
@@ -1772,8 +1774,8 @@ function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults
     ? `\nGilets vibrants :\n- S'il y a des gilets vibrants, je suis intéressé(e).${vestCount ? `\n- Nombre de gilets vibrants que je souhaite réserver : ${vestCount}` : ""}\n`
     : "";
   const vestQuestion = vestWant === "yes"
-    ? "\n- Comment réserver les gilets vibrants et où les récupérer."
-    : (vestWant === "no" ? "" : "\n- S'il y a des gilets vibrants, où les récupérer.");
+    ? "\n- Comment réserver les gilets vibrants et où les récupérer ?"
+    : (vestWant === "no" ? "" : "\n- S'il y a des gilets vibrants, où les récupérer ?");
 
   const signature = name && name.trim() ? `Bien cordialement.\n${name.trim()}` : "Bien cordialement.";
 
@@ -1782,9 +1784,9 @@ function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults
 ${who} suis sourd(e), je souhaite réserver des places pour ${multiDate ? `la soirée chansignée du ${multiDate}, avec ${artist}` : `le concert chansigné de ${artist}`}.
 ${pshBlock}${companionBlock}${vestBlock}
 Merci de m'indiquer :
-- Comment acheter mes places.
+- Comment acheter mes places ?
 - Y a-t-il un tarif réduit ?
-- Où me rendre le jour J, et à quelle heure, pour assister ${multiDate ? "à la soirée chansignée" : "au concert chansigné"}.${vestQuestion}
+- Où me rendre le jour J, et à quelle heure, pour assister ${multiDate ? "à la soirée chansignée" : "au concert chansigné"} ?${vestQuestion}
 
 Pour faciliter ma compréhension, merci de privilégier une réponse claire et avec des phrases simples.
 
@@ -2003,9 +2005,11 @@ function openModal(id){
             <div>
               <p class="help-banner-kicker">Besoin d'aide ?</p>
               <p class="help-banner-title">Vous souhaitez écrire au festival / à la salle pour réserver vos places ?</p>
-              <p class="help-banner-warn help-banner-first">Remplissez le formulaire.</p>
-              <p class="help-banner-warn">Le message s'écrit tout seul.</p>
-              <p class="help-banner-warn">Appuyez sur <span class="nowrap">« Envoyer le mail ».</span> Votre mail s'ouvre. Tout est prêt.</p>
+              <p class="help-banner-warn help-banner-first">Remplissez le formulaire</p>
+              <p class="help-banner-warn">Le message s'écrit tout seul</p>
+              <p class="help-banner-warn">Appuyez sur <span class="nowrap">« Envoyer le mail »</span></p>
+              <p class="help-banner-warn">Votre mail s'ouvre</p>
+              <p class="help-banner-warn">C'est prêt&nbsp;! <span class="nowrap">Relisez et envoyez</span></p>
             </div>
           </div>
 
@@ -2023,7 +2027,7 @@ function openModal(id){
             <div class="msg-step-head">
               <span class="msg-step-icon">${iconEdit}</span>
               <span class="msg-step-label">2. Vérifier le message</span>
-              <img class="lsf-dot lsf-dot-sm" src="${lsfDot}" alt="LSF" width="34" height="34">
+              <img class="lsf-dot lsf-dot-sm" src="${lsfDot}" alt="LSF" width="42" height="42">
             </div>
             <pre class="message-preview" id="message-preview"></pre>
           </div>

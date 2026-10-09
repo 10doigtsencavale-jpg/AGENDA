@@ -1,13 +1,8 @@
-V47 - À téléverser À LA PLACE de la V46 (ne PAS téléverser la V46).
+V48 - à téléverser à la place de la V47 (index.html seulement).
 
-Cette version repart de la page actuellement en ligne :
-- le bouton « Envoyer le mail », « Rien ne s'ouvre ? » et le bouton Gmail (ordinateur) sont gardés tels quels ;
-- Camille Yembé (13/10) reste marqué annulé comme en ligne.
-
-Ajouts par-dessus :
-- « Vidéo d'annonce en LSF » ;
-- vignette ronde mains + LSF dans l'encadré « Besoin d'aide ? » et à côté de « 2. Vérifier le message » ;
-- encadré « Besoin d'aide ? » de la même couleur que la vignette placement (mode clair) ;
-- le « » » de « Envoyer le mail » ne reste plus seul en bout de ligne.
-
-Téléverser uniquement index.html (GitHub > Add file > Upload files > Commit changes).
+- Encadré « Besoin d'aide ? » : 5 lignes avec tirets, même espacement :
+  Remplissez le formulaire / Le message s'écrit tout seul / Appuyez sur « Envoyer le mail » /
+  Votre mail s'ouvre / C'est prêt ! Relisez et envoyez
+- Message : points d'interrogation ajoutés aux questions (acheter les places, jour J et heure, gilets vibrants).
+- Rond mains + LSF à côté de « 2. Vérifier le message » : plus grand.
+- Bouton « Envoyer le mail » : inchangé.
