@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr" data-theme="light"><head>
+<html lang="fr"><head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://agenda10dec.goatcounter.com; font-src 'self'; connect-src 'self' https://agenda10dec.goatcounter.com https://docs.google.com https://*.googleusercontent.com; manifest-src 'self'; worker-src 'self'; frame-src https://www.facebook.com https://www.instagram.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -32,10 +32,10 @@
 <meta name="twitter:title" content="Agenda Chansigné — les concerts chansignés à venir">
 <meta name="twitter:description" content="Agenda des concerts chansignés (traduits en langue des signes française) en France et en Suisse : prochaines dates, affiches et réservations. Par 10 Doigts en Cavale.">
 <meta name="twitter:image" content="https://10doigtsencavale-jpg.github.io/AGENDA/og-image.jpg">
-<meta name="color-scheme" content="only light">
-<meta name="supported-color-schemes" content="light">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
 <script data-goatcounter="https://agenda10dec.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}footer .legal-links{margin-top:14px;font-size:13px;line-height:2.4}footer .legal-links a{padding:8px 2px;font-weight:600}</style>
+<style>:root{color-scheme:light dark}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}footer .legal-links{margin-top:14px;font-size:13px;line-height:2.4}footer .legal-links a{padding:8px 2px;font-weight:600}</style>
 <style>
   :root{
     --bg:#d9f0f2;
@@ -51,6 +51,7 @@
     --accent-2-ink:#3b2013;
     --teal:#8fc7bc;
     --teal-deep:#2f7468;
+    --row:#fbfdfd;
     --shadow: 0 1px 2px rgba(59,32,19,.08), 0 8px 24px -12px rgba(59,32,19,.24);
     --font-display:'Avenir Next Condensed','Roboto Condensed','Arial Narrow','Helvetica Neue Condensed',system-ui,sans-serif;
     --font-body:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -70,6 +71,7 @@
       --accent-2-ink:#2c1c05;
       --teal:#8fc7bc;
       --teal-deep:#3f8f83;
+      --row:#1a4347;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -14px rgba(0,0,0,.65);
     }
   }
@@ -87,6 +89,7 @@
     --accent-2-ink:#2c1c05;
     --teal:#8fc7bc;
     --teal-deep:#3f8f83;
+    --row:#1a4347;
     --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -14px rgba(0,0,0,.65);
   }
 
@@ -424,12 +427,12 @@
   .video-box{width:100%;max-width:420px;margin:auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;color:#fff;}
   .video-name{margin:0;font-family:var(--font-display);font-weight:800;font-size:24px;text-transform:uppercase;line-height:1.15;}
   .video-frame{display:block;border:0;border-radius:14px;background:#000;height:min(70vh,680px);height:min(70dvh,680px);aspect-ratio:9/16;max-width:100%;}
-  .video-consent{background:#fff;color:var(--ink);border-radius:18px;padding:22px 18px;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .video-consent{background:var(--surface);color:var(--ink);border-radius:18px;padding:22px 18px;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:14px;}
   .video-consent p{margin:0;font-size:16px;line-height:1.4;font-weight:600;}
   .video-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;box-sizing:border-box;min-height:56px;padding:12px 18px;border-radius:999px;border:0;cursor:pointer;
     font-family:var(--font-display);font-weight:800;font-size:19px;line-height:1.2;text-decoration:none;}
   .video-btn.is-main{background:var(--accent);color:var(--accent-ink,#fff);}
-  .video-btn.is-back{background:#fff;color:var(--ink);}
+  .video-btn.is-back{background:var(--surface);color:var(--ink);}
   .video-btn svg{width:20px;height:20px;flex:none;}
   .video-ext{color:#fff;font-weight:700;font-size:15.5px;text-decoration:underline;text-underline-offset:3px;}
   .video-consent .video-ext{color:var(--ink);}
@@ -636,12 +639,6 @@
     background:linear-gradient(150deg, #b3321f 0%, #b45309 100%);
     color:#fff;box-shadow:var(--shadow);
   }
-  .coming-soon-confetti{
-    position:absolute;top:16px;left:18px;display:flex;gap:6px;align-items:center;opacity:.85;
-  }
-  .coming-soon-confetti span{display:block;width:6px;height:6px;border-radius:50%;background:#fff;}
-  .coming-soon-confetti span:nth-child(2){width:8px;height:8px;background:rgba(255,255,255,.7);}
-  .coming-soon-confetti span:nth-child(3){width:5px;height:5px;background:rgba(255,255,255,.7);}
   .coming-soon-title{
     font-family:var(--font-display);font-weight:800;font-size:26px;
     text-transform:uppercase;letter-spacing:.5px;line-height:1.15;margin:8px 0 8px;
@@ -696,7 +693,7 @@
   }
 
   /* ===== Bascule Liste / Carte ===== */
-  .view-switch{display:flex;gap:8px;margin:2px 0 14px;padding:5px;background:#fff;border:2px solid var(--line);border-radius:18px;}
+  .view-switch{display:flex;gap:8px;margin:2px 0 14px;padding:5px;background:var(--surface);border:2px solid var(--line);border-radius:18px;}
   .vs-btn{flex:1;appearance:none;border:0;background:transparent;color:var(--ink);cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:9px;min-height:50px;border-radius:13px;
     font-family:var(--font-display);font-weight:800;font-size:21px;letter-spacing:.3px;text-transform:uppercase;transition:background .15s ease,color .15s ease;}
@@ -741,7 +738,7 @@
 
   /* Fiche du bas */
   .map-sheet{position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0 auto;max-width:640px;max-height:62vh;overflow:auto;
-    background:#fff;border-radius:26px 26px 0 0;box-shadow:0 -10px 34px -8px rgba(59,32,19,.45);padding:14px 16px calc(18px + env(safe-area-inset-bottom));
+    background:var(--surface);border-radius:26px 26px 0 0;box-shadow:0 -10px 34px -8px rgba(59,32,19,.45);padding:14px 16px calc(18px + env(safe-area-inset-bottom));
     border-top:4px solid var(--accent);animation:sheet-in .2s ease;}
   @keyframes sheet-in{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
   .map-sheet[hidden]{display:none;}
@@ -749,7 +746,7 @@
   .ms-title{flex:1;font-family:var(--font-display);font-weight:800;font-size:25px;line-height:1.1;color:var(--accent-text);display:flex;align-items:center;gap:6px;}
   .ms-title svg{width:24px;height:24px;flex:none;color:var(--accent);}
   .ms-close{appearance:none;border:0;background:var(--surface-2);color:var(--ink);width:46px;height:46px;border-radius:50%;font-size:30px;line-height:1;cursor:pointer;flex:none;}
-  .ms-row{display:flex;gap:12px;align-items:stretch;padding:10px;margin:0 0 10px;border:2px solid var(--line);border-radius:18px;background:#fbfdfd;cursor:pointer;}
+  .ms-row{display:flex;gap:12px;align-items:stretch;padding:10px;margin:0 0 10px;border:2px solid var(--line);border-radius:18px;background:var(--row);cursor:pointer;}
   .ms-row:last-child{margin-bottom:0;}
   .ms-row:focus-visible{outline:3px solid var(--accent-2);}
   .ms-date{flex:none;width:58px;text-align:center;display:flex;flex-direction:column;justify-content:center;}
@@ -767,6 +764,11 @@
     font-family:var(--font-body);font-weight:800;font-size:16.5px;box-shadow:0 3px 0 #c57d0f;}
   .ms-btn svg{width:20px;height:20px;}
 
+  /* Lien vers le GPS (adresse du lieu) */
+  a.geo{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-thickness:2px;text-decoration-color:var(--accent-2);text-underline-offset:3px;-webkit-tap-highlight-color:transparent;}
+  a.geo:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px;border-radius:4px;}
+  a.geo-main{font-weight:700;color:var(--ink);text-decoration-style:solid;text-decoration-color:var(--accent);}
+  a.geo-main .pin{display:inline-block;width:15px;height:15px;margin:0 4px -1px 0;color:var(--accent);}
   .coming-soon[hidden]{display:none;}
   #hero-slot[hidden],#list-slot[hidden]{display:none;}
 </style>
@@ -803,7 +805,6 @@
   <div id="list-slot"></div>
 
   <div class="coming-soon">
-    <div class="coming-soon-confetti"><span></span><span></span><span></span></div>
     <p class="coming-soon-title">D'autres événements<br>à venir</p>
     <p class="coming-soon-sub">De nouveaux concerts chansignés arrivent bientôt !</p>
   </div>
@@ -946,6 +947,20 @@ function normalizeLink(link){
   if(link.startsWith("mailto:") || link.startsWith("http")) return link;
   if(link.includes("@")) return "mailto:" + link;
   return "https://" + link;
+}
+const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+function mapsUrl(venue, city){
+  let name = String(city || "").trim(), tail = "";
+  const m = /^(.*?)\s*\(([^)]+)\)\s*$/.exec(name);
+  if(m){ name = m[1]; const c = m[2].trim().toUpperCase(); tail = c === "CH" ? "Suisse" : (c === "BE" ? "Belgique" : "France"); }
+  const q = [String(venue || "").trim(), name, tail].filter(Boolean).join(", ");
+  return IS_IOS ? "https://maps.apple.com/?q=" + encodeURIComponent(q)
+                : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+}
+function geoLink(venue, city, inner, cls){
+  if(!venue && !city) return inner;
+  const label = "Voir sur la carte GPS : " + [venue, city].filter(Boolean).join(", ");
+  return `<a class="geo${cls ? " " + cls : ""}" href="${escapeHtml(mapsUrl(venue, city))}" target="_blank" rel="noopener" aria-label="${escapeHtml(label)}">${inner}</a>`;
 }
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1329,9 +1344,9 @@ function render(){
           <div class="hero-meta hero-meta-stack">
             <span>${escapeHtml(dateStr0)}</span>
             ${timeText(next) ? `<span class="hero-hour">${escapeHtml(timeText(next))}</span>` : ""}
-            ${next.venue ? `<span>${escapeHtml(next.venue)}</span>` : ""}
+            ${next.venue ? `<span>${geoLink(next.venue, next.city, escapeHtml(next.venue))}</span>` : ""}
             ${noteText(next) ? `<span class="hero-note">${escapeHtml(noteText(next))}</span>` : ""}
-            ${next.city ? `<span>${escapeHtml(next.city)}</span>` : ""}
+            ${next.city ? `<span>${geoLink(next.venue, next.city, escapeHtml(next.city))}</span>` : ""}
           </div>
           <div class="hero-actions">
             ${nextLink ? `<button type="button" class="btn btn-primary">${iconInfo} Informations</button>` : ``}
@@ -1381,9 +1396,9 @@ function render(){
           <div class="card-body">
             ${e.multi ? `<div class="card-multi-row"><span class="badge-duo">${e.members.length} artistes</span>${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>` : ""}
             <div class="card-artist">${namesHtml(e)}${(!e.multi && newIds.has(e.id)) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
-            ${e.venue ? `<div class="card-venue-name">${escapeHtml(e.venue)}</div>` : ""}
+            ${e.venue ? `<div class="card-venue-name">${geoLink(e.venue, e.city, escapeHtml(e.venue))}</div>` : ""}
             ${noteText(e) ? `<div class="card-note">${escapeHtml(noteText(e))}</div>` : ""}
-            ${e.city ? `<div class="card-venue">${iconPin}${escapeHtml(e.city)}</div>` : ""}
+            ${e.city ? `<div class="card-venue">${iconPin}${geoLink(e.venue, e.city, escapeHtml(e.city))}</div>` : ""}
             ${e.cancelled
               ? `<span class="badge-cancelled">Annulé</span>`
               : (link ? `<button type="button" class="card-cta">${iconInfo} Informations</button>` : (e.note ? `<span class="card-cta" style="color:var(--muted);background:none;padding:0;">${escapeHtml(e.note)}</span>` : ``))}
@@ -1564,8 +1579,8 @@ function mapSheetRow(g, showCity){
     ${th}
     <div class="ms-body">
       <div class="ms-artist">${namesHtml(g)}</div>
-      ${g.venue ? `<div class="ms-venue">${escapeHtml(g.venue)}</div>` : ""}
-      ${showCity && g.city ? `<div class="ms-city">${iconPin}${escapeHtml(g.city)}</div>` : ""}
+      ${g.venue ? `<div class="ms-venue">${geoLink(g.venue, g.city, escapeHtml(g.venue))}</div>` : ""}
+      ${showCity && g.city ? `<div class="ms-city">${iconPin}${geoLink(g.venue, g.city, escapeHtml(g.city))}</div>` : ""}
       <span class="ms-btn">${iconInfo} Informations</span>
     </div></div>`;
 }
@@ -1624,10 +1639,12 @@ function setView(v){
   });
   sheet.addEventListener("click", ev => {
     if(ev.target.closest("#ms-close")){ closeMapSheet(); return; }
+    if(ev.target.closest("a.geo")) return;
     const row = ev.target.closest("[data-id]"); if(row){ lastFocused = row; openModal(row.dataset.id); }
   });
   sheet.addEventListener("keydown", ev => {
     if(ev.key !== "Enter" && ev.key !== " ") return;
+    if(ev.target.closest("a.geo")) return;
     const row = ev.target.closest(".ms-row"); if(!row) return;
     ev.preventDefault(); lastFocused = row; openModal(row.dataset.id);
   });
@@ -1831,7 +1848,8 @@ function openModal(id){
 
   modalEyebrow.textContent = e.cancelled ? "Concert annulé" : (e.multi ? `Détails de la soirée · ${e.members.length} artistes` : "Détails du concert");
   modalTitle.innerHTML = namesHtml(e, true);
-  modalMeta.textContent = `${dateStr} — ${[e.venue ? e.venue + (noteText(e) ? " (" + e.timeNote + ")" : "") : "", e.city].filter(Boolean).join(", ")}`;
+  const placeTxt = [e.venue ? e.venue + (noteText(e) ? " (" + e.timeNote + ")" : "") : "", e.city].filter(Boolean).join(", ");
+  modalMeta.innerHTML = escapeHtml(dateStr) + (placeTxt ? " — " + geoLink(e.venue, e.city, iconPin + escapeHtml(placeTxt), "geo-main") : "");
 
   currentGroup = e;
   renderWhere(e);
@@ -2176,11 +2194,13 @@ function closeModal(){
 
 function wireCardTriggers(container){
   container.addEventListener("click", ev => {
+    if(ev.target.closest("a.geo")) return;
     const card = ev.target.closest("[data-id]");
     if(card) openModal(card.dataset.id);
   });
   container.addEventListener("keydown", ev => {
     if(ev.key !== "Enter" && ev.key !== " ") return;
+    if(ev.target.closest("a.geo")) return;
     const card = ev.target.closest("[data-id]");
     if(!card) return;
     ev.preventDefault();
