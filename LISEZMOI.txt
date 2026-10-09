@@ -1,7 +1,13 @@
-V35 - Date/heure espacees, bandeau d'aide, majuscules dans le message
+V47 - À téléverser À LA PLACE de la V46 (ne PAS téléverser la V46).
 
-A METTRE SUR GITHUB (1 seul fichier) :
-1. Ouvre le depot AGENDA sur GitHub.
-2. Clique sur "Add file" puis "Upload files".
-3. Glisse le fichier index.html (il remplace l'ancien).
-4. En bas, clique sur "Commit changes" (important).
+Cette version repart de la page actuellement en ligne :
+- le bouton « Envoyer le mail », « Rien ne s'ouvre ? » et le bouton Gmail (ordinateur) sont gardés tels quels ;
+- Camille Yembé (13/10) reste marqué annulé comme en ligne.
+
+Ajouts par-dessus :
+- « Vidéo d'annonce en LSF » ;
+- vignette ronde mains + LSF dans l'encadré « Besoin d'aide ? » et à côté de « 2. Vérifier le message » ;
+- encadré « Besoin d'aide ? » de la même couleur que la vignette placement (mode clair) ;
+- le « » » de « Envoyer le mail » ne reste plus seul en bout de ligne.
+
+Téléverser uniquement index.html (GitHub > Add file > Upload files > Commit changes).
