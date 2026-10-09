@@ -674,6 +674,22 @@
   .install-copy{font:inherit;font-weight:800;padding:8px 14px;border-radius:999px;border:2px solid var(--accent-2);background:var(--surface);color:var(--ink);cursor:pointer;}
 
   .install-help strong{font-weight:700;}
+  .install-help .ih-title{font-family:var(--font-display);font-weight:800;font-size:21px;line-height:1.15;margin:0 0 10px;color:var(--ink);}
+  .install-help .ih-warn{margin:0 0 10px;padding:8px 12px;border-radius:12px;background:var(--accent-2);color:var(--accent-2-ink);font-weight:700;}
+  .ih-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
+  .ih-step{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;}
+  .ih-n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;}
+  .ih-ic{flex:none;width:34px;height:34px;color:var(--accent-text);}
+  .ih-ic svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .ih-t{font-size:16.5px;line-height:1.3;font-weight:600;}
+  .ih-t small{display:block;font-weight:500;font-size:14px;color:var(--muted);margin-top:2px;}
+  .install-help .ih-note{margin:10px 0 0;font-size:14.5px;color:var(--muted);}
+  .ih-pick{margin-top:12px;padding-top:10px;border-top:1.5px solid var(--line);}
+  .ih-pick-label{margin:0 0 8px;font-size:14.5px;font-weight:700;}
+  .ih-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .ih-chip{appearance:none;font:inherit;font-weight:800;font-size:15px;min-height:44px;padding:8px 16px;border-radius:999px;border:2px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;}
+  .ih-chip.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
+
 
 
   .install-top{margin:14px 0 12px;}
@@ -2240,9 +2256,9 @@ document.addEventListener("keydown", ev => {
 });
 
 /* Installation sur l'écran d'accueil (PWA). Un lien web ne peut pas "télécharger"
-   une appli à lui seul : sur Android le navigateur propose l'installation
-   (bouton natif si disponible), sur iPhone il faut passer par Partager →
-   "Sur l'écran d'accueil". Le bouton affiche donc la bonne marche à suivre. */
+   une appli à lui seul. Le bouton détecte le téléphone et le navigateur, puis
+   montre 3 étapes très courtes avec des pictogrammes. Si la détection se trompe,
+   la personne choisit elle-même son téléphone (boutons iPhone / Android / Samsung / Autre). */
 (function(){
   try {
     const wrap = document.getElementById("install-wrap");
@@ -2256,6 +2272,7 @@ document.addEventListener("keydown", ev => {
     const KEY = "agenda-install-dismissed";
     const getDismissed = () => { try { return localStorage.getItem(KEY) === "1"; } catch(e) { return false; } };
     const setDismissed = v => { try { if(v) localStorage.setItem(KEY, "1"); else localStorage.removeItem(KEY); } catch(e) {} };
+    const track = name => { try { if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:"installation/" + name, title:"Installation " + name, event:true}); } catch(e) {} };
     const render = dismissed => {
       wrap.hidden = dismissed;
       if(again) again.hidden = !dismissed;
@@ -2268,59 +2285,133 @@ document.addEventListener("keydown", ev => {
     // le rater : sans lui, Chrome ne propose pas l'installation en un geste.
     let deferred = window.__bip || null;
     window.addEventListener("beforeinstallprompt", ev => { ev.preventDefault(); deferred = ev; });
-    window.addEventListener("appinstalled", () => { deferred = null; setDismissed(true); render(true); if(again) again.hidden = true; });
+    window.addEventListener("appinstalled", () => { deferred = null; track("installee"); setDismissed(true); render(true); if(again) again.hidden = true; });
     if(window.__installed){ wrap.hidden = true; if(again) again.hidden = true; return; }
+
     const ua = navigator.userAgent || "";
     const isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
     const isAndroid = /Android/.test(ua);
-    const stepsIOS = '<p><strong>Sur iPhone / iPad (Safari) :</strong></p><p>1. Touchez le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut).</p><p>2. Choisissez <strong>« Sur l\'écran d\'accueil »</strong>.</p><p>3. Touchez <strong>Ajouter</strong>.</p>';
-    const stepsAndroid = '<p><strong>Sur Android (Chrome) :</strong></p><p>1. Touchez le menu <strong>⋮</strong> en haut à droite.</p><p>2. Choisissez <strong>« Installer l\'application »</strong> (ou « Ajouter à l\'écran d\'accueil »).</p><p>3. Confirmez.</p><p>L\'appli est peut-être <strong>déjà installée</strong> : cherchez l\'icône « Agenda Chansigné » sur votre écran d\'accueil.</p>';
-    // Samsung Internet : son installateur d'applis web produit un paquet jugé
-    // "non sécurisé" par Google Play Protect (Android 14+), ce qui bloque
-    // l'installation. Chrome n'a pas ce problème : on y renvoie la personne.
     const isSamsung = /SamsungBrowser/i.test(ua) && isAndroid;
+    const fromApp = /^android-app:\/\//.test(document.referrer || "");   // lien ouvert depuis WhatsApp, SMS, Gmail…
+    const inAppUA = !isSamsung && (/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|TikTok|musical_ly|BytedanceWebview|Snapchat|LinkedInApp|MicroMessenger|Line\/|Pinterest|Twitter/i.test(ua) || (isAndroid && /; wv\)/.test(ua)));
     const chromeIntent = "intent://" + location.host + location.pathname + location.search +
       "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(location.href) + ";end";
-    const stepsSamsung = '<p><strong>Vous utilisez Samsung Internet.</strong> Ce navigateur ne sait pas installer cette appli (message « Impossible d\'installer l\'application web »).</p><p><strong>Option 1 (recommandée) :</strong> touchez <strong>« Installer avec Chrome »</strong> : la page s\'ouvre dans Google Chrome, où l\'installation fonctionne.</p><p><strong>Option 2 :</strong> dans Samsung Internet, touchez le menu <strong>☰</strong> (en bas à droite), puis <strong>« Ajouter la page à »</strong> et <strong>« Écran d\'accueil »</strong>. Vous obtenez une icône qui ouvre l\'agenda.</p>';
-    if(isSamsung){
-      const label = document.getElementById("install-label");
-      if(label) label.textContent = "Installer avec Chrome";
-      btn.dataset.chromeIntent = chromeIntent;
-      help.innerHTML = stepsSamsung;
+
+    // Pictogrammes
+    const I = {
+      share:'<svg viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M7 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-1"/></svg>',
+      addHome:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><path d="M12 8v8M8 12h8"/></svg>',
+      dotsV:'<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></svg>',
+      dotsH:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>',
+      menu:'<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+      phone:'<svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 8v7M9 12.5l3 3 3-3"/></svg>',
+      check:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>',
+      compass:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>',
+      globe:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>'
+    };
+    const step = (n, ic, html) => '<li class="ih-step"><span class="ih-n">' + n + '</span><span class="ih-ic">' + I[ic] + '</span><span class="ih-t">' + html + '</span></li>';
+    const PANELS = {
+      ios: ['iPhone ou iPad', [
+        step(1,"share","Touchez <b>Partager</b>.<small>Bouton en bas (Safari) ou en haut à droite (Chrome).</small>"),
+        step(2,"addHome","Touchez <b>Sur l'écran d'accueil</b>.<small>Glissez vers le haut si vous ne le voyez pas.</small>"),
+        step(3,"check","Touchez <b>Ajouter</b>.")],
+        "Ensuite, cherchez l'icône sur l'écran d'accueil."],
+      "ios-app": ["Ouvrez d'abord dans Safari", [
+        step(1,"dotsH","Touchez <b>⋯</b> ou le bouton <b>Safari</b>."),
+        step(2,"compass","Touchez <b>Ouvrir dans Safari</b>."),
+        step(3,"phone","Touchez ensuite <b>Installer</b> en haut de la page.")],
+        "Ou copiez le lien et collez-le dans Safari."],
+      "android-app": ["Ouvrez d'abord dans Chrome", [
+        step(1,"dotsV","Touchez <b>⋮</b> en haut à droite."),
+        step(2,"globe","Touchez <b>Ouvrir dans Chrome</b>."),
+        step(3,"phone","Touchez ensuite <b>Installer</b> en haut de la page.")],
+        "Ou copiez le lien et collez-le dans Chrome."],
+      android: ["Android", [
+        step(1,"dotsV","Touchez <b>⋮</b> en haut à droite."),
+        step(2,"phone","Touchez <b>Installer l'application</b> ou <b>Ajouter à l'écran d'accueil</b>."),
+        step(3,"check","Touchez <b>Installer</b>.")],
+        "Déjà installée ? Cherchez l'icône sur l'écran d'accueil."],
+      samsung: ["Samsung Internet", [
+        step(1,"menu","Touchez <b>☰</b> en bas à droite."),
+        step(2,"addHome","Touchez <b>Ajouter la page à</b>, puis <b>Écran d'accueil</b>."),
+        step(3,"check","Touchez <b>Ajouter</b>.")],
+        "Le plus simple : touchez le bouton jaune <b>Installer avec Chrome</b> (si Chrome est sur le téléphone)."],
+      firefox: ["Firefox (Android)", [
+        step(1,"dotsV","Touchez <b>⋮</b> (menu de Firefox)."),
+        step(2,"phone","Touchez <b>Installer</b>.<small>Si vous ne voyez pas « Installer » : touchez « Ajouter à l'écran d'accueil ».</small>"),
+        step(3,"check","Confirmez.")],
+        "Toujours rien ? Ouvrez ce lien dans Chrome : l'installation y est plus simple."],
+      "ios-fx": ["Firefox sur iPhone", [
+        step(1,"share","Touchez <b>Copier le lien</b> (en bas)."),
+        step(2,"compass","Ouvrez <b>Safari</b>, puis collez le lien dans la barre."),
+        step(3,"addHome","Touchez <b>Partager</b>, puis <b>Sur l'écran d'accueil</b>.")],
+        "Firefox sur iPhone ne sait pas installer l'appli. Safari le sait."],
+      desktop: ["Ordinateur", [
+        step(1,"globe","Ouvrez ce lien avec <b>Chrome</b> ou <b>Edge</b>."),
+        step(2,"phone","Touchez l'icône <b>Installer</b> dans la barre d'adresse."),
+        step(3,"check","Confirmez.")],
+        "Firefox sur ordinateur ne sait pas installer d'appli. Vous pouvez garder le lien en favori."],
+      other: ["Autre navigateur", [
+        step(1,"menu","Ouvrez le menu du navigateur : <b>⋮</b> ou <b>☰</b>."),
+        step(2,"phone","Touchez <b>Installer</b> ou <b>Ajouter à l'écran d'accueil</b>."),
+        step(3,"check","Confirmez.")],
+        "Pas de bouton ? Utilisez Chrome (Android) ou Safari (iPhone)."]
+    };
+    const CHIPS = [["ios","iPhone"],["android","Android"],["samsung","Samsung"],["firefox","Firefox"],["other","Autre"]];
+    const FOOT = '<p class="ih-note"><button type="button" class="install-copy" id="install-copy">Copier le lien</button> <span id="install-copy-state" role="status"></span></p>' +
+                 '<p class="ih-note">Pas besoin d\'installer : vous pouvez aussi ouvrir ce lien dans votre navigateur.</p>';
+    let shownKind = null;
+    const showKind = (kind, manual, extra) => {
+      const p = PANELS[kind] || PANELS.other;
+      shownKind = kind;
+      const chipBase = (kind === "ios-app" || kind === "ios-fx") ? "ios" : (kind === "android-app" ? "android" : (kind === "desktop" ? "other" : kind));
+      help.innerHTML = '<div class="ih-title">' + p[0] + '</div>' + (extra ? '<p class="ih-warn">' + extra + '</p>' : '') +
+        '<ol class="ih-steps">' + p[1].join("") + '</ol>' + (p[2] ? '<p class="ih-note">' + p[2] + '</p>' : '') +
+        '<div class="ih-pick"><p class="ih-pick-label">Ce n\'est pas votre téléphone ? Choisissez :</p><div class="ih-chips">' +
+        CHIPS.map(c => '<button type="button" class="ih-chip' + (c[0] === chipBase ? ' on' : '') + '" data-kind="' + c[0] + '">' + c[1] + '</button>').join("") +
+        '</div></div>' + FOOT;
       help.hidden = false;
-    }
-    // Navigateur intégré à une appli (Facebook, Instagram, Messenger, TikTok…) :
-    // l'installation y est impossible, il faut d'abord rouvrir la page dans le
-    // vrai navigateur. C'est le cas le plus fréquent pour qui arrive depuis un
-    // post ou une story.
-    const inApp = !isSamsung && (/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|TikTok|musical_ly|BytedanceWebview|Snapchat|LinkedInApp|MicroMessenger|Line\//i.test(ua) || (isAndroid && /; wv\)/.test(ua)));
-    const stepsInApp = '<p><strong>Cette page est ouverte dans une autre appli</strong> (Facebook, Instagram…) : l\'installation n\'y est pas possible.</p>' +
-      (isIOS
-        ? '<p>1. Touchez <strong>⋯</strong> (en bas ou en haut à droite).</p><p>2. Choisissez <strong>« Ouvrir dans Safari »</strong>.</p><p>3. Touchez ensuite <strong>« Installer l\'appli sur mon téléphone »</strong>.</p>'
-        : '<p>1. Touchez <strong>« Ouvrir dans Chrome »</strong> ci-dessus. Si rien ne se passe : touchez <strong>⋮</strong> (ou ⋯) en haut à droite, puis <strong>« Ouvrir dans le navigateur »</strong>.</p><p>2. Touchez ensuite <strong>« Installer l\'appli sur mon téléphone »</strong>.</p>') +
-      '<p><button type="button" class="install-copy" id="install-copy">Copier le lien de l\'agenda</button> <span id="install-copy-state" role="status"></span></p>';
-    if(inApp){
-      const label = document.getElementById("install-label");
-      if(label) label.textContent = isIOS ? "Ouvrir dans Safari" : "Ouvrir dans Chrome";
-      help.innerHTML = stepsInApp;
-      help.hidden = false;
-      help.addEventListener("click", async ev => {
-        const c = ev.target.closest("#install-copy"); if(!c) return;
-        const s = document.getElementById("install-copy-state");
-        try { await navigator.clipboard.writeText(location.origin + location.pathname); s.textContent = "Lien copié."; }
-        catch(e){ s.textContent = location.origin + location.pathname; }
-      });
-    }
+      track((manual ? "choix-" : "aide-") + kind);
+      try { help.scrollIntoView({block:"nearest", behavior:"smooth"}); } catch(e) {}
+    };
+    const detectKind = () => isIOS ? (inAppUA ? "ios-app" : (/FxiOS/.test(ua) ? "ios-fx" : "ios"))
+      : (isSamsung ? "samsung" : ((inAppUA || fromApp) ? (/Firefox\//.test(ua) && !inAppUA ? "firefox" : "android-app") : (isAndroid ? (/Firefox\//.test(ua) ? "firefox" : ((/Chrome\//.test(ua) && !/OPR|EdgA|Vivaldi|DuckDuckGo|MiuiBrowser|HuaweiBrowser|UCBrowser/.test(ua)) ? "android" : "other")) : "desktop")));
+
+    // Étiquette du bouton
+    const label = document.getElementById("install-label");
+    if(isSamsung && label) label.textContent = "Installer avec Chrome";
+    else if(isIOS && inAppUA && label) label.textContent = "Ouvrir dans Safari";
+    else if(isAndroid && inAppUA && label) label.textContent = "Ouvrir dans Chrome";
+    if(inAppUA || isSamsung) showKind(detectKind(), false);
+
+    const openInChrome = () => {
+      const t0 = Date.now();
+      window.location.href = chromeIntent;
+      // Si la page est toujours là après 1,6 s, Chrome ne s'est pas ouvert : on montre les étapes à la main.
+      setTimeout(() => {
+        if(!document.hidden && Date.now() - t0 < 4000) showKind(isSamsung ? "samsung" : "android-app", false, "Chrome ne s'est pas ouvert ? Suivez ces étapes.");
+      }, 1600);
+    };
     btn.addEventListener("click", async () => {
-      if(isSamsung){ window.location.href = chromeIntent; return; }
-      if(inApp){ if(isAndroid) window.location.href = chromeIntent; else help.hidden = false; return; }
+      track("bouton");
+      if(isAndroid && (isSamsung || inAppUA)){ openInChrome(); return; }
+      if(isIOS && inAppUA){ showKind("ios-app", false); return; }
       if(deferred){
-        try { deferred.prompt(); await deferred.userChoice; } catch(e) {}
+        try { deferred.prompt(); const r = await deferred.userChoice; track(r && r.outcome === "accepted" ? "accepte" : "refuse"); } catch(e) {}
         deferred = null;
         return;
       }
-      help.innerHTML = isIOS ? stepsIOS : (isAndroid ? stepsAndroid : stepsAndroid + stepsIOS);
-      help.hidden = !help.hidden;
+      if(!help.hidden && shownKind === detectKind()){ help.hidden = true; return; }
+      showKind(detectKind(), false);
+    });
+    help.addEventListener("click", async ev => {
+      const chip = ev.target.closest(".ih-chip");
+      if(chip){ showKind(chip.dataset.kind, true); return; }
+      const c = ev.target.closest("#install-copy"); if(!c) return;
+      const s = document.getElementById("install-copy-state");
+      const url = location.origin + location.pathname;
+      try { await navigator.clipboard.writeText(url); s.textContent = "Lien copié."; track("lien-copie"); }
+      catch(e){ s.textContent = url; }
     });
   } catch(err) { /* l'aide à l'installation n'est pas essentielle */ }
 })();
