@@ -1,10 +1,6 @@
-V56 - Envoie 3 fichiers sur GitHub : index.html + meet-badge.png + meet-people.png (2 nouveaux)
-
-1) Message de réservation : l'ordre des questions change.
-   Les 4 premières ne changent pas. Ensuite : gilets vibrants, puis adresse exacte, puis transports.
-2) Fiche d'un concert : l'affiche passe à droite. La vignette "Vidéo d'annonce en LSF" est à gauche.
-   Le "Placement des chansigneurs" remonte juste en dessous.
-3) Nouvelle vignette ronde "Rencontre après le concert" sous le placement.
-   Au clic : une page joyeuse (RDV devant la scène, 15 minutes après le concert, liste des activités).
-   Elle est affichée pour tous les concerts (sauf annulé / bientôt).
-Pour une soirée avec 2 affiches : l'ancienne disposition est gardée (les 2 affiches ne tiendraient pas à côté).
+V57 - Envoie 1 seul fichier sur GitHub : index.html
+Page "Rencontre après le concert" :
+- Un seul bandeau turquoise : RDV devant la scène + 15 minutes après le concert.
+- Ordre : discuter, avis, poser vos questions, puis journalistes.
+- Nouvelle phrase : S'il y a des journalistes, possibilité d'être interviewé si vous voulez.
+- Bouton "Fermer" petit et discret en bas de page.
