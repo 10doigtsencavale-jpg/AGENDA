@@ -761,6 +761,15 @@
   .mk.is-sel .pf{fill:var(--accent-2);}
   .mk.is-sel .cc{transform:scale(1.18);background:var(--accent-2);color:var(--accent-2-ink);}
   .mk:focus-visible{outline:3px solid var(--accent-2);outline-offset:-4px;border-radius:12px;}
+  .map-pins{transition:opacity .18s ease;}
+  .map-pins.is-moving{opacity:0;pointer-events:none;}
+  .map-sub{display:inline-flex;align-items:center;min-height:42px;}
+  .map-reset{appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:0 16px;border-radius:14px;
+    background:var(--accent-2);color:var(--accent-2-ink);font-family:var(--font-display);font-weight:800;font-size:17px;letter-spacing:.2px;
+    box-shadow:0 3px 0 rgba(59,32,19,.28);-webkit-tap-highlight-color:transparent;}
+  .map-reset[hidden]{display:none;}
+  .map-reset svg{width:20px;height:20px;flex:none;}
+  .map-reset:focus-visible{outline:3px solid var(--ink);outline-offset:2px;}
   .map-zoom{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;background:#fff;border-radius:16px;padding:4px;box-shadow:0 2px 0 rgba(59,32,19,.2),0 6px 14px -6px rgba(59,32,19,.4);}
   .map-zoom button{appearance:none;border:0;background:transparent;color:var(--ink);cursor:pointer;min-height:40px;padding:0 14px;border-radius:12px;
     font-family:var(--font-display);font-weight:800;font-size:17px;text-transform:uppercase;letter-spacing:.3px;}
@@ -1540,12 +1549,13 @@ const MAP_VIEWS = {
   all: {label:"France + Suisse", box:null},
   ch:  {label:"Suisse", box:{lon0:5.55, lon1:10.75, lat0:45.55, lat1:48.0}}
 };
-let mapView = "all", mapSelKey = null, mapClusters = [];
+let mapView = "all", mapSelKey = null, mapClusters = [], mapFocus = null, mapBusy = false;
 const iconListView = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.6" cy="6" r="1.2" fill="currentColor"/><circle cx="4.6" cy="12" r="1.2" fill="currentColor"/><circle cx="4.6" cy="18" r="1.2" fill="currentColor"/></svg>';
 const iconMapView = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>';
 const pinSvg = '<svg class="pin-s" viewBox="0 0 34 44" aria-hidden="true"><path class="pf" d="M17 1.5C8.4 1.5 1.6 8.2 1.6 16.6 1.6 28 17 42.5 17 42.5S32.4 28 32.4 16.6C32.4 8.2 25.6 1.5 17 1.5Z"/><circle class="pd" cx="17" cy="16.6" r="6"/></svg>';
 
 function mapView_box(cw){
+  if(mapFocus) return {x:mapFocus.x, y:mapFocus.y, w:mapFocus.w, h:mapFocus.h};
   const v = MAP_VIEWS[mapView];
   let b;
   if(!v.box) b = {x:0, y:0, w:MAPGEO.w, h:MAPGEO.h};
@@ -1572,7 +1582,7 @@ function mapBaseSvg(vb, cw){
     </g>
     <path class="dep" d="${MAPGEO.dep}"/>
     <path class="edge" fill="none" d="${L.fra}"/><path class="edge" fill="none" d="${L.che}"/><path class="edge" fill="none" d="${L.bel}"/>
-    ${mapView === "all" ? lbl("France", 46.35, 2.6) + lbl("Suisse", 46.45, 8.75) + lbl("Belgique", 50.5, 5.1) : lbl("Suisse", 46.95, 8.1) + lbl("France", 46.0, 6.45)}
+    ${mapFocus ? "" : mapView === "all" ? lbl("France", 46.35, 2.6) + lbl("Suisse", 46.45, 8.75) + lbl("Belgique", 50.5, 5.1) : lbl("Suisse", 46.95, 8.1) + lbl("France", 46.0, 6.45)}
   </svg>`;
 }
 function mapLayout(){
@@ -1625,6 +1635,60 @@ function mapLayout(){
   note.textContent = unplaced ? unplaced + (unplaced > 1 ? " concerts ne sont pas sur la carte : voir la Liste." : " concert n'est pas sur la carte : voir la Liste.") : "";
   document.getElementById("map-empty").hidden = total > 0;
   card.hidden = total === 0;
+  const rb = document.getElementById("map-reset"); if(rb) rb.hidden = !mapFocus;
+  const hint = document.getElementById("map-hint"); if(hint) hint.hidden = !!mapFocus;
+}
+/* ---- zoom automatique sur un groupe de points ---- */
+function mapZoomPlan(c, cw){
+  const seen = new Set(), pts = [];
+  for(const g of c.items){
+    const ll = mapPlaceOf(g); if(!ll) continue;
+    const k = ll[0].toFixed(3) + "," + ll[1].toFixed(3); if(seen.has(k)) continue; seen.add(k);
+    pts.push(geoXY(ll[0], ll[1]));
+  }
+  if(pts.length < 2) return null;
+  let dmin = Infinity, x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for(let i = 0; i < pts.length; i++){
+    x0 = Math.min(x0, pts[i][0]); x1 = Math.max(x1, pts[i][0]); y0 = Math.min(y0, pts[i][1]); y1 = Math.max(y1, pts[i][1]);
+    for(let j = i + 1; j < pts.length; j++) dmin = Math.min(dmin, Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]));
+  }
+  const ratio = MAPGEO.h / MAPGEO.w, ch = cw * ratio, M = 48;
+  const upp = Math.max(dmin / 64, (x1 - x0) / Math.max(cw - 2 * M, 60), (y1 - y0) / Math.max(ch - 2 * M, 60), 30 / cw);
+  const w = upp * cw, h = w * ratio;
+  let x = (x0 + x1) / 2 - w / 2, y = (y0 + y1) / 2 - h / 2;
+  x = Math.min(Math.max(x, 0), MAPGEO.w - w); y = Math.min(Math.max(y, -50), MAPGEO.h - h);
+  return {x, y, w, h};
+}
+function mapAnimateTo(target, done){
+  const card = document.getElementById("map-card"), svg = card && card.querySelector("#map-svg");
+  const vbA = svg && svg.getAttribute("viewBox"), from = vbA ? vbA.split(/\s+/).map(Number) : null;
+  const still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(!svg || !from || from.length !== 4 || still){ done(); return; }
+  const pins = card.querySelector("#map-pins"); pins.classList.add("is-moving");
+  const to = [target.x, target.y, target.w, target.h], t0 = performance.now(), D = 480;
+  mapBusy = true;
+  (function step(now){
+    const k = Math.min(1, (now - t0) / D), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    svg.setAttribute("viewBox", from.map((v, i) => (v + (to[i] - v) * e).toFixed(2)).join(" "));
+    if(k < 1) requestAnimationFrame(step);
+    else { mapBusy = false; done(); pins.classList.remove("is-moving"); }
+  })(t0);
+}
+function mapZoomTo(c){
+  const card = document.getElementById("map-card"), cw = card.clientWidth || 358;
+  const plan = mapZoomPlan(c, cw), cur = mapView_box(cw);
+  if(!plan || plan.w > cur.w * 0.92) return false;       // on ne peut plus rapprocher : on ouvre la fiche
+  closeMapSheet();
+  mapAnimateTo(plan, () => { mapFocus = plan; mapLayout(); const rb = document.getElementById("map-reset"); if(rb) rb.focus({preventScroll:true}); });
+  return true;
+}
+function mapReset(){
+  if(!mapFocus || mapBusy) return;
+  closeMapSheet();
+  const cw = document.getElementById("map-card").clientWidth || 358;
+  const saved = mapFocus; mapFocus = null;
+  const target = mapView_box(cw); mapFocus = saved;
+  mapAnimateTo(target, () => { mapFocus = null; mapLayout(); });
 }
 function renderMap(){
   const slot = document.getElementById("map-slot"); if(!slot || slot.hidden) return;
@@ -1673,13 +1737,13 @@ function setView(v){
   const bl = document.getElementById("vs-list"), bm = document.getElementById("vs-map");
   bl.classList.toggle("is-on", !map); bm.classList.toggle("is-on", map);
   bl.setAttribute("aria-selected", String(!map)); bm.setAttribute("aria-selected", String(map));
-  if(map){ renderMap(); } else { closeMapSheet(); }
+  if(map){ renderMap(); } else { closeMapSheet(); mapFocus = null; }
   try{ history.replaceState(null, "", map ? "#carte" : location.pathname + location.search); }catch(_){}
   window.scrollTo({top:0});
 }
 (function initMapView(){
   const slot = document.getElementById("map-slot");
-  slot.innerHTML = `<div class="map-intro"><span class="n" id="map-count"></span><span class="h">Cliquez sur un point.</span></div>
+  slot.innerHTML = `<div class="map-intro"><span class="n" id="map-count"></span><span class="map-sub"><span class="h" id="map-hint">Cliquez sur un point.</span><button type="button" class="map-reset" id="map-reset" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Voir toute la carte</button></span></div>
     <div class="map-card" id="map-card"><svg class="map-svg" id="map-svg"></svg><div class="map-pins" id="map-pins"></div></div>
     <div class="map-empty" id="map-empty" hidden>Aucun concert à venir.</div>
     <p class="map-note" id="map-note" hidden></p>`;
@@ -1693,10 +1757,20 @@ function setView(v){
   card.addEventListener("click", ev => {
     const z = ev.target.closest(".map-zoom button");
     if(z){ mapView = z.dataset.z; card.querySelectorAll(".map-zoom button").forEach(b => b.classList.toggle("on", b === z)); closeMapSheet(); mapLayout(); return; }
+    if(mapBusy) return;
     const mk = ev.target.closest(".mk");
-    if(mk){ const c = mapClusters[+mk.dataset.i]; if(c){ (mapSelKey === c.key) ? closeMapSheet() : openMapSheet(c); } return; }
+    if(mk){
+      const c = mapClusters[+mk.dataset.i];
+      if(c){
+        if(mapSelKey === c.key) closeMapSheet();
+        else if(c.n > 1 && mapZoomTo(c)) { /* zoom en cours */ }
+        else openMapSheet(c);
+      }
+      return;
+    }
     closeMapSheet();
   });
+  document.getElementById("map-reset").addEventListener("click", mapReset);
   sheet.addEventListener("click", ev => {
     if(ev.target.closest("#ms-close")){ closeMapSheet(); return; }
     if(ev.target.closest("a.geo")) return;

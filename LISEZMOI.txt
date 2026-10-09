@@ -1,4 +1,5 @@
-V52 - Envoie les 2 fichiers sur GitHub : index.html ET vest-icon.png (nouveau).
-- Picto gilet vibrant devant la phrase jaune des gilets.
-- Boutons Oui / Non remis sous la phrase justificatif.
-  Pas de réponse ou Oui : la phrase est dans le message. Non : la phrase est retirée.
+V53 - Envoie 1 seul fichier sur GitHub : index.html
+Carte : un clic sur un rond avec un chiffre zoome tout seul sur cette zone.
+Les points se séparent. On clique ensuite sur un point pour voir la fiche.
+Bouton orange "Voir toute la carte" pour revenir à la carte entière.
+Si les points sont trop proches pour être séparés, la fiche s'ouvre directement.
