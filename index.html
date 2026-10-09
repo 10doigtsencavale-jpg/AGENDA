@@ -1610,8 +1610,7 @@ function setView(v){
 (function initMapView(){
   const slot = document.getElementById("map-slot");
   slot.innerHTML = `<div class="map-intro"><span class="n" id="map-count"></span><span class="h">Cliquez sur un point.</span></div>
-    <div class="map-card" id="map-card"><svg class="map-svg" id="map-svg"></svg><div class="map-pins" id="map-pins"></div>
-      <div class="map-zoom" role="group" aria-label="Zone de la carte"><button type="button" data-z="all" class="on">France + Suisse</button><button type="button" data-z="ch">Suisse</button></div></div>
+    <div class="map-card" id="map-card"><svg class="map-svg" id="map-svg"></svg><div class="map-pins" id="map-pins"></div></div>
     <div class="map-empty" id="map-empty" hidden>Aucun concert à venir.</div>
     <p class="map-note" id="map-note" hidden></p>`;
   const sheet = document.createElement("div");
