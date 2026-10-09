@@ -491,6 +491,59 @@
   .hero-meta-stack .hero-note{font-style:italic;}
   @media (max-width:359px){ .card-artist .names{font-size:17.5px;} }
   .video-badge-btn + .video-badge-btn{margin-top:10px;}
+
+  /* Haut de la fiche : vidéo LSF à gauche, affiche à droite */
+  .modal-hero{position:relative;overflow:hidden;border-radius:24px 24px 0 0;}
+  #modal-hero-side{display:none;}
+  .modal-hero.is-split{display:flex;align-items:center;gap:8px;padding:54px 14px 16px 6px;background:var(--surface-2);}
+  .modal-hero.is-split::before{content:"";position:absolute;inset:-24px;background:var(--pbg) center/cover;filter:blur(24px) saturate(1.15);opacity:.6;}
+  .modal-hero.is-split > *{position:relative;}
+  .modal-hero.is-split #modal-hero-side{display:flex;flex:1 1 0;min-width:0;justify-content:center;align-items:center;}
+  .modal-hero.is-split #modal-image-wrap{flex:0 0 57%;max-width:57%;display:flex;justify-content:flex-end;}
+  .modal-hero.is-split .modal-poster{width:auto;max-width:100%;height:auto;padding:0;background:none;border-radius:12px;overflow:hidden;}
+  .modal-hero.is-split .modal-poster-bg{display:none;}
+  .modal-hero.is-split #modal-image-wrap .modal-poster img{position:static;display:block;width:auto;max-width:100%;height:auto;max-height:min(37vh,310px);border-radius:12px;}
+  .modal-hero.is-split .poster-zoom{right:6px;bottom:6px;padding:5px 10px 5px 8px;font-size:13px;}
+  .modal-hero.is-split .video-badge-btn{flex-direction:column;gap:8px;margin:0;align-items:center;}
+  .modal-hero.is-split .video-badge-label{text-align:center;font-size:17px;}
+  .modal-hero.is-split .video-badge-label small{font-size:13.5px;margin-top:2px;}
+  .modal-hero.is-split #modal-video-wrap{display:flex;flex-direction:column;align-items:center;}
+  .modal-hero.is-split .where-info{margin:8px 0 0;padding:10px 12px;font-size:16px;text-align:center;}
+
+  /* Rencontre après le concert : pastille + page festive */
+  .meet-overlay{position:fixed;inset:0;z-index:205;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+    background:#182d68;background-image:radial-gradient(circle at 15% 8%,rgba(47,168,160,.55),transparent 38%),radial-gradient(circle at 90% 92%,rgba(240,160,40,.38),transparent 40%);}
+  .meet-overlay[hidden]{display:none;}
+  .meet-box{position:relative;z-index:1;width:100%;max-width:460px;margin:0 auto;padding:62px 16px 28px;box-sizing:border-box;}
+  .meet-card{border-radius:28px;overflow:hidden;background:#fff7e0;box-shadow:0 14px 0 rgba(0,0,0,.18),0 24px 40px -16px rgba(0,0,0,.5);animation:meet-pop .45s cubic-bezier(.2,.9,.3,1.25) both;}
+  .meet-top{position:relative;background:#2fa8a0;background-image:radial-gradient(circle at 12% 18%,#52c4bb 0 11%,transparent 11.5%),radial-gradient(circle at 92% 70%,#52c4bb 0 14%,transparent 14.5%);
+    padding:22px 16px 0;text-align:center;overflow:hidden;}
+  .meet-kicker{margin:0 0 4px;display:inline-block;background:#f0a028;color:#3b2013;font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:.5px;text-transform:uppercase;padding:4px 14px;border-radius:999px;transform:rotate(-2deg);}
+  .meet-title{margin:8px 0 12px;font-family:var(--font-display);font-weight:800;font-size:clamp(25px,7.2vw,34px);line-height:1.06;color:#fff;text-transform:uppercase;text-shadow:0 3px 0 rgba(24,45,104,.35);}
+  .meet-people{display:block;width:100%;max-width:340px;height:auto;margin:0 auto;}
+  .meet-body{padding:20px 18px 24px;text-align:center;}
+  .meet-when{display:flex;flex-direction:column;gap:10px;align-items:center;}
+  .meet-pill{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;font-family:var(--font-display);font-weight:800;font-size:23px;line-height:1.1;color:#fff;box-shadow:0 3px 0 rgba(59,32,19,.25);}
+  .meet-pill svg{width:26px;height:26px;flex:none;}
+  .meet-pill.is-where{background:#d33d27;}
+  .meet-pill.is-time{background:#182d68;}
+  .meet-lead{margin:22px 0 12px;font-family:var(--font-display);font-weight:800;font-size:27px;line-height:1.1;color:#b3321f;}
+  .meet-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;text-align:left;}
+  .meet-list li{display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 3px 0 rgba(59,32,19,.12);
+    font-family:var(--font-display);font-weight:800;font-size:21px;line-height:1.2;color:#3b2013;}
+  .meet-list .mi{flex:none;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 3px 0 rgba(59,32,19,.2);}
+  .meet-list .mi svg{width:27px;height:27px;}
+  .meet-list .c1{background:#d33d27;} .meet-list .c2{background:#f0a028;color:#3b2013;} .meet-list .c3{background:#2fa8a0;} .meet-list .c4{background:#182d68;}
+  .meet-end span{white-space:nowrap;}
+  .meet-end{margin:24px 0 18px;padding:16px;border-radius:20px;background:#f0a028;color:#3b2013;font-family:var(--font-display);font-weight:800;font-size:clamp(22px,7vw,30px);line-height:1.15;text-transform:uppercase;transform:rotate(-1.5deg);box-shadow:0 4px 0 rgba(59,32,19,.25);}
+  .meet-close{appearance:none;border:0;cursor:pointer;width:100%;min-height:56px;border-radius:999px;background:#182d68;color:#fff;font-family:var(--font-display);font-weight:800;font-size:21px;text-transform:uppercase;letter-spacing:.4px;box-shadow:0 4px 0 rgba(0,0,0,.25);}
+  .meet-close:focus-visible,.meet-overlay .lightbox-close:focus-visible{outline:3px solid #f0a028;outline-offset:3px;}
+  .meet-confetti{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  .meet-confetti i{position:absolute;top:-6vh;display:block;width:10px;height:16px;border-radius:2px;opacity:.9;animation:meet-fall linear infinite;}
+  .meet-confetti i:nth-child(3n){border-radius:50%;width:12px;height:12px;}
+  @keyframes meet-fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(112vh) rotate(540deg);}}
+  @keyframes meet-pop{0%{transform:scale(.92) translateY(14px);opacity:0;}100%{transform:none;opacity:1;}}
+  @media (prefers-reduced-motion:reduce){ .meet-card{animation:none;} .meet-confetti i{animation:none;top:calc(var(--y,10) * 1vh);} }
   .modal-eyebrow{
     font-size:13.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
     color:var(--accent-text);margin-bottom:5px;
@@ -873,10 +926,14 @@
 <div id="modal" class="modal-overlay" hidden>
   <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <button type="button" class="modal-close" id="modal-close-btn" aria-label="Fermer">&times;</button>
-    <div id="modal-image-wrap"></div>
-    <div class="modal-body">
+    <div class="modal-hero" id="modal-hero">
+      <div id="modal-hero-side"></div>
+      <div id="modal-image-wrap"></div>
+    </div>
+    <div class="modal-body" id="modal-body">
       <div id="modal-video-wrap"></div>
       <div id="modal-where-wrap"></div>
+      <div id="modal-meet-wrap"></div>
       <div class="modal-eyebrow" id="modal-eyebrow"></div>
       <h2 class="modal-title" id="modal-title"></h2>
       <div class="modal-meta" id="modal-meta"></div>
@@ -892,6 +949,35 @@
   <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Fermer l'image">&times;</button>
   <img id="lightbox-img" alt="">
   <div id="lightbox-stack" class="lightbox-stack" hidden></div>
+</div>
+
+<div id="meet-overlay" class="meet-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="meet-title">
+  <div class="meet-confetti" id="meet-confetti" aria-hidden="true"></div>
+  <button type="button" class="lightbox-close" id="meet-close-x" aria-label="Fermer">&times;</button>
+  <div class="meet-box" id="meet-box">
+    <div class="meet-card">
+      <div class="meet-top">
+        <p class="meet-kicker">Venez nous voir !</p>
+        <h2 class="meet-title" id="meet-title">Rencontre<br>après le concert</h2>
+        <img class="meet-people" id="meet-people" alt="Des personnes sourdes et des chansigneurs discutent en langue des signes.">
+      </div>
+      <div class="meet-body">
+        <div class="meet-when">
+          <span class="meet-pill is-where"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>RDV devant la scène</span>
+          <span class="meet-pill is-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg>15 minutes après le concert</span>
+        </div>
+        <p class="meet-lead">Rencontrez les chansigneurs !</p>
+        <ul class="meet-list">
+          <li><span class="mi c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H11l-5 4v-4H4Z"/></svg></span><span>Faire connaissance et discuter</span></li>
+          <li><span class="mi c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14.2c1 1.6 2.5 2.4 4 2.4s3-.8 4-2.4"/><path d="M9 9.5v.4M15 9.5v.4"/></svg></span><span>Donner votre avis sur le concert</span></li>
+          <li><span class="mi c3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg></span><span>Faire une interview avec des journalistes, si vous voulez</span></li>
+          <li><span class="mi c4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.6 2.6 0 1 1 3.6 2.4c-.7.4-1.1.9-1.1 1.7M12 17v.2"/></svg></span><span>Poser toutes vos questions</span></li>
+        </ul>
+        <p class="meet-end"><span>On vous attend !</span><br><span>Venez nombreux !</span></p>
+        <button type="button" class="meet-close" id="meet-close">Fermer</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="video-overlay" class="video-overlay" hidden role="dialog" aria-modal="true" aria-label="Vidéo en langue des signes">
@@ -1051,6 +1137,8 @@ const iconCalendar = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
 const placeBadgeImg = "place-badge.png";
 const lsfDot = "data:image/webp;base64,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";
 const videoBadgeImg = "video-badge.png";
+const meetBadgeImg = "meet-badge.png";
+const meetPeopleImg = "meet-people.png";
 const heroDoodle = '<svg class="hero-doodle" viewBox="0 0 100 130" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M40 95c-14-2-24-16-24-16"/><path d="M46 60V22a5 5 0 0 1 10 0v30"/><path d="M56 52V16a5 5 0 0 1 10 0v36"/><path d="M66 54V24a5 5 0 0 1 10 0v34"/><rect x="38" y="60" width="38" height="34" rx="16"/><path d="M55 94c0 10 4 18 4 18"/><path d="M8 30a16 16 0 0 0 16 16"/><path d="M8 30h16v16"/></svg>';
 
 /* Repère "Nouveau" + pastille sur l'icône de l'appli installée, pour les
@@ -1121,6 +1209,16 @@ function updateCardBadges(){
 }
 function placementOf(g){ return (g.members || [g]).map(m => PLACEMENT[m.id]).find(p => p && SCENES[p]) || null; }
 let currentGroup = null;
+/* Vignette « Rencontre après le concert » : ouvre une page festive (texte + dessin). */
+function renderMeet(e){
+  const wrap = document.getElementById("modal-meet-wrap");
+  if(e.cancelled || e.soon){ wrap.innerHTML = ""; return; }
+  wrap.innerHTML = `<button type="button" class="video-badge-btn place-badge-btn meet-badge-btn" id="meet-btn" aria-haspopup="dialog">
+      <span class="video-badge-img-wrap"><img src="${meetBadgeImg}" alt=""></span>
+      <span class="video-badge-label">Rencontre après le concert<small>Touchez pour voir</small></span>
+    </button>`;
+  document.getElementById("meet-btn").addEventListener("click", ev => openMeet(ev.currentTarget));
+}
 function renderWhere(e){
   const wrap = document.getElementById("modal-where-wrap");
   if(e.cancelled || e.soon){ wrap.innerHTML = ""; return; }
@@ -1881,8 +1979,8 @@ Merci de m'indiquer :
 - Comment acheter mes places ?
 - Y a-t-il un tarif réduit ?
 - À quelle heure est l'ouverture des portes ?
-- À quelle heure ${multiDate ? "sont les concerts chansignés" : "est le concert chansigné"} ?
-- Quelle est l'adresse exacte de l'entrée (point GPS si possible) ?${vestQuestion}
+- À quelle heure ${multiDate ? "sont les concerts chansignés" : "est le concert chansigné"} ?${vestQuestion}
+- Quelle est l'adresse exacte de l'entrée (point GPS si possible) ?
 - Pouvez-vous m'indiquer s'il y a des navettes/transports spécifiques pour venir et repartir ?
 
 Pour faciliter ma compréhension, merci de privilégier une réponse claire et avec des phrases simples.
@@ -1971,6 +2069,16 @@ function openModal(id){
   modalEl.scrollTop = 0;
   document.querySelector(".modal-panel").scrollTop = 0;
 
+  // Mise en page du haut : vidéo LSF à gauche, affiche à droite (une seule affiche).
+  // Sinon (soirée à plusieurs affiches, pas de vignette) : ancienne disposition.
+  const hasVideoBadge = e.videos.length > 0 || (!e.cancelled && !e.soon);
+  const split = !e.multi && e.posters.length === 1 && e.videos.length <= 1 && hasVideoBadge;
+  const hero = document.getElementById("modal-hero");
+  hero.classList.toggle("is-split", split);
+  hero.style.setProperty("--pbg", split ? `url('${e.posters[0].src}')` : "none");
+  if(split) document.getElementById("modal-hero-side").appendChild(modalVideoWrap);
+  else { const mb = document.getElementById("modal-body"); if(modalVideoWrap.parentNode !== mb) mb.insertBefore(modalVideoWrap, mb.firstChild); }
+
   // Vignette "Vidéo en LSF" — tout en haut du formulaire, avant le reste,
   // pour un public sourd très visuel : image = message, avant même le texte.
   // La vidéo est hébergée à l'extérieur (ex. Facebook) et simplement liée
@@ -2009,6 +2117,7 @@ function openModal(id){
 
   currentGroup = e;
   renderWhere(e);
+  renderMeet(e);
 
   // Rappel calendrier — utile quel que soit le mode de réservation (mail
   // ou site web), donc affiché pour tout concert qui n'est pas annulé.
@@ -2311,6 +2420,30 @@ function closeLightbox(){
 }
 lightboxEl.addEventListener("click", closeLightbox);
 
+// ---- Page « Rencontre après le concert » -----------------------------------
+const meetEl = document.getElementById("meet-overlay");
+let lastMeetBtn = null;
+(function initMeet(){
+  document.getElementById("meet-people").src = meetPeopleImg;
+  const box = document.getElementById("meet-confetti"), cols = ["#f0a028","#d33d27","#2fa8a0","#ffffff","#ffd666","#ff846b"];
+  let h = "";
+  for(let i = 0; i < 18; i++){
+    const left = (i * 5.7 + (i % 3) * 2) % 100, dur = 7 + (i * 1.7) % 6, delay = -((i * 2.3) % 9), y = (i * 13) % 100;
+    h += `<i style="left:${left.toFixed(1)}%;background:${cols[i % cols.length]};animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s;--y:${y}"></i>`;
+  }
+  box.innerHTML = h;
+})();
+function openMeet(btn){
+  lastMeetBtn = btn || null;
+  meetEl.hidden = false; meetEl.scrollTop = 0;
+  document.getElementById("meet-close").focus({preventScroll:true});
+}
+function closeMeet(){
+  meetEl.hidden = true;
+  if(lastMeetBtn && lastMeetBtn.isConnected) lastMeetBtn.focus({preventScroll:true});
+}
+meetEl.addEventListener("click", ev => { if(ev.target.closest("#meet-close, #meet-close-x") || !ev.target.closest(".meet-card")) closeMeet(); });
+
 // ---- Lecteur vidéo intégré -------------------------------------------------
 // Les vidéos LSF sont publiées sur Facebook (ou Instagram). On les affiche dans
 // l'appli pour que la personne reste dans l'agenda : la croix ou « Revenir à
@@ -2404,6 +2537,7 @@ modalEl.addEventListener("click", ev => { if(ev.target === modalEl) closeModal()
 document.addEventListener("keydown", ev => {
   if(ev.key !== "Escape") return;
   if(!videoOverlay.hidden){ closeVideo(); return; }
+  if(!meetEl.hidden){ closeMeet(); return; }
   if(!lightboxEl.hidden){ closeLightbox(); return; }
   if(!modalEl.hidden) closeModal();
 });
