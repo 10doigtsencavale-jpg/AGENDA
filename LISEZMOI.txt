@@ -1,8 +1,5 @@
-V48 - à téléverser à la place de la V47 (index.html seulement).
-
-- Encadré « Besoin d'aide ? » : 5 lignes avec tirets, même espacement :
-  Remplissez le formulaire / Le message s'écrit tout seul / Appuyez sur « Envoyer le mail » /
-  Votre mail s'ouvre / C'est prêt ! Relisez et envoyez
-- Message : points d'interrogation ajoutés aux questions (acheter les places, jour J et heure, gilets vibrants).
-- Rond mains + LSF à côté de « 2. Vérifier le message » : plus grand.
-- Bouton « Envoyer le mail » : inchangé.
+V50 - Remplace index.html sur GitHub (comme d'habitude).
+- Case "justificatif de surdité" (Oui / Non) sous Adultes et Enfants des personnes sourdes. Oui = la phrase s'ajoute au message.
+- Nouvelles questions dans le message du formulaire.
+- Les 3 images de placement : mains refaites avec 5 doigts.
+mains_avant_apres.png : comparaison (à gauche avant, à droite après).
