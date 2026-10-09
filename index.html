@@ -614,6 +614,10 @@
   .msg-step-icon svg{width:18px;height:18px;}
   .msg-step-label{font-family:var(--font-display);font-weight:800;font-size:17.5px;color:var(--ink);}
   .msg-step-hint{font-size:15.5px;color:var(--muted);margin:0 0 10px;line-height:1.5;}
+  .msg-send-hint{text-align:center;margin:10px 0 14px;}
+  .msg-fallback{margin-top:6px;}
+  .msg-fallback summary{cursor:pointer;font-weight:700;font-size:15.5px;color:var(--muted);text-align:center;padding:8px 0;text-decoration:underline;}
+  .msg-fallback[open] .msg-address-chip{margin-bottom:12px;}
   .msg-address-chip{
     display:block;background:var(--surface-2);border:2px dashed var(--accent-2);
     border-radius:14px;padding:13px 16px;font-weight:800;font-size:17px;
@@ -984,6 +988,7 @@ function normalizeLink(link){
   return "https://" + link;
 }
 const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const IS_MOBILE = IS_IOS || /Android|Mobi/i.test(navigator.userAgent);
 function mapsUrl(venue, city){
   let name = String(city || "").trim(), tail = "";
   const m = /^(.*?)\s*\(([^)]+)\)\s*$/.exec(name);
@@ -1994,9 +1999,9 @@ function openModal(id){
             <div>
               <p class="help-banner-kicker">Besoin d'aide ?</p>
               <p class="help-banner-title">Vous souhaitez écrire au festival / à la salle pour réserver vos places ?</p>
-              <p class="help-banner-warn help-banner-first">Remplissez le formulaire</p>
-              <p class="help-banner-warn">Le message se rédige à votre place</p>
-              <p class="help-banner-warn">Copiez et envoyez le message <span class="nowrap">vous-même</span> à l'organisateur.</p>
+              <p class="help-banner-warn help-banner-first">Remplissez le formulaire.</p>
+              <p class="help-banner-warn">Le message s'écrit tout seul.</p>
+              <p class="help-banner-warn">Appuyez sur « Envoyer le mail ». Votre mail s'ouvre. Tout est prêt.</p>
             </div>
           </div>
 
@@ -2012,20 +2017,26 @@ function openModal(id){
 
           <div class="msg-step">
             <div class="msg-step-head">
-              <span class="msg-step-icon">${iconCopy}</span>
-              <span class="msg-step-label">2. Copier le message</span>
+              <span class="msg-step-icon">${iconEdit}</span>
+              <span class="msg-step-label">2. Vérifier le message</span>
             </div>
             <pre class="message-preview" id="message-preview"></pre>
-            <button type="button" class="modal-cta" id="copy-all-btn">${iconCopy} Copier le message et le mail pour l'envoyer</button>
           </div>
 
           <div class="msg-step">
             <div class="msg-step-head">
               <span class="msg-step-icon">${iconMail}</span>
-              <span class="msg-step-label">3. Envoyez-le depuis votre boîte mail</span>
+              <span class="msg-step-label">3. Envoyer le mail</span>
             </div>
-            <p class="msg-step-hint">Ouvrez votre application mail, collez le message, et envoyez-le à :</p>
-            <p class="msg-address-chip">${escapeHtml(mailAddress)}</p>
+            <a class="modal-cta" id="send-mail-btn" href="#">${iconMail} Envoyer le mail</a>
+            <p class="msg-step-hint msg-send-hint">Votre mail s'ouvre. Appuyez sur « Envoyer ».</p>
+            ${IS_MOBILE ? "" : `<a class="reminder-btn" id="gmail-btn" href="#" target="_blank" rel="noopener">${iconMail} Ouvrir dans Gmail</a>`}
+            <details class="msg-fallback">
+              <summary>Rien ne s'ouvre ?</summary>
+              <p class="msg-step-hint">Copiez le message. Collez-le dans un nouveau mail. Envoyez-le à :</p>
+              <p class="msg-address-chip">${escapeHtml(mailAddress)}</p>
+              <button type="button" class="modal-copy-message" id="copy-all-btn">${iconCopy} Copier le message</button>
+            </details>
           </div>
         </div>`;
     } else {
@@ -2070,6 +2081,16 @@ function openModal(id){
         e.multi ? `${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}` : null,
         vest
       );
+      // Bouton « Envoyer le mail » : ouvre l'appli mail avec destinataire,
+      // objet et message déjà remplis (mis à jour à chaque modification).
+      if(mailAddress){
+        const subject = `Réservation — ${e.multi ? "soirée chansignée" : "concert chansigné"} de ${e.artistsAnd}`;
+        const body = preview.textContent;
+        const sendBtn = document.getElementById("send-mail-btn");
+        if(sendBtn) sendBtn.href = `mailto:${mailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.replace(/\r?\n/g, "\r\n"))}`;
+        const gmailBtn = document.getElementById("gmail-btn");
+        if(gmailBtn) gmailBtn.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(mailAddress)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      }
     }
     refreshMessage();
 
@@ -2111,7 +2132,7 @@ function openModal(id){
       copyAllBtn.addEventListener("click", async () => {
         const combined = `À : ${mailAddress}\nObjet : Réservation — ${e.multi ? "soirée chansignée" : "concert chansigné"} de ${e.artistsAnd}\n\n${preview.textContent}`;
         const ok = await copyText(combined);
-        copyAllBtn.innerHTML = ok ? "Copié ✓ — collez-le dans un nouveau mail" : "Impossible de copier";
+        copyAllBtn.innerHTML = ok ? "Copié ✓ Collez-le dans un nouveau mail." : "Impossible de copier";
         copyAllBtn.classList.toggle("is-copied", ok);
         setTimeout(() => { copyAllBtn.innerHTML = baseCopyAllLabel; copyAllBtn.classList.remove("is-copied"); }, 3000);
       });
