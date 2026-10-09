@@ -583,9 +583,8 @@
   }
   @media (max-width:350px){.stepper-group-title{font-size:12px;letter-spacing:0;padding:9px 10px;gap:6px;}}
   .stepper-group-title .ear-off{width:22px;height:22px;flex:none;}
-  .proof-group{border:0;padding:0;min-width:0;margin:14px 0 0;}
-  .proof-group legend{padding:0;margin:0 0 8px;font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.35;}
-  .proof-group .vest-options{margin-bottom:0;}
+  .proof-note{display:flex;align-items:flex-start;gap:10px;margin:14px 0 0;font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.4;}
+  .proof-note svg{width:26px;height:26px;flex:none;color:var(--accent-2-ink,var(--accent-2));}
   .vest-group{border:0;padding:0;min-width:0;margin-left:0;margin-right:0;}
   .vest-group legend{padding:9px 12px;display:block;width:100%;box-sizing:border-box;}
   .vest-options{display:flex;gap:10px;margin-bottom:12px;}
@@ -1024,6 +1023,13 @@ const iconCopy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const iconMail = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg>';
 const iconClock = '<svg class="clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
 const iconEarOff = '<svg class="ear-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18.5a3.5 3.5 0 1 0 7 0c0-1.57.92-2.52 2.04-3.46"/><path d="M6 8.5c0-.75.13-1.47.36-2.14"/><path d="M8.8 3.15A6.5 6.5 0 0 1 19 8.5c0 1.63-.44 2.81-1.09 3.76"/><path d="M12.5 6A2.5 2.5 0 0 1 16 8.5a4.5 4.5 0 0 1-1.5 3.5"/><path d="m2 2 20 20"/></svg>';
+const iconDoc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>';
+// Phrase « justificatif » : s'adapte au nombre de personnes sourdes cochées.
+function proofSentence(n){
+  if(n <= 0) return "J'ai (ou nous avons) un justificatif pour prouver ma (notre) surdité, si besoin.";
+  if(n === 1) return "J'ai un justificatif pour prouver ma surdité, si besoin.";
+  return "Nous avons un justificatif pour prouver notre surdité, si besoin.";
+}
 const iconPin = '<svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-4.14 0-7.5 3.36-7.5 7.5 0 5.63 6.55 11.6 6.83 11.85a1 1 0 0 0 1.34 0c.28-.25 6.83-6.22 6.83-11.85C19.5 5.36 16.14 2 12 2Zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5Z"/></svg>';
 const iconPlay = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
 const iconZoom = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>';
@@ -1747,7 +1753,7 @@ async function copyText(text){
 
 /* Message pré-rempli, pensé pour les personnes sourdes qui ont du mal
    à rédiger : il suffit de le copier et de l'envoyer tel quel. */
-function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name, multiDate, vest, proof){
+function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults, companionChildren, name, multiDate, vest){
   const pa = Math.max(0, pshAdults);
   const pc = Math.max(0, pshChildren);
   const ca = Math.max(0, companionAdults);
@@ -1762,10 +1768,8 @@ function buildReservationMessage(artist, pshAdults, pshChildren, companionAdults
   if(ca > 0) companionLines.push(`- ${ca} adulte${ca > 1 ? "s" : ""}`);
   if(cc > 0) companionLines.push(`- ${cc} enfant${cc > 1 ? "s" : ""}`);
 
-  // Justificatif de surdité : "oui" ajoute la phrase (au pluriel s'ils sont plusieurs).
-  const proofLine = (proof && proof.want === "yes")
-    ? ((pa + pc) > 1 ? "Nous avons un justificatif pour prouver notre surdité." : "J'ai un justificatif pour prouver ma surdité.")
-    : "";
+  // Justificatif de surdité : phrase ajoutée automatiquement (adaptée au nombre de personnes).
+  const proofLine = proofSentence(pa + pc);
   const pshBlock = pshLines.length
     ? `\nPersonnes sourdes/malentendantes :\n${pshLines.join("\n")}${proofLine ? `\n${proofLine}` : ""}\n`
     : (proofLine ? `\n${proofLine}\n` : "");
@@ -1898,6 +1902,19 @@ function openModal(id){
         </span>
         <span class="video-badge-label">Vidéo d'annonce en LSF<small>${e.videos.length > 1 ? escapeHtml(v.artist) : "Touchez pour la regarder"}</small></span>
       </a>`).join("");
+  } else if(!e.cancelled && !e.soon){
+    // Pas encore de vidéo : même principe que le placement (bulle « à consulter »).
+    modalVideoWrap.innerHTML = `<button type="button" class="video-badge-btn" id="video-none-btn" aria-controls="video-none-info" aria-expanded="false">
+        <span class="video-badge-img-wrap"><img src="${videoBadgeImg}" alt=""></span>
+        <span class="video-badge-label">Vidéo d'annonce en LSF<small>Touchez pour voir</small></span>
+      </button>
+      <div class="where-info" id="video-none-info" role="status" hidden>Pas d'annonce en LSF pour le moment</div>`;
+    const vnBtn = document.getElementById("video-none-btn"), vnInfo = document.getElementById("video-none-info");
+    vnBtn.addEventListener("click", () => {
+      const open = vnInfo.hidden;
+      vnInfo.hidden = !open;
+      vnBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
   } else {
     modalVideoWrap.innerHTML = "";
   }
@@ -1968,13 +1985,7 @@ function openModal(id){
             <button type="button" id="psh-children-plus" aria-label="Plus d'enfants en situation de handicap">+</button>
           </div>
         </div>
-        <fieldset class="proof-group">
-          <legend>J'ai (ou nous avons) un justificatif pour prouver ma (notre) surdité :</legend>
-          <div class="vest-options">
-            <label class="vest-option"><input type="radio" name="proof-want" id="proof-yes" value="yes"><span>Oui</span></label>
-            <label class="vest-option"><input type="radio" name="proof-want" id="proof-no" value="no"><span>Non</span></label>
-          </div>
-        </fieldset>
+        <p class="proof-note">${iconDoc}<span id="proof-text">${proofSentence(0)}</span></p>
       </div>
 
       <div class="stepper-group">
@@ -2090,7 +2101,6 @@ function openModal(id){
 
     const counts = { pshAdults: 0, pshChildren: 0, compAdults: 0, compChildren: 0 };
     const vest = { want: null, count: "" };
-    const proof = { want: null };
     const nameInput = document.getElementById("msg-name");
     const preview = document.getElementById("message-preview");
     const copyMsgBtn = mailAddress ? null : document.getElementById("copy-message-btn");
@@ -2103,10 +2113,11 @@ function openModal(id){
       document.getElementById("psh-children-count").textContent = String(counts.pshChildren);
       document.getElementById("comp-adults-count").textContent = String(counts.compAdults);
       document.getElementById("comp-children-count").textContent = String(counts.compChildren);
+      document.getElementById("proof-text").textContent = proofSentence(counts.pshAdults + counts.pshChildren);
       preview.textContent = buildReservationMessage(
         e.artistsAnd, counts.pshAdults, counts.pshChildren, counts.compAdults, counts.compChildren, nameInput.value,
         e.multi ? `${dt.getDate()} ${MOIS[dt.getMonth()].toLowerCase()}` : null,
-        vest, proof
+        vest
       );
       // Bouton « Envoyer le mail » : ouvre l'appli mail avec destinataire,
       // objet et message déjà remplis (mis à jour à chaque modification).
@@ -2145,10 +2156,6 @@ function openModal(id){
       refreshMessage();
     }));
     vestCountInput.addEventListener("input", () => { vest.count = vestCountInput.value; refreshMessage(); });
-    document.querySelectorAll('input[name="proof-want"]').forEach(r => r.addEventListener("change", () => {
-      proof.want = r.value;
-      refreshMessage();
-    }));
     if(copyMsgBtn){
       copyMsgBtn.addEventListener("click", async () => {
         const ok = await copyText(preview.textContent);

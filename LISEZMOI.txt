@@ -1,5 +1,3 @@
-V50 - Remplace index.html sur GitHub (comme d'habitude).
-- Case "justificatif de surdité" (Oui / Non) sous Adultes et Enfants des personnes sourdes. Oui = la phrase s'ajoute au message.
-- Nouvelles questions dans le message du formulaire.
-- Les 3 images de placement : mains refaites avec 5 doigts.
-mains_avant_apres.png : comparaison (à gauche avant, à droite après).
+V51 - Remplace index.html sur GitHub.
+- Phrase "justificatif" avec picto document, toujours affichée sous les personnes sourdes. Elle change selon le nombre (0, 1, 2 ou +) et s'ajoute au message.
+- Vidéo d'annonce en LSF : le picto est maintenant sur tous les concerts. Sans lien vidéo, un clic affiche "Pas d'annonce en LSF pour le moment" (même bulle que le placement).
