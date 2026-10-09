@@ -1,5 +1,5 @@
-V53 - Envoie 1 seul fichier sur GitHub : index.html
-Carte : un clic sur un rond avec un chiffre zoome tout seul sur cette zone.
-Les points se séparent. On clique ensuite sur un point pour voir la fiche.
-Bouton orange "Voir toute la carte" pour revenir à la carte entière.
-Si les points sont trop proches pour être séparés, la fiche s'ouvre directement.
+V55 - Envoie 1 seul fichier sur GitHub : index.html
+Message de réservation : nouvelle dernière question
+"Pouvez-vous m'indiquer s'il y a des navettes/transports spécifiques pour venir et repartir ?"
+Elle vient après la question des gilets vibrants.
+Cette version contient aussi la sécurité du zoom de carte (V54).

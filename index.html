@@ -1667,11 +1667,14 @@ function mapAnimateTo(target, done){
   const pins = card.querySelector("#map-pins"); pins.classList.add("is-moving");
   const to = [target.x, target.y, target.w, target.h], t0 = performance.now(), D = 480;
   mapBusy = true;
+  let over = false;
+  const finish = () => { if(over) return; over = true; mapBusy = false; done(); pins.classList.remove("is-moving"); };
+  setTimeout(finish, D + 250);                              // filet de sécurité si l'écran est en pause
   (function step(now){
+    if(over) return;
     const k = Math.min(1, (now - t0) / D), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
     svg.setAttribute("viewBox", from.map((v, i) => (v + (to[i] - v) * e).toFixed(2)).join(" "));
-    if(k < 1) requestAnimationFrame(step);
-    else { mapBusy = false; done(); pins.classList.remove("is-moving"); }
+    if(k < 1) requestAnimationFrame(step); else finish();
   })(t0);
 }
 function mapZoomTo(c){
@@ -1880,6 +1883,7 @@ Merci de m'indiquer :
 - À quelle heure est l'ouverture des portes ?
 - À quelle heure ${multiDate ? "sont les concerts chansignés" : "est le concert chansigné"} ?
 - Quelle est l'adresse exacte de l'entrée (point GPS si possible) ?${vestQuestion}
+- Pouvez-vous m'indiquer s'il y a des navettes/transports spécifiques pour venir et repartir ?
 
 Pour faciliter ma compréhension, merci de privilégier une réponse claire et avec des phrases simples.
 
