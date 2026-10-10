@@ -1,1 +1,1 @@
-V69 - Mets sur GitHub (dossier AGENDA) : index.html (remplace). Un seul fichier. Puis dis "fait".
+V72 - Mets sur GitHub (dossier AGENDA) : index.html (remplace). Un seul fichier (contient aussi V70 et V71). Puis dis "fait".

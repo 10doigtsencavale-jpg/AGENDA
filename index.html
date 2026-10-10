@@ -311,7 +311,8 @@ window.addEventListener("popstate", () => {
   .card-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;justify-content:center;}
   .card-artist{
     font-family:var(--font-display);
-    font-weight:700;font-size:20px;line-height:1.15;
+    font-weight:700;font-size:22px;line-height:1.15;
+    color:var(--date-ink);
     overflow-wrap:anywhere;
   }
   .card-venue{
@@ -519,7 +520,7 @@ window.addEventListener("popstate", () => {
   .names-inline{display:flex;flex-wrap:wrap;column-gap:.3em;font-size:clamp(24px,7vw,30px);}
   .names-inline .nm{min-width:0;}
   .hero-meta-stack .hero-note{font-style:italic;}
-  @media (max-width:359px){ .card-artist .names{font-size:17.5px;} }
+  @media (max-width:359px){ .card-artist .names{font-size:19.5px;} }
   .video-badge-btn + .video-badge-btn{margin-top:10px;}
 
   /* Haut de la fiche : vidéo LSF à gauche, affiche à droite */
@@ -733,15 +734,16 @@ window.addEventListener("popstate", () => {
   .coming-soon{
     position:relative;overflow:hidden;
     margin:8px 0 30px;border-radius:20px;padding:30px 20px 26px;text-align:center;
-    background:linear-gradient(150deg, #b3321f 0%, #b45309 100%);
-    color:#fff;box-shadow:var(--shadow);
+    background:#f7a42b;
+    color:#3b2013;box-shadow:var(--shadow);
   }
   .coming-soon-title{
     font-family:var(--font-display);font-weight:800;font-size:26px;
     text-transform:uppercase;letter-spacing:.5px;line-height:1.15;margin:8px 0 8px;
+    white-space:nowrap;
   }
   .coming-soon-sub{
-    font-size:16px;margin:0 auto;opacity:.95;max-width:32ch;
+    font-size:16px;margin:0 auto;max-width:32ch;
   }
 
   footer{
@@ -901,7 +903,7 @@ window.addEventListener("popstate", () => {
     .hero-eyebrow .dot{box-shadow:0 0 0 4px rgba(143,216,243,.35);}
     .hero-meta{color:#eefafa;}
     .hero-meta span:not(:last-child)::after{color:#8fe0da;}
-    .coming-soon{background:linear-gradient(150deg,#0e8d89 0%,#2a64b0 100%);}
+    .coming-soon{background:#f7a42b;color:#3b2013;}
     .help-banner{background:#0f7f86;}
     .place-mini{background:#19b3ac;}
     @keyframes placePulse{0%{box-shadow:0 2px 7px rgba(0,0,0,.3),0 0 0 0 rgba(47,196,189,.6);}100%{box-shadow:0 2px 7px rgba(0,0,0,.3),0 0 0 14px rgba(47,196,189,0);}}
@@ -1206,7 +1208,7 @@ function placeLines(e){
 }
 function namesHtml(g, inline){
   if(!g.multi) return escapeHtml(g.artist);
-  return `<span class="names${inline ? " names-inline" : ""}">${g.members.map((m,i) => `<span class="nm">${i ? "+\u00a0" : ""}${escapeHtml(m.artist)}</span>`).join("")}</span>`;
+  return `<span class="names${inline ? " names-inline" : ""}">${g.members.map((m,i) => `<span class="nm">${escapeHtml(m.artist)}${i < g.members.length - 1 ? "\u00a0+" : ""}</span>`).join("")}</span>`;
 }
 // Placement du chansigneur : { "id-du-concert": "jardin" | "cour" | "centre" }
 // jardin = à GAUCHE de la scène (vu du public) ; cour = à DROITE ; centre.
@@ -1603,6 +1605,7 @@ function render(){
     html += `</div></div>`;
   }
   listSlot.innerHTML = html;
+  fitNames();
 
   // Laisse le repère "Nouveau" et la pastille sur l'icône visibles un
   // moment, puis marque ces concerts comme vus pour la prochaine visite.
@@ -1613,6 +1616,27 @@ function render(){
     }, 4000);
   }
 }
+/* Concerts à plusieurs artistes : chaque nom tient sur une seule ligne (la police se réduit si besoin). */
+function fitNames(){
+  document.querySelectorAll(".card-artist .names .nm").forEach(n => {
+    n.style.whiteSpace = "nowrap"; n.style.fontSize = "";
+    let fs = parseFloat(getComputedStyle(n).fontSize);
+    const max = n.parentElement.clientWidth;
+    while(max > 0 && n.scrollWidth > max + 0.5 && fs > 13){ fs -= 0.5; n.style.fontSize = fs + "px"; }
+  });
+}
+/* Encart du bas : « D'autres événements » sur une seule ligne, « à venir » en dessous. */
+function fitSoon(){
+  const t = document.querySelector(".coming-soon-title"); if(!t) return;
+  t.style.fontSize = "";
+  let fs = parseFloat(getComputedStyle(t).fontSize);
+  const max = t.clientWidth;
+  while(max > 0 && t.scrollWidth > max + 0.5 && fs > 14){ fs -= 0.5; t.style.fontSize = fs + "px"; }
+}
+function fitAll(){ fitNames(); fitSoon(); }
+window.addEventListener("resize", fitAll);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+fitSoon();
 render();
 refreshEvents(true); probePosters();
 
