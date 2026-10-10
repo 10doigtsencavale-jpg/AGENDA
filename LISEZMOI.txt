@@ -1,7 +1,7 @@
-V58 - Envoie 1 seul fichier sur GitHub : index.html
-Le geste "retour" du téléphone (glisser depuis le bord) ou le bouton retour :
-- ferme la page ouverte (fiche du concert, affiche en grand, vidéo, rencontre, fiche de la carte)
-- reste dans l'appli
-Si plusieurs pages sont ouvertes (ex. affiche sur une fiche), chaque retour ferme la dernière.
-Sur l'écran d'accueil (liste ou carte), le retour quitte l'appli comme avant.
-La croix, le bouton Fermer et la touche Échap marchent toujours.
+V59 - L'application s'appelle maintenant "AGENDA".
+Envoie ces 7 fichiers sur GitHub (ils remplacent les anciens) :
+index.html, manifest.json, og-image.jpg, 404.html, cgu.html, confidentialite.html, mentions-legales.html
+
+- Onglet du navigateur, nom sous l'icône, pages légales, aperçu de partage (WhatsApp...) : AGENDA.
+- Attention : sur les téléphones où l'appli est DÉJÀ installée, le nom sous l'icône
+  peut rester "Agenda Chansigné" jusqu'à une nouvelle installation.
