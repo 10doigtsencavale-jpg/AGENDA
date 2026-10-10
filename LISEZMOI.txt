@@ -1,4 +1,1 @@
-V62 - Mets sur GitHub (dossier AGENDA), en remplacant les anciens :
-1. place-mini.png
-2. mentions-legales.html
-Puis dis "fait".
+V63 - Mets sur GitHub (dossier AGENDA) : place-mini.png (remplace l ancien). Un seul fichier. Puis dis "fait".
