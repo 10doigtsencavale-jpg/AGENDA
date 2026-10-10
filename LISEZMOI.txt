@@ -1,6 +1,8 @@
-V65 - Mets sur GitHub (dossier AGENDA), en remplacant les anciens, ces 4 fichiers :
-1. index.html          (boutons Informations turquoise, sans le i)
-2. place-mini.png      (bonhomme turquoise, 1re page)
-3. place-badge.png     (scene OU, page du concert)
-4. meet-badge.png      (rencontre : ancien picto remis)
+V66 - Correctif : les anciens pictos restaient en memoire dans le telephone.
+Mets sur GitHub (dossier AGENDA) ces 4 fichiers :
+1. index.html          (remplace)
+2. sw.js               (remplace)
+3. place-mini-v2.png   (NOUVEAU nom)
+4. place-badge-v2.png  (NOUVEAU nom)
+Les anciens place-mini.png et place-badge.png ne servent plus (tu peux les laisser).
 Puis dis "fait".
