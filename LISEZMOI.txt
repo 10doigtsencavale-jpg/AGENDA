@@ -1,1 +1,6 @@
-V63 - Mets sur GitHub (dossier AGENDA) : place-mini.png (remplace l ancien). Un seul fichier. Puis dis "fait".
+V65 - Mets sur GitHub (dossier AGENDA), en remplacant les anciens, ces 4 fichiers :
+1. index.html          (boutons Informations turquoise, sans le i)
+2. place-mini.png      (bonhomme turquoise, 1re page)
+3. place-badge.png     (scene OU, page du concert)
+4. meet-badge.png      (rencontre : ancien picto remis)
+Puis dis "fait".
