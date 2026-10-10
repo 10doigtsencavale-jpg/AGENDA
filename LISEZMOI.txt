@@ -1,8 +1,1 @@
-V66 - Correctif : les anciens pictos restaient en memoire dans le telephone.
-Mets sur GitHub (dossier AGENDA) ces 4 fichiers :
-1. index.html          (remplace)
-2. sw.js               (remplace)
-3. place-mini-v2.png   (NOUVEAU nom)
-4. place-badge-v2.png  (NOUVEAU nom)
-Les anciens place-mini.png et place-badge.png ne servent plus (tu peux les laisser).
-Puis dis "fait".
+V67 - Mets sur GitHub (dossier AGENDA) : index.html (remplace). Un seul fichier. Puis dis "fait".
