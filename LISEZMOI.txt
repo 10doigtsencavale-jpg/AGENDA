@@ -1,1 +1,4 @@
-V72 - Mets sur GitHub (dossier AGENDA) : index.html (remplace). Un seul fichier (contient aussi V70 et V71). Puis dis "fait".
+V73 - Mets sur GitHub (dossier AGENDA) :
+1. index.html         (remplace)
+2. meet-badge-v2.png  (NOUVEAU nom)
+Puis dis "fait".
