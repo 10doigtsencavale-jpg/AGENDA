@@ -1,6 +1,7 @@
-V57 - Envoie 1 seul fichier sur GitHub : index.html
-Page "Rencontre après le concert" :
-- Un seul bandeau turquoise : RDV devant la scène + 15 minutes après le concert.
-- Ordre : discuter, avis, poser vos questions, puis journalistes.
-- Nouvelle phrase : S'il y a des journalistes, possibilité d'être interviewé si vous voulez.
-- Bouton "Fermer" petit et discret en bas de page.
+V58 - Envoie 1 seul fichier sur GitHub : index.html
+Le geste "retour" du téléphone (glisser depuis le bord) ou le bouton retour :
+- ferme la page ouverte (fiche du concert, affiche en grand, vidéo, rencontre, fiche de la carte)
+- reste dans l'appli
+Si plusieurs pages sont ouvertes (ex. affiche sur une fiche), chaque retour ferme la dernière.
+Sur l'écran d'accueil (liste ou carte), le retour quitte l'appli comme avant.
+La croix, le bouton Fermer et la touche Échap marchent toujours.

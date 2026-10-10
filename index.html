@@ -14,6 +14,33 @@
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <script>if(!/SamsungBrowser/i.test(navigator.userAgent)){var l=document.createElement("link");l.rel="manifest";l.href="manifest.json";document.head.appendChild(l);}</script>
+<script>
+/* Bouton « retour » du téléphone (ou glissement depuis le bord de l'écran) :
+   il ferme la page ouverte (fiche, affiche, vidéo, rencontre, fiche carte)
+   au lieu de quitter l'appli. Chaque page ouverte ajoute une entrée à l'historique. */
+const navStack = []; let navIgnore = 0, navStale = 0, navFromPop = false;
+function navPush(name){
+  if(navStack.includes(name)) return;
+  try{ history.pushState({ov:name}, "", location.href); navStack.push(name); }catch(_){}
+}
+function navRelease(name){
+  const i = navStack.lastIndexOf(name); if(i < 0) return;
+  navStack.splice(i, 1);
+  if(navFromPop) return;
+  if(i === navStack.length){ navIgnore++; try{ history.back(); }catch(_){ navIgnore--; } }
+  else navStale++;
+}
+window.addEventListener("popstate", () => {
+  if(navIgnore > 0){ navIgnore--; return; }
+  const top = navStack[navStack.length - 1];
+  if(!top){ if(navStale > 0) navStale--; return; }
+  const closers = {modal:() => closeModal(), lightbox:() => closeLightbox(), meet:() => closeMeet(), video:() => closeVideo(), sheet:() => closeMapSheet()};
+  navFromPop = true;
+  try{ closers[top] && closers[top](); }catch(_){}
+  navFromPop = false;
+  if(navStack[navStack.length - 1] === top) navStack.pop();
+});
+</script>
 <meta name="description" content="Agenda des concerts chansignés (traduits en langue des signes française) en France et en Suisse : prochaines dates, affiches et réservations. Par 10 Doigts en Cavale.">
 <meta name="theme-color" content="#d33d27">
 <link rel="canonical" href="https://10doigtsencavale-jpg.github.io/AGENDA/">
@@ -1051,7 +1078,7 @@ const BASE_EVENTS = [
   {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:M("bWFpbHRvOmJpbGxldHRlcmllQGxmZS5iemg="), linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
   {id:"2026-09-25-mathilde-peruwelz", artist:"Mathilde", venue:"Centre culturel", city:"Péruwelz (BE)", date:"2026-09-25", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-273f03c6bf.jpg", note:null, cancelled:false},
   {id:"2026-09-26-mathilde-saint-lezin", artist:"Mathilde", venue:"", city:"Saint-Lézin (49)", date:"2026-09-26", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0f27631bbb.jpg", note:null, cancelled:false},
-  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:"21:15", timePrefix:"Dès", link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
+  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:"18:30", timePrefix:"Dès", link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
   {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:"18:30", timePrefix:"Dès", link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:true, video:"https://www.facebook.com/watch/?v=2180421376203167"},
   {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Théâtre Edwige Feuillère", city:"Vesoul (70)", date:"2026-10-16", time:"20:00", link:"https://billetterie.theatre-edwige-feuillere.fr/spectacle?id_spectacle=402&lng=1", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
   {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique", city:"Grenoble (38)", date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com/agenda/743-Danyl-ZS", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
@@ -1814,7 +1841,7 @@ function openMapSheet(c){
   const sheet = document.getElementById("map-sheet");
   sheet.innerHTML = `<div class="ms-head"><div class="ms-title">${iconPin}<span>${escapeHtml(title)}</span></div><button type="button" class="ms-close" id="ms-close" aria-label="Fermer la fiche">&times;</button></div>`
     + c.items.map(g => mapSheetRow(g, cities.length > 1)).join("");
-  sheet.hidden = false; sheet.scrollTop = 0;
+  sheet.hidden = false; sheet.scrollTop = 0; navPush("sheet");
   document.querySelectorAll("#map-pins .mk").forEach(b => b.classList.toggle("is-sel", mapClusters[+b.dataset.i] && mapClusters[+b.dataset.i].key === mapSelKey));
   document.getElementById("map-slot").style.paddingBottom = (sheet.offsetHeight + 24) + "px";
   document.getElementById("ms-close").focus({preventScroll:true});
@@ -1822,7 +1849,7 @@ function openMapSheet(c){
   if(mk){ const r = mk.getBoundingClientRect(), top = innerHeight - sheet.offsetHeight; if(r.bottom > top - 12) window.scrollBy({top:r.bottom - top + 24, behavior:"smooth"}); }
 }
 function closeMapSheet(){
-  mapSelKey = null;
+  mapSelKey = null; navRelease("sheet");
   const sheet = document.getElementById("map-sheet"); if(sheet) sheet.hidden = true;
   const slot = document.getElementById("map-slot"); if(slot) slot.style.paddingBottom = "";
   document.querySelectorAll("#map-pins .mk.is-sel").forEach(b => b.classList.remove("is-sel"));
@@ -2379,7 +2406,7 @@ function openModal(id){
   }
 
   lastFocused = document.activeElement;
-  modalEl.hidden = false;
+  modalEl.hidden = false; navPush("modal");
   document.body.classList.add("modal-open");
   document.getElementById("modal-close-btn").focus();
 }
@@ -2394,7 +2421,7 @@ function openLightboxStack(items){
            : `<p class="lb-pending">À consulter le jour du concert</p>`}</figure>`).join("");
   lightboxStack.hidden = false; lightboxStack.scrollTop = 0;
   lightboxEl.classList.add("is-scene-bg");
-  lightboxEl.hidden = false;
+  lightboxEl.hidden = false; navPush("lightbox");
   document.getElementById("lightbox-close").focus();
 }
 function openLightbox(src, alt, scene){
@@ -2403,11 +2430,11 @@ function openLightbox(src, alt, scene){
   lightboxImg.alt = alt || "";
   lightboxImg.src = src;
   lightboxEl.classList.toggle("is-scene-bg", !!scene);
-  lightboxEl.hidden = false;
+  lightboxEl.hidden = false; navPush("lightbox");
   document.getElementById("lightbox-close").focus();
 }
 function closeLightbox(){
-  lightboxEl.hidden = true;
+  lightboxEl.hidden = true; navRelease("lightbox");
   lightboxEl.classList.remove("is-scene-bg");
   lightboxImg.removeAttribute("src");
   lightboxImg.classList.remove("is-scene");
@@ -2433,11 +2460,11 @@ let lastMeetBtn = null;
 })();
 function openMeet(btn){
   lastMeetBtn = btn || null;
-  meetEl.hidden = false; meetEl.scrollTop = 0;
+  meetEl.hidden = false; meetEl.scrollTop = 0; navPush("meet");
   document.getElementById("meet-close").focus({preventScroll:true});
 }
 function closeMeet(){
-  meetEl.hidden = true;
+  meetEl.hidden = true; navRelease("meet");
   if(lastMeetBtn && lastMeetBtn.isConnected) lastMeetBtn.focus({preventScroll:true});
 }
 meetEl.addEventListener("click", ev => { if(ev.target.closest("#meet-close, #meet-close-x") || !ev.target.closest(".meet-card")) closeMeet(); });
@@ -2488,12 +2515,12 @@ function openVideo(btn){
   lastVideoBtn = btn;
   const multi = document.querySelectorAll("#modal-video-wrap .video-badge-btn").length > 1;
   renderVideo(info, url, multi ? btn.dataset.videoArtist : "");
-  videoOverlay.hidden = false;
+  videoOverlay.hidden = false; navPush("video");
   document.getElementById("video-close").focus();
   return true;
 }
 function closeVideo(){
-  videoOverlay.hidden = true;
+  videoOverlay.hidden = true; navRelease("video");
   videoBox.innerHTML = "";            // retire l'iframe : la vidéo s'arrête
   if(lastVideoBtn && lastVideoBtn.isConnected) lastVideoBtn.focus();
 }
@@ -2506,7 +2533,7 @@ modalVideoWrap.addEventListener("click", ev => {
 });
 
 function closeModal(){
-  modalEl.hidden = true;
+  modalEl.hidden = true; navRelease("modal");
   document.body.classList.remove("modal-open");
   if(lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
 }
