@@ -1218,7 +1218,7 @@ const SCENE_INFO = {
 /* images WebP (et non SVG) : certains téléphones Android affichent des bandes noires sur les gros SVG */
 function sceneSrc(pos){ return SCENES[pos]; }
 function placementItems(g){ return (g.members || [g]).map(m => ({artist:m.artist, pos:(PLACEMENT[m.id] && SCENES[PLACEMENT[m.id]]) ? PLACEMENT[m.id] : null})); }
-const PLACE_MINI = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><clipPath id="c"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#c)"><rect width="64" height="64" fill="#e64330"/><rect x="12" y="12" width="1.7" height="36" fill="#fff"/><rect x="50.3" y="12" width="1.7" height="36" fill="#fff"/><rect x="12" y="12" width="40" height="4" fill="#fff"/><g transform="translate(17.8 16) rotate(-42) scale(.66)"><rect x="-0.8" y="0" width="1.6" height="2.4" fill="#fff"/><path d="M-2.5 2.4 H2.5 L3.5 8.6 H-3.5 Z" fill="#fff"/><ellipse cx="0" cy="8.6" rx="3.5" ry="1.1" fill="#fff"/><ellipse cx="0" cy="8.6" rx="2.2" ry=".6" fill="#e64330"/></g><g transform="translate(46.2 16) rotate(42) scale(.66)"><rect x="-0.8" y="0" width="1.6" height="2.4" fill="#fff"/><path d="M-2.5 2.4 H2.5 L3.5 8.6 H-3.5 Z" fill="#fff"/><ellipse cx="0" cy="8.6" rx="3.5" ry="1.1" fill="#fff"/><ellipse cx="0" cy="8.6" rx="2.2" ry=".6" fill="#e64330"/></g><rect x="10" y="48" width="44" height="1.7" fill="#fff"/><g fill="#111" stroke="#111" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="23.2" r="3.3" stroke="none"/><rect x="28" y="27.6" width="8" height="10" rx="2.6" stroke="none"/><path d="M28.4 29.6 L24.2 27.2 M35.6 29.6 L39.8 27.2" stroke-width="2.2" fill="none"/><rect x="28.4" y="35.5" width="3.1" height="12.4" rx="1.2" stroke="none"/><rect x="32.5" y="35.5" width="3.1" height="12.4" rx="1.2" stroke="none"/></g></g></svg>');
+const PLACE_MINI = "place-mini.png";
 function placeMiniHtml(){ return `<span class="place-mini" aria-hidden="true"><img src="${PLACE_MINI}" alt=""></span>`; }
 function updateCardBadges(){
   document.querySelectorAll(".card[data-id]").forEach(c => {
@@ -1536,9 +1536,9 @@ function render(){
           <div class="hero-meta hero-meta-stack">
             <span>${escapeHtml(dateStr0)}</span>
             ${timeText(next) ? `<span class="hero-hour">${escapeHtml(timeText(next))}</span>` : ""}
-            ${next.venue ? `<span>${geoLink(next.venue, next.city, escapeHtml(next.venue))}</span>` : ""}
+            ${next.venue ? `<span>${escapeHtml(next.venue)}</span>` : ""}
             ${noteText(next) ? `<span class="hero-note">${escapeHtml(noteText(next))}</span>` : ""}
-            ${next.city ? `<span>${geoLink(next.venue, next.city, escapeHtml(next.city))}</span>` : ""}
+            ${next.city ? `<span>${escapeHtml(next.city)}</span>` : ""}
           </div>
           <div class="hero-actions">
             ${nextLink ? `<button type="button" class="btn btn-primary">${iconInfo} Informations</button>` : ``}
@@ -1588,9 +1588,9 @@ function render(){
           <div class="card-body">
             ${e.multi ? `<div class="card-multi-row"><span class="badge-duo">${e.members.length} artistes</span>${newIds.has(e.id) ? '<span class="badge-new">Nouveau</span>' : ''}</div>` : ""}
             <div class="card-artist">${namesHtml(e)}${(!e.multi && newIds.has(e.id)) ? '<span class="badge-new">Nouveau</span>' : ''}</div>
-            ${e.venue ? `<div class="card-venue-name">${geoLink(e.venue, e.city, escapeHtml(e.venue))}</div>` : ""}
+            ${e.venue ? `<div class="card-venue-name">${escapeHtml(e.venue)}</div>` : ""}
             ${noteText(e) ? `<div class="card-note">${escapeHtml(noteText(e))}</div>` : ""}
-            ${e.city ? `<div class="card-venue">${iconPin}${geoLink(e.venue, e.city, escapeHtml(e.city))}</div>` : ""}
+            ${e.city ? `<div class="card-venue">${iconPin}${escapeHtml(e.city)}</div>` : ""}
             ${e.cancelled
               ? `<span class="badge-cancelled">Annulé</span>`
               : (link ? `<button type="button" class="card-cta">${iconInfo} Informations</button>` : (e.note ? `<span class="card-cta" style="color:var(--muted);background:none;padding:0;">${escapeHtml(e.note)}</span>` : ``))}
@@ -1829,8 +1829,8 @@ function mapSheetRow(g, showCity){
     ${th}
     <div class="ms-body">
       <div class="ms-artist">${namesHtml(g)}</div>
-      ${g.venue ? `<div class="ms-venue">${geoLink(g.venue, g.city, escapeHtml(g.venue))}</div>` : ""}
-      ${showCity && g.city ? `<div class="ms-city">${iconPin}${geoLink(g.venue, g.city, escapeHtml(g.city))}</div>` : ""}
+      ${g.venue ? `<div class="ms-venue">${escapeHtml(g.venue)}</div>` : ""}
+      ${showCity && g.city ? `<div class="ms-city">${iconPin}${escapeHtml(g.city)}</div>` : ""}
       <span class="ms-btn">${iconInfo} Informations</span>
     </div></div>`;
 }
