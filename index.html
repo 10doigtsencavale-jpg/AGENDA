@@ -526,28 +526,28 @@ window.addEventListener("popstate", () => {
   /* Haut de la fiche : vidéo LSF à gauche, affiche à droite */
   .modal-hero{position:relative;overflow:hidden;border-radius:24px 24px 0 0;}
   #modal-hero-side{display:none;}
-  .modal-hero.is-split{display:flex;align-items:center;gap:8px;padding:54px 14px 16px 6px;background:var(--surface-2);}
+  .modal-hero.is-split{display:flex;align-items:center;gap:8px;padding:54px 14px 16px 22px;background:var(--surface-2);}
   .modal-hero.is-split::before{content:"";position:absolute;inset:-24px;background:var(--pbg) center/cover;filter:blur(24px) saturate(1.15);opacity:.6;}
   .modal-hero.is-split > *{position:relative;}
   .modal-hero.is-split #modal-hero-side{display:flex;flex:1 1 0;min-width:0;justify-content:center;align-items:center;}
-  .modal-hero.is-split #modal-image-wrap{flex:0 0 57%;max-width:57%;display:flex;justify-content:flex-end;}
+  .modal-hero.is-split #modal-image-wrap{flex:0 0 55%;max-width:55%;display:flex;justify-content:flex-end;}
   .modal-hero.is-split .modal-poster{width:auto;max-width:100%;height:auto;padding:0;background:none;border-radius:12px;overflow:hidden;}
   .modal-hero.is-split .modal-poster-bg{display:none;}
   .modal-hero.is-split #modal-image-wrap .modal-poster img{position:static;display:block;width:auto;max-width:100%;height:auto;max-height:min(37vh,310px);border-radius:12px;}
   .modal-hero.is-split .poster-zoom{right:6px;bottom:6px;padding:5px 10px 5px 8px;font-size:13px;}
-  .modal-hero.is-split .video-badge-btn{flex-direction:column;gap:8px;margin:0;align-items:center;}
-  .modal-hero.is-split .video-badge-label{text-align:center;font-size:17px;}
+  .modal-hero.is-split .video-badge-btn{flex-direction:column;gap:8px;margin:0;align-items:flex-start;}
+  .modal-hero.is-split .video-badge-label{text-align:left;font-size:17px;}
   .modal-hero.is-split .video-badge-label small{font-size:13.5px;margin-top:2px;}
-  .modal-hero.is-split #modal-video-wrap{display:flex;flex-direction:column;align-items:center;}
+  .modal-hero.is-split #modal-video-wrap{display:flex;flex-direction:column;align-items:flex-start;}
   .modal-hero.is-split{align-items:stretch;}
   .modal-hero.is-split #modal-hero-side{align-self:stretch;align-items:stretch;justify-content:flex-start;margin-top:0;}
   .modal-hero.is-split #modal-image-wrap{align-items:flex-start;}
   .modal-hero.is-split #modal-video-wrap{flex:1 1 auto;width:100%;justify-content:space-between;}
   .modal-hero.is-split .info-chips{margin:18px 0 0;}
   .modal-body > #modal-video-wrap .video-badge-btn{padding-right:46px;}
-  .info-chips{display:flex;flex-direction:column;align-items:center;gap:7px;margin:10px 0 12px;width:100%;}
-  .modal-body > #modal-video-wrap .info-chips{flex-direction:row;flex-wrap:wrap;justify-content:center;}
-  .info-chip{display:inline-flex;align-items:center;justify-content:center;gap:7px;max-width:100%;background:var(--accent-2);color:var(--accent-2-ink);border-radius:10px;padding:6px 11px;font-weight:800;font-size:16px;line-height:1.15;margin:0;box-sizing:border-box;}
+  .info-chips{display:flex;flex-direction:column;align-items:flex-start;gap:7px;margin:10px 0 12px;width:100%;}
+  .modal-body > #modal-video-wrap .info-chips{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;}
+  .info-chip{display:inline-flex;align-items:center;justify-content:center;gap:7px;max-width:100%;background:var(--info-bg);color:var(--info-ink);border-radius:10px;padding:6px 11px;font-weight:800;font-size:16px;line-height:1.15;margin:0;box-sizing:border-box;}
   .info-chip svg{flex:none;display:block;}
   .info-chip .flag{width:30px;height:20px;border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.28);}
   .info-chip .arrow{width:18px;height:14px;}
@@ -1472,7 +1472,7 @@ function csvEvents(text){
     if(g("avant_heure")) e.timePrefix = g("avant_heure");
     if(g("precisions")) e.timeNote = g("precisions");
     if(/^https:\/\//i.test(g("video"))) e.video = g("video");
-    const st = g("style").replace(/\s+/g," ").slice(0,28);
+    const st0 = g("style").replace(/\s+/g," ").slice(0,28), st = st0.charAt(0).toUpperCase() + st0.slice(1);
     if(st) e.style = st;
     const lg = langCodes(g("langue"));
     if(lg.length) e.langs = lg;
@@ -2205,13 +2205,13 @@ function openModal(id){
           <img src="${videoBadgeImg}" alt="">
           <span class="video-badge-play">${iconPlay}</span>
         </span>
-        <span class="video-badge-label">Vidéo d'annonce en LSF<small>${e.videos.length > 1 ? escapeHtml(v.artist) : "Touchez pour la regarder"}</small></span>
+        <span class="video-badge-label">Vidéo d'annonce<small>${e.videos.length > 1 ? escapeHtml(v.artist) : "Touchez pour la regarder"}</small></span>
       </a>`).join("") + infoChipsHtml(e);
   } else if(!e.cancelled && !e.soon){
     // Pas encore de vidéo : même principe que le placement (bulle « à consulter »).
     modalVideoWrap.innerHTML = `<button type="button" class="video-badge-btn" id="video-none-btn" aria-controls="video-none-info" aria-expanded="false">
         <span class="video-badge-img-wrap"><img src="${videoBadgeImg}" alt=""></span>
-        <span class="video-badge-label">Vidéo d'annonce en LSF<small>Touchez pour voir</small></span>
+        <span class="video-badge-label">Vidéo d'annonce<small>Touchez pour voir</small></span>
       </button>
       <div class="where-info" id="video-none-info" role="status" hidden>Pas d'annonce en LSF pour le moment</div>` + infoChipsHtml(e);
     const vnBtn = document.getElementById("video-none-btn"), vnInfo = document.getElementById("video-none-info");
