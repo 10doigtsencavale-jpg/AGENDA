@@ -1,2 +1,2 @@
-V80 - Nouvelle affiche Rencontre apres le concert
-Fichiers a mettre sur GitHub : index.html ET meet-people-v2.png (les deux).
+V83 - Picto Rencontre apres le concert (nouvelle version)
+Fichiers a mettre sur GitHub : index.html + meet-badge-v4.png + video-badge-v3.png (les 3).
