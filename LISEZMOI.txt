@@ -1,2 +1,2 @@
-V76 - Adresse sous la date (si ca tient sur une ligne) + bouton "Billetterie en ligne ici"
+V77 - Le bouton Installer revient apres desinstallation
 Fichier a mettre sur GitHub : index.html
