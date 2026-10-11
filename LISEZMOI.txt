@@ -1,3 +1,2 @@
-V78 - Tout aligne a gauche, "Video d annonce", badges bleu clair, majuscule au style
-Fichier a mettre sur GitHub : index.html
-Le tableau Google est deja mis a jour (Folk pour Mathilde).
+V80 - Nouvelle affiche Rencontre apres le concert
+Fichiers a mettre sur GitHub : index.html ET meet-people-v2.png (les deux).
