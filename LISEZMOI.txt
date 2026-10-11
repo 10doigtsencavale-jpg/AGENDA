@@ -1,3 +1,2 @@
-V74 - Style de musique + langue (FR/EN -> LSF)
-Fichier a mettre sur GitHub : index.html (un seul fichier).
-Le tableau Google est deja mis a jour (colonnes style et langue).
+V75 - Alignement du haut de la fiche
+Fichier a mettre sur GitHub : index.html
