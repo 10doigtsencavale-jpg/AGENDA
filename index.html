@@ -539,6 +539,16 @@ window.addEventListener("popstate", () => {
   .modal-hero.is-split .video-badge-label{text-align:center;font-size:17px;}
   .modal-hero.is-split .video-badge-label small{font-size:13.5px;margin-top:2px;}
   .modal-hero.is-split #modal-video-wrap{display:flex;flex-direction:column;align-items:center;}
+  .modal-hero.is-split #modal-hero-side{align-self:flex-start;margin-top:-30px;}
+  .modal-body > #modal-video-wrap .video-badge-btn{padding-right:46px;}
+  .info-chips{display:flex;flex-direction:column;align-items:center;gap:7px;margin:10px 0 12px;width:100%;}
+  .modal-body > #modal-video-wrap .info-chips{flex-direction:row;flex-wrap:wrap;justify-content:center;}
+  .info-chip{display:inline-flex;align-items:center;justify-content:center;gap:7px;max-width:100%;background:var(--accent-2);color:var(--accent-2-ink);border-radius:10px;padding:6px 11px;font-weight:800;font-size:16px;line-height:1.15;margin:0;box-sizing:border-box;}
+  .info-chip svg{flex:none;display:block;}
+  .info-chip .flag{width:30px;height:20px;border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.28);}
+  .info-chip .arrow{width:18px;height:14px;}
+  .info-chip .lsf{letter-spacing:.5px;}
+  .info-chip .note{width:15px;height:18px;}
   .modal-hero.is-split .where-info{margin:8px 0 0;padding:10px 12px;font-size:16px;text-align:center;}
 
   /* Rencontre après le concert : pastille + page festive */
@@ -1083,7 +1093,7 @@ const BASE_EVENTS = [
   {id:"2026-09-13-gims", artist:"GIMS", venue:"Festival La Flûme Enchantée — Scène du Château", city:"Gévezé (35)", date:"2026-09-13", time:null, link:M("bWFpbHRvOmJpbGxldHRlcmllQGxmZS5iemg="), linkLabel:"Réserver", image:"ev-bd447b86a6.jpg", note:null, cancelled:true},
   {id:"2026-09-25-mathilde-peruwelz", artist:"Mathilde", venue:"Centre culturel", city:"Péruwelz (BE)", date:"2026-09-25", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-273f03c6bf.jpg", note:null, cancelled:false},
   {id:"2026-09-26-mathilde-saint-lezin", artist:"Mathilde", venue:"", city:"Saint-Lézin (49)", date:"2026-09-26", time:"20:00", link:"https://tournee.mathilde-officiel.fr", linkLabel:"Réserver", image:"ev-0f27631bbb.jpg", note:null, cancelled:false},
-  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:"21:15", timePrefix:"Dès", link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
+  {id:"2026-10-13-miki", artist:"Miki", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:"18:30", timePrefix:"Dès", link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-0f4886a633.jpg", note:null, cancelled:false, video:"https://www.facebook.com/watch/?v=2180421376203167"},
   {id:"2026-10-13-camille-yembe", artist:"Camille Yembé", venue:"Nancy Jazz Pulsations", city:"Nancy (54)", date:"2026-10-13", time:"18:30", timePrefix:"Dès", link:M("bWFpbHRvOnJvbWFuZUBuYW5jeWphenpwdWxzYXRpb25zLmNvbQ=="), linkLabel:"Réserver", image:"ev-d2189e5965.jpg", note:null, cancelled:true, video:"https://www.facebook.com/watch/?v=2180421376203167"},
   {id:"2026-10-16-mathilde-vesoul", artist:"Mathilde", venue:"Théâtre Edwige Feuillère", city:"Vesoul (70)", date:"2026-10-16", time:"20:00", link:"https://billetterie.theatre-edwige-feuillere.fr/spectacle?id_spectacle=402&lng=1", linkLabel:"Réserver", image:"ev-57ebbeae96.jpg", note:null, cancelled:false},
   {id:"2026-10-16-danyl-belle-electrique", artist:"Danyl", venue:"La Belle Électrique", city:"Grenoble (38)", date:"2026-10-16", time:"20:00", link:"https://billetterie.la-belle-electrique.com/agenda/743-Danyl-ZS", linkLabel:"Réserver", image:"ev-41ae26d048.jpg", note:null, video:"https://www.facebook.com/reel/1485962466961636", cancelled:false},
@@ -1334,6 +1344,36 @@ function refreshPlacement(force){
     if(currentGroup && !modalEl.hidden) renderWhere(currentGroup);
   }).catch(()=>{});
 }
+
+// Style musical + langue chantée (arrivée = toujours la LSF)
+function langCodes(txt){
+  const out = [];
+  for(const w of String(txt || "").toLowerCase().split(/[^a-zé]+/)){
+    const c = /^(fr|fra)/.test(w) ? "FR" : /^(en|ang)/.test(w) ? "EN" : "";
+    if(c && !out.includes(c)) out.push(c);
+  }
+  return out;
+}
+const FLAG_SVG = {
+  FR: '<svg class="flag" viewBox="0 0 30 20" aria-hidden="true" focusable="false"><rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg>',
+  EN: '<svg class="flag" viewBox="0 0 30 20" aria-hidden="true" focusable="false"><clipPath id="ukc"><rect width="30" height="20"/></clipPath><g clip-path="url(#ukc)"><rect width="30" height="20" fill="#012169"/><path d="M0 0L30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0L30 20M30 0L0 20" stroke="#C8102E" stroke-width="1.6"/><path d="M15 0V20M0 10H30" stroke="#fff" stroke-width="6"/><path d="M15 0V20M0 10H30" stroke="#C8102E" stroke-width="3.4"/></g></svg>'
+};
+const LANG_NAME = {FR:"français", EN:"anglais"};
+const ICON_NOTE = '<svg class="note" viewBox="0 0 15 18" aria-hidden="true" focusable="false"><path d="M5 1.5v10.2a3 3 0 1 0 2 2.8V5l6-1.5V1L5 1.5z" fill="currentColor"/></svg>';
+const ICON_ARROW = '<svg class="arrow" viewBox="0 0 18 14" aria-hidden="true" focusable="false"><path d="M1 7h14M10 2l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function infoChipsHtml(g){
+  if(g.cancelled || g.soon) return "";
+  const mem = g.members || [g];
+  const styles = Array.from(new Set(mem.map(m => m.style).filter(Boolean)));
+  const langs = Array.from(new Set(mem.flatMap(m => m.langs || [])));
+  let h = "";
+  if(styles.length) h += `<p class="info-chip" aria-label="Style de musique : ${escapeHtml(styles.join(", "))}">${ICON_NOTE}<span>${styles.map(escapeHtml).join(" · ")}</span></p>`;
+  if(langs.length){
+    const names = langs.map(c => LANG_NAME[c]).join(" et ");
+    h += `<p class="info-chip" aria-label="Chanté en ${names}. Traduit en langue des signes française.">${langs.map(c => FLAG_SVG[c]).join("")}${ICON_ARROW}<span class="lsf">LSF</span></p>`;
+  }
+  return h ? `<div class="info-chips">${h}</div>` : "";
+}
 function buildGroups(list){
   const out = [], idx = new Map();
   for(const e of list){
@@ -1426,6 +1466,10 @@ function csvEvents(text){
     if(g("avant_heure")) e.timePrefix = g("avant_heure");
     if(g("precisions")) e.timeNote = g("precisions");
     if(/^https:\/\//i.test(g("video"))) e.video = g("video");
+    const st = g("style").replace(/\s+/g," ").slice(0,28);
+    if(st) e.style = st;
+    const lg = langCodes(g("langue"));
+    if(lg.length) e.langs = lg;
     out.push(e);
   }
   return out;
@@ -1443,7 +1487,7 @@ function applyEventsCsv(text){
     if(b){
       used.add(b.id);
       const m = Object.assign({}, b, f); delete m._ref;
-      for(const k of ["video","timePrefix","timeNote"]) if(f[k] === undefined) delete m[k];
+      for(const k of ["video","timePrefix","timeNote","style","langs"]) if(f[k] === undefined) delete m[k];
       out.push(m);
     } else {
       f.image = (/^[0-9a-f]{10}$/.test(f._ref) && ok.has(f._ref)) ? "ev-" + f._ref + ".jpg" : null;
@@ -2144,14 +2188,14 @@ function openModal(id){
           <span class="video-badge-play">${iconPlay}</span>
         </span>
         <span class="video-badge-label">Vidéo d'annonce en LSF<small>${e.videos.length > 1 ? escapeHtml(v.artist) : "Touchez pour la regarder"}</small></span>
-      </a>`).join("");
+      </a>`).join("") + infoChipsHtml(e);
   } else if(!e.cancelled && !e.soon){
     // Pas encore de vidéo : même principe que le placement (bulle « à consulter »).
     modalVideoWrap.innerHTML = `<button type="button" class="video-badge-btn" id="video-none-btn" aria-controls="video-none-info" aria-expanded="false">
         <span class="video-badge-img-wrap"><img src="${videoBadgeImg}" alt=""></span>
         <span class="video-badge-label">Vidéo d'annonce en LSF<small>Touchez pour voir</small></span>
       </button>
-      <div class="where-info" id="video-none-info" role="status" hidden>Pas d'annonce en LSF pour le moment</div>`;
+      <div class="where-info" id="video-none-info" role="status" hidden>Pas d'annonce en LSF pour le moment</div>` + infoChipsHtml(e);
     const vnBtn = document.getElementById("video-none-btn"), vnInfo = document.getElementById("video-none-info");
     vnBtn.addEventListener("click", () => {
       const open = vnInfo.hidden;

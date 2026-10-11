@@ -1,4 +1,3 @@
-V73 - Mets sur GitHub (dossier AGENDA) :
-1. index.html         (remplace)
-2. meet-badge-v2.png  (NOUVEAU nom)
-Puis dis "fait".
+V74 - Style de musique + langue (FR/EN -> LSF)
+Fichier a mettre sur GitHub : index.html (un seul fichier).
+Le tableau Google est deja mis a jour (colonnes style et langue).
