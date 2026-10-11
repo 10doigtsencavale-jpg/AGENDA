@@ -1,2 +1,2 @@
-V75 - Alignement du haut de la fiche
+V76 - Adresse sous la date (si ca tient sur une ligne) + bouton "Billetterie en ligne ici"
 Fichier a mettre sur GitHub : index.html

@@ -596,6 +596,8 @@ window.addEventListener("popstate", () => {
     margin:0 0 6px;line-height:1.05;
   }
   .modal-meta{font-size:16.5px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+  .modal-meta.meta-stack .meta-sep{display:none;}
+  .modal-meta.meta-stack a.geo-main{display:block;margin-top:3px;}
   .reminder-btn{
     appearance:none;font-family:var(--font-body);text-decoration:none;
     display:flex;align-items:center;justify-content:center;gap:9px;
@@ -613,7 +615,7 @@ window.addEventListener("popstate", () => {
     font-weight:700;font-size:17px;text-decoration:none;
     box-sizing:border-box;text-align:center;cursor:pointer;
   }
-  .modal-cta svg{width:15px;height:15px;flex:none;}
+  .modal-cta svg{width:21px;height:21px;flex:none;}
   .modal-cta .addr{overflow-wrap:anywhere;}
   .modal-cta.is-copied{background:var(--accent);color:var(--accent-ink);}
   .modal-note{
@@ -2146,6 +2148,18 @@ function buildGoogleCalendarUrl(e){
 // Vignette légère pour la liste (le build produit th-xxx.jpg à côté de ev-xxx.jpg).
 function thumbSrc(src){ return typeof src === "string" ? src.replace(/(^|\/)ev-/, "$1th-") : src; }
 
+// Adresse sous la date si elle tient sur une seule ligne ; sinon on garde date — adresse sur la même ligne.
+function fitMeta(){
+  const m = document.getElementById("modal-meta");
+  if(!m || modalEl.hidden) return;
+  const a = m.querySelector("a.geo-main");
+  m.classList.remove("meta-stack");
+  if(!a) return;
+  m.classList.add("meta-stack");
+  const lh = parseFloat(getComputedStyle(m).lineHeight) || 24;
+  if(a.getBoundingClientRect().height > lh * 1.4) m.classList.remove("meta-stack");
+}
+window.addEventListener("resize", () => fitMeta());
 function openModal(id){
   refreshPlacement(false);
   const e = GROUPS.find(ev => ev.id === id);
@@ -2213,7 +2227,8 @@ function openModal(id){
   modalEyebrow.textContent = e.cancelled ? "Concert annulé" : (e.multi ? `Détails de la soirée · ${e.members.length} artistes` : "Détails du concert");
   modalTitle.innerHTML = namesHtml(e, true);
   const placeTxt = [e.venue ? e.venue + (noteText(e) ? " (" + e.timeNote + ")" : "") : "", e.city].filter(Boolean).join(", ");
-  modalMeta.innerHTML = escapeHtml(dateStr) + (placeTxt ? " — " + geoLink(e.venue, e.city, iconPin + escapeHtml(placeTxt), "geo-main") : "");
+  modalMeta.classList.remove("meta-stack");
+  modalMeta.innerHTML = `<span class="meta-date">${escapeHtml(dateStr)}</span>` + (placeTxt ? `<span class="meta-sep"> — </span>` + geoLink(e.venue, e.city, iconPin + escapeHtml(placeTxt), "geo-main") : "");
 
   currentGroup = e;
   renderWhere(e);
@@ -2240,8 +2255,7 @@ function openModal(id){
       // — pas besoin de répéter la consigne ici.
       modalCtaWrap.innerHTML = "";
     } else {
-      const address = link.replace(/^https?:\/\//,"");
-      modalCtaWrap.innerHTML = `<a class="modal-cta" href="${link}" target="_blank" rel="noopener">${iconTicket} ${escapeHtml(e.linkLabel || "Réserver")} — <span class="addr">${escapeHtml(address)}</span></a>`;
+      modalCtaWrap.innerHTML = `<a class="modal-cta" href="${link}" target="_blank" rel="noopener">${iconTicket} <span>Billetterie en ligne ici</span></a>`;
     }
   } else if(e.cancelled){
     modalCtaWrap.innerHTML = `<span class="modal-note">Ce concert est annulé, il n'est plus possible de réserver.</span>`;
@@ -2482,6 +2496,7 @@ function openModal(id){
 
   lastFocused = document.activeElement;
   modalEl.hidden = false; navPush("modal");
+  fitMeta(); requestAnimationFrame(fitMeta); if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitMeta);
   document.body.classList.add("modal-open");
   document.getElementById("modal-close-btn").focus();
 }
