@@ -1,2 +1,2 @@
-V84 - Message ecrit : "tarif reduit (PSH)" + question espace reserve aux personnes sourdes
-Fichier a mettre sur GitHub : index.html (un seul fichier, les images sont deja en ligne).
+V85 - Un seul fichier a mettre sur GitHub : index.html
+Changement : question du message ecrit -> espace reserve pour les personnes sourdes (places assises ou debout)
