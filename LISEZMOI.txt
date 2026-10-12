@@ -1,2 +1,2 @@
-V83 - Picto Rencontre apres le concert (nouvelle version)
-Fichiers a mettre sur GitHub : index.html + meet-badge-v4.png + video-badge-v3.png (les 3).
+V84 - Message ecrit : "tarif reduit (PSH)" + question espace reserve aux personnes sourdes
+Fichier a mettre sur GitHub : index.html (un seul fichier, les images sont deja en ligne).
