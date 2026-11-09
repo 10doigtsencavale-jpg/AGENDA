@@ -2716,7 +2716,7 @@ document.addEventListener("keydown", ev => {
     const step = (n, ic, html) => '<li class="ih-step"><span class="ih-n">' + n + '</span><span class="ih-ic">' + I[ic] + '</span><span class="ih-t">' + html + '</span></li>';
     const PANELS = {
       ios: ['iPhone ou iPad', [
-        step(1,"share","Touchez <b>Partager</b>.<small>Bouton en bas (Safari) ou en haut à droite (Chrome).</small>"),
+        step(1,"dotsH","Cliquez sur <b>\"...\"</b> en bas à droite.<small>Pas de \"...\" ? Touchez Partager.</small>"),
         step(2,"addHome","Touchez <b>Sur l'écran d'accueil</b>.<small>Glissez vers le haut si vous ne le voyez pas.</small>"),
         step(3,"check","Touchez <b>Ajouter</b>.")],
         "Ensuite, cherchez l'icône sur l'écran d'accueil."],
@@ -2748,7 +2748,7 @@ document.addEventListener("keydown", ev => {
       "ios-fx": ["Firefox sur iPhone", [
         step(1,"share","Touchez <b>Copier le lien</b> (en bas)."),
         step(2,"compass","Ouvrez <b>Safari</b>, puis collez le lien dans la barre."),
-        step(3,"addHome","Touchez <b>Partager</b>, puis <b>Sur l'écran d'accueil</b>.")],
+        step(3,"addHome","Cliquez sur <b>\"...\"</b> en bas à droite, puis <b>Sur l'écran d'accueil</b>.")],
         "Firefox sur iPhone ne sait pas installer l'appli. Safari le sait."],
       desktop: ["Ordinateur", [
         step(1,"globe","Ouvrez ce lien avec <b>Chrome</b> ou <b>Edge</b>."),
