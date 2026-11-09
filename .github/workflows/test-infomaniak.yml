@@ -1,0 +1,31 @@
+# Test de publication vers Infomaniak (essai). Ne s'exécute que sur la branche test-infomaniak.
+# N'a aucun effet sur l'appli actuelle (GitHub Pages publie la branche main).
+name: Test publication Infomaniak
+on:
+  push:
+    branches: [test-infomaniak]
+concurrency: test-infomaniak
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Envoyer les fichiers
+        env:
+          HOTE: ${{ secrets.INFOMANIAK_HOTE }}
+          UTILISATEUR: ${{ secrets.INFOMANIAK_UTILISATEUR }}
+          LFTP_PASSWORD: ${{ secrets.INFOMANIAK_MOT_DE_PASSE }}
+        run: |
+          set -u
+          date -u +%FT%TZ > publication.txt
+          EXCLU="--exclude-glob .git* --exclude-glob apercu* --exclude-glob comparaison* --exclude-glob LISEZMOI* --exclude-glob A-SUPPRIMER* --exclude-glob a-importer.json --exclude-glob README.md"
+          COMMUN="set net:max-retries 2; set net:timeout 30; set sftp:auto-confirm yes"
+          if lftp -c "$COMMUN; open -u $UTILISATEUR --env-password sftp://$HOTE; mirror -R --parallel=4 $EXCLU ./ ./"; then
+            echo "Publication réussie en SFTP"
+          else
+            echo "SFTP refusé, essai en FTP chiffré"
+            lftp -c "$COMMUN; set ftp:ssl-force true; set ftp:ssl-protect-data true; open -u $UTILISATEUR --env-password ftp://$HOTE; mirror -R --parallel=4 $EXCLU ./ ./"
+            echo "Publication réussie en FTP chiffré"
+          fi
