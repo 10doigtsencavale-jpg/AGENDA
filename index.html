@@ -643,7 +643,7 @@ window.addEventListener("popstate", () => {
   .help-banner .nowrap{white-space:nowrap;}
   .lsf-dot{display:block;flex:none;border-radius:50%;object-fit:cover;background:#e3a749;}
   .lsf-dot-lg{width:56px;height:56px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);}
-  .lsf-dot-sm{width:42px;height:42px;box-sizing:border-box;border:2px solid var(--line);margin-left:auto;}
+  .lsf-dot-sm{width:56px;height:56px;box-sizing:border-box;border:3px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.2);margin-left:auto;}
   /* Pictos mains + LSF cliquables : ouvrent une vidéo LSF hébergée avec l'appli */
   .lsf-play{appearance:none;border:0;background:none;padding:0;margin:0;position:relative;flex:none;cursor:pointer;border-radius:50%;align-self:flex-start;}
   .msg-step-head .lsf-play{margin-left:auto;align-self:center;}
@@ -651,7 +651,6 @@ window.addEventListener("popstate", () => {
   .lsf-play:active{transform:scale(.94);}
   .lsf-play-icon{position:absolute;right:-4px;bottom:-4px;width:24px;height:24px;border-radius:50%;background:#fff;color:#182d68;
     display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);}
-  .lsf-play .lsf-dot-sm + .lsf-play-icon{width:20px;height:20px;right:-5px;bottom:-5px;}
   .lsf-play-icon svg{width:11px;height:11px;margin-left:2px;}
   .video-local{display:block;width:100%;height:auto;max-height:72vh;max-height:72dvh;border-radius:14px;background:#000;object-fit:contain;}
   .video-err{margin:0;font-weight:700;font-size:18px;}
@@ -2379,7 +2378,7 @@ function openModal(id){
             <div class="msg-step-head">
               <span class="msg-step-icon">${iconEdit}</span>
               <span class="msg-step-label">2. Vérifier le message</span>
-              <button type="button" class="lsf-play" data-lsf-video="lsf-verifier-message.mp4" aria-label="Voir le message en LSF"><img class="lsf-dot lsf-dot-sm" src="${lsfDot}" alt="" width="42" height="42"><span class="lsf-play-icon">${iconPlay}</span></button>
+              <button type="button" class="lsf-play" data-lsf-video="lsf-verifier-message.mp4" aria-label="Voir le message en LSF"><img class="lsf-dot lsf-dot-sm" src="${lsfDot}" alt="" width="56" height="56"><span class="lsf-play-icon">${iconPlay}</span></button>
             </div>
             <pre class="message-preview" id="message-preview"></pre>
           </div>
