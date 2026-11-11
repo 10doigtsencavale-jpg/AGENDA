@@ -6,18 +6,20 @@ name: Importer les videos LSF
 on:
   push:
     branches: [main]
-    paths: [a-importer-videos.json]
+    paths: [a-importer-videos.json, .github/workflows/importer-videos.yml]
   workflow_dispatch:
 permissions:
   contents: write
-concurrency: importer-videos
+concurrency:
+  group: importer-videos
+  cancel-in-progress: true
 jobs:
   importer:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Installer ffmpeg
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+        run: pip install --quiet imageio-ffmpeg && ln -sf "$(python3 -c 'import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())')" /usr/local/bin/ffmpeg && ffmpeg -version | head -1
       - name: Télécharger et alléger
         run: |
           python3 - <<'PY'
