@@ -5,7 +5,7 @@ on:
   push:
     branches: [main]
   workflow_run:
-    workflows: ["Importer les visuels"]
+    workflows: ["Importer les visuels", "Importer les videos LSF"]
     types: [completed]
   workflow_dispatch:
 concurrency: publier-infomaniak
@@ -25,7 +25,7 @@ jobs:
           LFTP_PASSWORD: ${{ secrets.INFOMANIAK_MOT_DE_PASSE }}
         run: |
           set -u
-          EXCLU="--exclude-glob .* --exclude-glob apercu* --exclude-glob comparaison* --exclude-glob LISEZMOI* --exclude-glob A-SUPPRIMER* --exclude-glob a-importer.json --exclude-glob README.md"
+          EXCLU="--exclude-glob .* --exclude-glob apercu* --exclude-glob comparaison* --exclude-glob LISEZMOI* --exclude-glob A-SUPPRIMER* --exclude-glob a-importer*.json --exclude-glob README.md"
           COMMUN="set net:max-retries 2; set net:timeout 30; set sftp:auto-confirm yes; set mirror:parallel-transfer-count 4"
           if lftp -c "$COMMUN; open -u $UTILISATEUR --env-password sftp://$HOTE; mirror -R --delete $EXCLU ./ ./"; then
             echo "Publication réussie en SFTP"

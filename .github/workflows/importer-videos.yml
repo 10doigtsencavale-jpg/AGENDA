@@ -1,0 +1,57 @@
+# Importe dans l'appli les vidéos LSF déposées sur le Drive (partagées « tous les utilisateurs disposant du lien »).
+# Claude dépose la liste dans a-importer-videos.json : [{"fichier":"lsf-xxx.mp4","drive":"ID_DU_FICHIER"}]
+# Ce robot télécharge chaque vidéo, l'allège pour téléphone (H.264, 720 px, lecture immédiate),
+# crée une image d'aperçu (.jpg), enregistre le tout dans l'appli puis vide la liste.
+name: Importer les videos LSF
+on:
+  push:
+    branches: [main]
+    paths: [a-importer-videos.json]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: importer-videos
+jobs:
+  importer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Télécharger et alléger
+        run: |
+          python3 - <<'PY'
+          import json, re, subprocess, sys, os
+          liste = json.load(open("a-importer-videos.json", encoding="utf-8"))
+          erreurs, restants = [], []
+          for item in liste:
+              nom, fid = item["fichier"], item["drive"]
+              if not re.fullmatch(r"lsf-[a-z0-9-]+\.mp4", nom) or not re.fullmatch(r"[A-Za-z0-9_-]{20,}", fid):
+                  erreurs.append(f"{nom} : nom ou identifiant invalide"); restants.append(item); continue
+              url = f"https://drive.usercontent.google.com/download?id={fid}&export=download&confirm=t"
+              r = subprocess.run(["curl", "-sSL", "--fail", "-o", "source.mp4", url])
+              if r.returncode != 0 or os.path.getsize("source.mp4") < 100000:
+                  erreurs.append(f"{nom} : téléchargement impossible (le fichier est-il partagé par lien ?)"); restants.append(item); continue
+              vf = "scale='if(gt(iw,ih),-2,min(720,iw))':'if(gt(iw,ih),min(720,ih),-2)'"
+              r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", "source.mp4", "-vf", vf,
+                                  "-c:v", "libx264", "-preset", "veryfast", "-crf", "27", "-profile:v", "main",
+                                  "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "64k", "-ac", "1",
+                                  "-movflags", "+faststart", nom])
+              if r.returncode != 0:
+                  erreurs.append(f"{nom} : conversion impossible"); restants.append(item); continue
+              subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", nom, "-frames:v", "1",
+                              "-q:v", "4", nom.replace(".mp4", ".jpg")])
+              print("OK", nom, os.path.getsize(nom) // 1024, "Ko")
+              os.remove("source.mp4")
+          json.dump(restants, open("a-importer-videos.json", "w"), ensure_ascii=False, indent=1)
+          if erreurs:
+              print("\n".join(erreurs)); sys.exit(1)
+          PY
+      - name: Enregistrer dans l'appli
+        if: always()
+        run: |
+          rm -f source.mp4
+          git config user.name "Robot Agenda"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A lsf-*.mp4 lsf-*.jpg a-importer-videos.json
+          git diff --cached --quiet || (git commit -m "Vidéos LSF importées depuis le Drive" && git push)
