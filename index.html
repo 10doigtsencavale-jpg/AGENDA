@@ -644,6 +644,17 @@ window.addEventListener("popstate", () => {
   .lsf-dot{display:block;flex:none;border-radius:50%;object-fit:cover;background:#e3a749;}
   .lsf-dot-lg{width:56px;height:56px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);}
   .lsf-dot-sm{width:42px;height:42px;box-sizing:border-box;border:2px solid var(--line);margin-left:auto;}
+  /* Pictos mains + LSF cliquables : ouvrent une vidéo LSF hébergée avec l'appli */
+  .lsf-play{appearance:none;border:0;background:none;padding:0;margin:0;position:relative;flex:none;cursor:pointer;border-radius:50%;align-self:flex-start;}
+  .msg-step-head .lsf-play{margin-left:auto;align-self:center;}
+  .lsf-play .lsf-dot-sm{margin-left:0;}
+  .lsf-play:active{transform:scale(.94);}
+  .lsf-play-icon{position:absolute;right:-4px;bottom:-4px;width:24px;height:24px;border-radius:50%;background:#fff;color:#182d68;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);}
+  .lsf-play .lsf-dot-sm + .lsf-play-icon{width:20px;height:20px;right:-5px;bottom:-5px;}
+  .lsf-play-icon svg{width:11px;height:11px;margin-left:2px;}
+  .video-local{display:block;width:100%;height:auto;max-height:72vh;max-height:72dvh;border-radius:14px;background:#000;object-fit:contain;}
+  .video-err{margin:0;font-weight:700;font-size:18px;}
   .help-banner-warn{font-size:16px;line-height:1.4;margin-top:8px !important;font-weight:700;}
   .help-banner-first{margin-top:14px !important;}
   .help-banner-warn{position:relative;padding-left:16px;}
@@ -2342,7 +2353,7 @@ function openModal(id){
       modalMessageWrap.innerHTML = `
         <div class="modal-message">
           <div class="help-banner" role="note">
-            <img class="lsf-dot lsf-dot-lg" src="${lsfDot}" alt="LSF" width="56" height="56">
+            <button type="button" class="lsf-play" data-lsf-video="lsf-aide-reservation.mp4" aria-label="Voir l'explication en LSF"><img class="lsf-dot lsf-dot-lg" src="${lsfDot}" alt="" width="56" height="56"><span class="lsf-play-icon">${iconPlay}</span></button>
             <div>
               <p class="help-banner-kicker">Besoin d'aide ?</p>
               <p class="help-banner-title">Vous souhaitez écrire au festival / à la salle pour réserver vos places ?</p>
@@ -2368,7 +2379,7 @@ function openModal(id){
             <div class="msg-step-head">
               <span class="msg-step-icon">${iconEdit}</span>
               <span class="msg-step-label">2. Vérifier le message</span>
-              <img class="lsf-dot lsf-dot-sm" src="${lsfDot}" alt="LSF" width="42" height="42">
+              <button type="button" class="lsf-play" data-lsf-video="lsf-verifier-message.mp4" aria-label="Voir le message en LSF"><img class="lsf-dot lsf-dot-sm" src="${lsfDot}" alt="" width="42" height="42"><span class="lsf-play-icon">${iconPlay}</span></button>
             </div>
             <pre class="message-preview" id="message-preview"></pre>
           </div>
@@ -2612,9 +2623,30 @@ function openVideo(btn){
 }
 function closeVideo(){
   videoOverlay.hidden = true; navRelease("video");
+  const v = videoBox.querySelector("video"); if(v) v.pause();
   videoBox.innerHTML = "";            // retire l'iframe : la vidéo s'arrête
   if(lastVideoBtn && lastVideoBtn.isConnected) lastVideoBtn.focus();
 }
+// Vidéos LSF hébergées avec l'appli (pictos mains + LSF du formulaire de réservation par mail).
+function openLocalVideo(btn){
+  const src = btn.dataset.lsfVideo;
+  lastVideoBtn = btn;
+  videoBox.innerHTML = `
+    <video class="video-local" src="${src}" poster="${src.replace(/\.mp4$/, ".jpg")}" controls playsinline preload="auto"></video>
+    <button type="button" class="video-btn is-back" id="video-back">← Revenir</button>`;
+  const v = videoBox.querySelector("video");
+  v.addEventListener("error", () => {
+    v.outerHTML = `<p class="video-err">Vidéo bientôt disponible.</p>`;
+  });
+  document.getElementById("video-back").addEventListener("click", closeVideo);
+  videoOverlay.hidden = false; navPush("video");
+  const p = v.play(); if(p && p.catch) p.catch(() => {});
+  document.getElementById("video-close").focus({preventScroll:true});
+}
+modalMessageWrap.addEventListener("click", ev => {
+  const b = ev.target.closest("button.lsf-play[data-lsf-video]");
+  if(b){ ev.preventDefault(); openLocalVideo(b); }
+});
 document.getElementById("video-close").addEventListener("click", closeVideo);
 videoOverlay.addEventListener("click", ev => { if(ev.target === videoOverlay) closeVideo(); });
 modalVideoWrap.addEventListener("click", ev => {

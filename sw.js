@@ -14,6 +14,7 @@ self.addEventListener("fetch", e => {
   if(req.method !== "GET") return;
   const url = new URL(req.url);
   if(url.origin !== location.origin) return;
+  if(/\.mp4$/.test(url.pathname)) return; // vidéos : lecture directe (iPhone exige les requêtes partielles)
   if(req.mode === "navigate"){
     e.respondWith(fetch(req).then(r => { if(r.ok){ const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return r; })
       .catch(() => caches.match(req).then(hit => hit || caches.match("index.html"))));
