@@ -71,10 +71,14 @@ window.addEventListener("popstate", () => {
     var icone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
     if(!icone) return;
     try { if(sessionStorage.getItem("agenda-ouverture-comptee")) return; sessionStorage.setItem("agenda-ouverture-comptee", "1"); } catch(e) {}
+    /* Première ouverture sur ce téléphone = estimation des installations (iPhone + Android). */
+    var premiere = false;
+    try { if(!localStorage.getItem("agenda-premiere-ouverture")){ localStorage.setItem("agenda-premiere-ouverture", String(Date.now())); premiere = true; } } catch(e) {}
     var essais = 0;
     var envoyer = function(){
       if(window.goatcounter && window.goatcounter.count){
         window.goatcounter.count({path:"ouverture-icone", title:"Ouverture depuis l'icône", event:true});
+        if(premiere) window.goatcounter.count({path:"premiere-ouverture", title:"Première ouverture (installation)", event:true});
       } else if(++essais < 40){ setTimeout(envoyer, 500); }
     };
     envoyer();
