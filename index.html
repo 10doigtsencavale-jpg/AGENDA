@@ -63,6 +63,24 @@ window.addEventListener("popstate", () => {
 <meta name="color-scheme" content="light dark">
 <meta name="supported-color-schemes" content="light dark">
 <script data-goatcounter="https://agenda10dec.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>
+/* Compte les ouvertures de l'appli depuis l'icône de l'écran d'accueil (appli installée).
+   Une seule fois par ouverture (pas à chaque actualisation). Visible dans GoatCounter : « ouverture-icone ». */
+(function(){
+  try {
+    var icone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+    if(!icone) return;
+    try { if(sessionStorage.getItem("agenda-ouverture-comptee")) return; sessionStorage.setItem("agenda-ouverture-comptee", "1"); } catch(e) {}
+    var essais = 0;
+    var envoyer = function(){
+      if(window.goatcounter && window.goatcounter.count){
+        window.goatcounter.count({path:"ouverture-icone", title:"Ouverture depuis l'icône", event:true});
+      } else if(++essais < 40){ setTimeout(envoyer, 500); }
+    };
+    envoyer();
+  } catch(e) {}
+})();
+</script>
 <style>:root{color-scheme:light dark}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}footer .legal-links{margin-top:14px;font-size:13px;line-height:2.4}footer .legal-links a{padding:8px 2px;font-weight:600}</style>
 <style>
   :root{
